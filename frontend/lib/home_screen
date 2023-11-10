@@ -1,0 +1,79 @@
+Scaffold(
+      appBar: AppBar(
+        title: const Text("MREC prism"),
+      ),
+      drawer: const Drawerwidget(),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(user.name),
+          Text(user.rollno),
+          Text(user.branch),
+          Text(user.clas),
+          Text(user.studentphno),
+          Text(user.studentemail),
+          ElevatedButton(
+            onPressed: () => authService.signOut(context),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              textStyle: MaterialStateProperty.all(
+                const TextStyle(color: Colors.white),
+              ),
+              minimumSize: MaterialStateProperty.all(
+                Size(MediaQuery.of(context).size.width / 2.5, 50),
+              ),
+            ),
+            child: const Text(
+              "Sign Out",
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ],
+      ),
+    );
+
+
+
+
+
+    child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(40),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Color.fromARGB(85, 164, 164, 164),
+                    ),
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
+                            ),
+                            Text(
+                              user.rollno.toUpperCase(),
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        VerticalDivider(),
+                        Column(
+                          children: [
+                            Text(
+                              user.branch,
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
+                            ),
+                            Text(
+                              user.clas.toUpperCase(),
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
