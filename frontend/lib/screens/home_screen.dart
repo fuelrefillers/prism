@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisSpacing: 30,
                 childAspectRatio: 3 / 2.5,
               ),
-              children: const [
+              children: [
                 Buttonhome(
                     category: "attendace",
                     icon: Icons.person,
@@ -156,8 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     category: "library",
                     icon: Icons.collections_bookmark_sharp,
                     screen: ProfileScreen()),
-                Buttonhome(
-                    category: "books", icon: Icons.book, screen: BooksScreen()),
+                Buttonhome(category: "books", icon: Icons.book, screen: Home()),
                 Buttonhome(
                     category: "transport",
                     icon: Icons.bus_alert_outlined,

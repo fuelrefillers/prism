@@ -1,127 +1,121 @@
+import 'dart:math';
+
+import 'package:flappy_search_bar_ns/flappy_search_bar_ns.dart' as search;
+import 'package:flappy_search_bar_ns/scaled_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:search_bar_animated/search_bar_animated.dart';
 
-class BooksScreen extends StatefulWidget {
-  const BooksScreen({super.key});
+class Post {
+  final String title;
+  final String body;
 
-  @override
-  State<BooksScreen> createState() {
-    return _BooksScreenState();
-  }
+  Post(this.title, this.body);
 }
 
-class _BooksScreenState extends State<BooksScreen> {
-  List list = [
-    "Flutter",
-    "Twitter",
-    "Facebook",
-    "Google",
-    "Instagram",
-    "Youtube",
-  ];
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
 
-  TextEditingController textController = TextEditingController();
-  String value = "";
+class _HomeState extends State<Home> {
+  final search.SearchBarController<Post> _searchBarController =
+      search.SearchBarController();
+  bool isReplay = false;
+
+  Future<List<Post>> _getALlPosts(String? text) async {
+    await Future.delayed(Duration(seconds: text!.length == 4 ? 10 : 1));
+    if (isReplay) return [Post("Replaying !", "Replaying body")];
+    if (text.length == 5) throw Error();
+    if (text.length == 6) return [];
+    List<Post> posts = [];
+
+    var random = new Random();
+    for (int i = 0; i < 10; i++) {
+      posts.add(
+        Post("$text $i", "body random number : ${random.nextInt(100)}"),
+      );
+    }
+    return posts;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: AnimatedSearchBar(
-          backgroundColor: Colors.transparent,
-          buttonColor: Colors.white,
-          width: MediaQuery.of(context).size.width,
-          submitButtonColor: Colors.white,
-          textStyle: const TextStyle(color: Colors.white),
-          buttonIcon: const Icon(
-            Icons.search,
+      body: SafeArea(
+        child: search.SearchBar<Post>(
+          searchBarPadding: EdgeInsets.symmetric(horizontal: 10),
+          headerPadding: EdgeInsets.symmetric(horizontal: 10),
+          listPadding: EdgeInsets.symmetric(horizontal: 10),
+          onSearch: _getALlPosts,
+          searchBarController: _searchBarController,
+          onError: (error) => Text('ERROR: ${error.toString()}'),
+          placeHolder: Text("placeholder"),
+          cancellationWidget: Text("Cancel"),
+          emptyWidget: Text("empty"),
+          indexedScaledTileBuilder: (int index) =>
+              ScaledTile.count(1, index.isEven ? 2 : 1),
+          header: Row(
+            children: <Widget>[
+              TextButton(
+                child: Text("sort"),
+                onPressed: () {
+                  _searchBarController.sortList((Post a, Post b) {
+                    return a.body.compareTo(b.body);
+                  });
+                },
+              ),
+              TextButton(
+                child: Text("Desort"),
+                onPressed: () {
+                  _searchBarController.removeSort();
+                },
+              ),
+              TextButton(
+                child: Text("Replay"),
+                onPressed: () {
+                  isReplay = !isReplay;
+                  _searchBarController.replayLastSearch();
+                },
+              ),
+            ],
           ),
-          duration: const Duration(milliseconds: 700),
-          submitIcon: const Icon(Icons.arrow_back_rounded),
-          animationAlignment: AnimationAlignment.right,
-          onSubmit: () {
-            setState(() {
-              value = textController.text;
-            });
+          onCancelled: () {
+            print("Cancelled triggered");
           },
-          searchList: list,
-          searchQueryBuilder: (query, list) => list.where((item) {
-            return item!.toString().toLowerCase().contains(query.toLowerCase());
-          }).toList(),
-          textController: textController,
-          overlaySearchListItemBuilder: (dynamic item) => Container(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              item,
-              style: const TextStyle(fontSize: 15, color: Colors.black),
-            ),
-          ),
-          onItemSelected: (dynamic item) {
-            textController.value = textController.value.copyWith(
-              text: item.toString(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          crossAxisCount: 2,
+          onItemFound: (Post? post, int index) {
+            return Container(
+              color: Colors.lightBlue,
+              child: ListTile(
+                title: Text(post!.title),
+                isThreeLine: true,
+                subtitle: Text(post.body),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Detail()));
+                },
+              ),
             );
           },
-          overlaySearchListHeight: 100,
         ),
       ),
-      body: Container(
-        color: Colors.blueGrey,
+    );
+  }
+}
+
+class Detail extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
         child: Column(
-          children: [
-            const SizedBox(
-              height: 200,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            AnimatedSearchBar(
-              shadow: const [
-                BoxShadow(
-                    color: Colors.black38, blurRadius: 6, offset: Offset(0, 6))
-              ],
-              backgroundColor: Colors.white,
-              buttonColor: Colors.blue,
-              width: MediaQuery.of(context).size.width * 0.7,
-              submitButtonColor: Colors.blue,
-              textStyle: const TextStyle(color: Colors.blue),
-              buttonIcon: const Icon(
-                Icons.search,
-              ),
-              duration: const Duration(milliseconds: 1000),
-              submitIcon: const Icon(Icons.send),
-              animationAlignment: AnimationAlignment.left,
-              onSubmit: () {
-                setState(() {
-                  value = textController.text;
-                });
-              },
-              searchList: list,
-              searchQueryBuilder: (query, list) => list.where((item) {
-                return item!
-                    .toString()
-                    .toLowerCase()
-                    .contains(query.toLowerCase());
-              }).toList(),
-              textController: textController,
-              overlaySearchListItemBuilder: (dynamic item) => Container(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  item,
-                  style: const TextStyle(fontSize: 15, color: Colors.black),
-                ),
-              ),
-              onItemSelected: (dynamic item) {
-                textController.value = textController.value.copyWith(
-                  text: item.toString(),
-                );
-              },
-              overlaySearchListHeight: 100,
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            Center(
-              child: Text(
-                value,
-                style: const TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
+            Text("Detail"),
           ],
         ),
       ),

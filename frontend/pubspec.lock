@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  flappy_search_bar_ns:
+    dependency: "direct main"
+    description:
+      name: flappy_search_bar_ns
+      sha256: "5517f7ac2cc253a2dd04e7fe7670bfd72234205d1f7c588568c585ab5081ea24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -102,6 +110,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  flutter_staggered_grid_view:
+    dependency: transitive
+    description:
+      name: flutter_staggered_grid_view
+      sha256: f0b6d8c0fa7b4b444985cdde68492c0138a4fb6fc57a641b24cb234b7ee0f5c4
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
