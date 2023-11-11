@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers.dart/favourite_provider.dart';
 import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/home_screen.dart';
@@ -15,6 +16,7 @@ void main() {
       .then((value) => runApp(MultiProvider(providers: [
             ChangeNotifierProvider(create: (_) => UserProvider()),
             ChangeNotifierProvider(create: (_) => TokenProvider()),
+            ChangeNotifierProvider(create: (_) => ProductFavoriteController()),
           ], child: const MyApp())));
 }
 

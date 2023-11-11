@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 // import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/attendance_screen.dart';
-import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/screens/books_home_screen.dart';
 import 'package:frontend/screens/fee_status_screen.dart';
+import 'package:frontend/screens/library_screen.dart';
 import 'package:frontend/screens/performance_screen.dart';
 import 'package:frontend/screens/profile_screen.dart';
+import 'package:frontend/screens/transport_screen.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/drawer.dart';
 import 'package:frontend/widgets/home_nav_control.dart';
@@ -47,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: const BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Color.fromARGB(238, 135, 135, 135),
+                      color: Color.fromARGB(79, 135, 135, 135),
                       blurRadius: 10,
                       spreadRadius: 2,
                       offset: Offset(
@@ -56,9 +58,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ],
-                  color: Color.fromARGB(51, 0, 0, 0),
                   image: DecorationImage(
-                    image: AssetImage('assets/chefs-3.jpg'),
+                    image: AssetImage('assets/home-screen-hero.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -130,6 +131,10 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 50,
           ),
+          const Text(
+            "Here are your latest details",
+            style: TextStyle(fontSize: 20),
+          ),
           Expanded(
             child: GridView(
               padding: const EdgeInsets.all(15),
@@ -155,12 +160,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Buttonhome(
                     category: "library",
                     icon: Icons.collections_bookmark_sharp,
-                    screen: ProfileScreen()),
-                Buttonhome(category: "books", icon: Icons.book, screen: Home()),
+                    screen: LibraryScreen()),
+                Buttonhome(
+                    category: "books",
+                    icon: Icons.book,
+                    screen: BooksHomeScreen()),
                 Buttonhome(
                     category: "transport",
                     icon: Icons.bus_alert_outlined,
-                    screen: ProfileScreen()),
+                    screen: Transportscreen()),
                 Buttonhome(
                     category: "hostel",
                     icon: Icons.apartment,

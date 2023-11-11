@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use("/api/user",require("./routes/userRoutes"));
 app.use("/api/userdata",require("./routes/userDataRoutes"));
+app.use("/api/books",require("./routes/booksRoutes"));
 
 app.listen(port,"0.0.0.0",()=>{
     console.log("server is live at 5000");  

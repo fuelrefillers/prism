@@ -16,6 +16,11 @@ class Buttonhome extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+          side: BorderSide(color: const Color.fromARGB(255, 207, 225, 185)),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 3,
+          shadowColor: const Color.fromARGB(255, 207, 225, 185),
           minimumSize: Size.zero, // Set this
           padding: EdgeInsets.zero, // and this
           shape: RoundedRectangleBorder(
