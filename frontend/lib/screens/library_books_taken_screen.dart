@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/books_screen.dart';
 import 'package:frontend/widgets/book_item.dart';

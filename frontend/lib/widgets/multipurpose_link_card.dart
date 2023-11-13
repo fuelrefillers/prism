@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:frontend/screens/books_screen.dart';
 
 class MultiPurposeLinkCard extends StatelessWidget {
   const MultiPurposeLinkCard({

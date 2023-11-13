@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/dummy_screen.dart';
-import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/widgets/home_nav_control.dart';
 
 class HostelsInfo extends StatelessWidget {

@@ -86,6 +86,25 @@ class Settings extends StatelessWidget {
             icon: Icon(Icons.logout),
             label: Text('logout'),
           ),
+          Padding(
+            padding: const EdgeInsets.all(80.0),
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              color: const Color.fromRGBO(49, 39, 79, 1),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              height: 50,
+              child: const Center(
+                child: Text(
+                  "Back",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

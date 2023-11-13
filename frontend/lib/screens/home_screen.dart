@@ -9,7 +9,6 @@ import 'package:frontend/screens/fee_status_screen.dart';
 import 'package:frontend/screens/hostels_screen.dart';
 import 'package:frontend/screens/library_screen.dart';
 import 'package:frontend/screens/performance_screen.dart';
-import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/screens/time_table_screen.dart';
 import 'package:frontend/screens/transport_screen.dart';
 import 'package:frontend/services/auth.dart';
