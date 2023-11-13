@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers.dart/is_parent_provider.dart';
 // import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/attendance_screen.dart';
 import 'package:frontend/screens/books_home_screen.dart';
+import 'package:frontend/screens/circular_screen.dart';
 import 'package:frontend/screens/fee_status_screen.dart';
+import 'package:frontend/screens/hostels_screen.dart';
 import 'package:frontend/screens/library_screen.dart';
 import 'package:frontend/screens/performance_screen.dart';
 import 'package:frontend/screens/profile_screen.dart';
+import 'package:frontend/screens/time_table_screen.dart';
 import 'package:frontend/screens/transport_screen.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/drawer.dart';
@@ -84,10 +88,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             "Welcome,",
                             style: TextStyle(fontSize: 25, color: Colors.white),
                           ),
-                          Text(
-                            user.name,
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.white),
+                          Consumer<IsParentLoggedIn>(
+                            builder: (_, model, child) => Text(
+                              model.isSignedIn ? user.parentname : user.name,
+                              style: const TextStyle(
+                                  fontSize: 20, color: Colors.white),
+                            ),
                           ),
                           Text(
                             user.rollno.toUpperCase(),
@@ -172,15 +178,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Buttonhome(
                     category: "hostel",
                     icon: Icons.apartment,
-                    screen: ProfileScreen()),
+                    screen: HostelScreen()),
                 Buttonhome(
-                    category: "exams",
-                    icon: Icons.menu_book_rounded,
-                    screen: ProfileScreen()),
+                    category: "Time Table",
+                    icon: Icons.view_timeline_outlined,
+                    screen: TimeTableScreen()),
                 Buttonhome(
-                    category: "extra",
-                    icon: Icons.exit_to_app,
-                    screen: ProfileScreen()),
+                    category: "circulars",
+                    icon: Icons.notification_add_sharp,
+                    screen: Circulars()),
               ],
             ),
           ),

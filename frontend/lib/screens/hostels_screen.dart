@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/widgets/hostels_card.dart';
 
 class HostelScreen extends StatelessWidget {
   const HostelScreen({super.key});
@@ -8,8 +9,17 @@ class HostelScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Hostels"),
       ),
-      body: Column(
-        children: [],
+      body: Padding(
+        padding: const EdgeInsets.all(13.0),
+        child: Column(
+          children: [
+            HostelsCard(),
+            SizedBox(
+              height: 20,
+            ),
+            HostelsCard(),
+          ],
+        ),
       ),
     );
   }

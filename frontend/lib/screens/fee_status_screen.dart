@@ -84,10 +84,53 @@ class FeeStatusScreen extends StatelessWidget {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SwitchClass extends StatefulWidget {
+  const SwitchClass({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SwitchClassState createState() => _SwitchClassState();
+}
+
+class _SwitchClassState extends State<SwitchClass> {
+  bool _veganFilterSet = true;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        const Text("body text 2"),
+        SwitchListTile(
+          value: _veganFilterSet,
+          onChanged: (isChecked) {
+            setState(() {
+              _veganFilterSet = isChecked;
+            });
+          },
+          title: Text(
+            'Vegan',
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          ),
+          subtitle: Text(
+            'Only include vegan meals.',
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                ),
+          ),
+          activeColor: Theme.of(context).colorScheme.tertiary,
+          contentPadding: const EdgeInsets.only(left: 34, right: 22),
+        ),
+      ],
     );
   }
 }

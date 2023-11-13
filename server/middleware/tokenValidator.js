@@ -10,6 +10,7 @@ const validateToken = asyncHandler((req,res,next)=>{
             if(err){
                 res.status(401);
                 throw new Error("token not valid ");
+                console.log(err);
             }
             else{
                 req.user = decoded.user;

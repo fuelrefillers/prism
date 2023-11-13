@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gauge_indicator/gauge_indicator.dart';
 
 class AttendanceGuage extends StatelessWidget {
-  const AttendanceGuage({super.key});
+  const AttendanceGuage({super.key, required this.totalAttendance});
+  final double totalAttendance;
   @override
   Widget build(BuildContext context) {
-    return const AnimatedRadialGauge(
+    return AnimatedRadialGauge(
       initialValue: 0.0,
       duration: Duration(seconds: 2),
       curve: Curves.elasticOut,
       radius: 100,
-      value: 50,
+      value: totalAttendance * 100,
       axis: GaugeAxis(
         min: 0,
         max: 100,

@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers.dart/attendance_provider.dart';
 import 'package:frontend/widgets/attendance_guage.dart';
 import 'package:frontend/widgets/linear_progress_bar.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class AttendanceScreen extends StatelessWidget {
   const AttendanceScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
+    final userAttendance = Provider.of<AttendanceProvider>(context).attendance;
     final formatter = DateFormat.yMMMEd();
     String formattedDate() {
       return formatter.format(DateTime.now());
     }
 
+    Widget dayStatus = Text(
+      "Absent",
+      style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 255, 0, 0)),
+    );
+    if (userAttendance.present_day == 1) {
+      dayStatus = Text(
+        "Present",
+        style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 6, 182, 0)),
+      );
+    }
+
+    final double totalAttendancePerchentage =
+        (userAttendance.total_atended_classes / userAttendance.total_classes);
+    final double monthlyAttendancePerchentage =
+        (userAttendance.monthly_attended_classes /
+            userAttendance.monthly_classes);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Attendance"),
@@ -26,7 +44,7 @@ class AttendanceScreen extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
-              child: const Card(
+              child: Card(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -37,12 +55,14 @@ class AttendanceScreen extends StatelessWidget {
                     ),
                     Stack(
                       children: [
-                        AttendanceGuage(),
+                        AttendanceGuage(
+                          totalAttendance: totalAttendancePerchentage,
+                        ),
                         Positioned(
                           bottom: 0,
-                          left: 77,
+                          left: MediaQuery.of(context).size.width / 6,
                           child: Text(
-                            "93%",
+                            "${(totalAttendancePerchentage * 100).toStringAsFixed(2)}%",
                             style: TextStyle(
                                 fontSize: 35,
                                 color: Color.fromARGB(255, 0, 0, 0)),
@@ -57,7 +77,7 @@ class AttendanceScreen extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height / 4,
               width: MediaQuery.of(context).size.width,
-              child: const Card(
+              child: Card(
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
                   child: Column(
@@ -69,11 +89,13 @@ class AttendanceScreen extends StatelessWidget {
                             fontSize: 25, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                       Text(
-                        "93%",
+                        "${(monthlyAttendancePerchentage * 100).toStringAsFixed(2)}%",
                         style: TextStyle(
                             fontSize: 35, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
-                      LinearProgressBar(),
+                      LinearProgressBar(
+                        progressPer: monthlyAttendancePerchentage,
+                      ),
                     ],
                   ),
                 ),
@@ -110,7 +132,7 @@ class AttendanceScreen extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height / 4,
                   width: MediaQuery.of(context).size.width / 2.2,
-                  child: const Card(
+                  child: Card(
                     child: Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Column(
@@ -122,12 +144,7 @@ class AttendanceScreen extends StatelessWidget {
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 0, 0, 0)),
                           ),
-                          Text(
-                            "Present",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Color.fromARGB(255, 0, 0, 0)),
-                          ),
+                          dayStatus,
                         ],
                       ),
                     ),

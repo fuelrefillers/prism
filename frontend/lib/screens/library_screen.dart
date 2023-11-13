@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
+import 'package:frontend/providers.dart/library_provider.dart';
+import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/screens/library_books_taken_screen.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
+import 'package:provider/provider.dart';
 
 class LibraryScreen extends StatefulWidget {
   const LibraryScreen({Key? key}) : super(key: key);
@@ -11,8 +15,10 @@ class LibraryScreen extends StatefulWidget {
 
 class _LibraryScreenState extends State<LibraryScreen> {
   final con = FlipCardController();
+
   @override
   Widget build(BuildContext context) {
+    final library = Provider.of<LibraryProvider>(context).library;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Library"),
@@ -42,7 +48,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       ],
                       color: Color.fromARGB(51, 0, 0, 0),
                       image: DecorationImage(
-                        image: AssetImage('assets/chefs-3.jpg'),
+                        image: AssetImage('assets/library-hero.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -65,7 +71,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           style: TextStyle(color: Colors.white, fontSize: 25),
                         ),
                         Text(
-                          "21J41A05R5",
+                          library.rollno,
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                         SizedBox(
@@ -177,12 +183,12 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 height: 75,
                                 width: 180,
                                 child: Image.network(
-                                  'https://barcode.tec-it.com/barcode.ashx?data=21J41A05R5&code=Code128&translate-esc=on',
+                                  'https://barcode.tec-it.com/barcode.ashx?data=${library.rollno.toUpperCase()}&code=Code128&translate-esc=on',
                                   fit: BoxFit.fill,
                                 ),
                               ),
                               Text(
-                                "books count : 3 of 6 ",
+                                "books count : ${library.booksTaken.length} of 6 ",
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 0, 0, 0),
                                     fontSize: 20,
@@ -196,7 +202,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
               ),
             ),
           ),
-          MultiPurposeCard(category: "Books history")
+          MultiPurposeCard(
+            category: "Books history",
+            height1: 80,
+            screen: LibraryBooksTakenScreen(),
+          )
         ],
       ),
     );

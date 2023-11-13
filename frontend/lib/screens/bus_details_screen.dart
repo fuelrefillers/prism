@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/screens/bus_stops_screen.dart';
+import 'package:frontend/screens/raise_complaint.dart';
+import 'package:frontend/screens/transport_screen.dart';
 import 'package:frontend/widgets/bus_driver_details_card.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
+import 'package:frontend/widgets/multipurpose_link_card.dart';
 
 class BusScreenDetails extends StatelessWidget {
-  const BusScreenDetails({super.key});
+  const BusScreenDetails({super.key, required this.bus});
+  final Bus bus;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +35,7 @@ class BusScreenDetails extends StatelessWidget {
                 ),
               ],
               image: DecorationImage(
-                image: AssetImage('assets/home-screen-hero.png'),
+                image: AssetImage('assets/bus-hero.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -37,9 +43,20 @@ class BusScreenDetails extends StatelessWidget {
           SizedBox(
             height: 30,
           ),
-          BusDriverDetailsCard(),
-          MultiPurposeCard(category: "Live Location"),
-          MultiPurposeCard(category: "Raise complaint"),
+          BusDriverDetailsCard(bus: bus),
+          // MultiPurposeCard(category: "Live Location", height1: 80),
+
+          MultiPurposeLinkCard(category: "Live Location", height1: 80),
+          MultiPurposeCard(
+            category: "Bus Stops",
+            height1: 80,
+            screen: BusStopsScreen(bus: bus),
+          ),
+          MultiPurposeCard(
+            category: "Raise complaint",
+            height1: 80,
+            screen: RaiseComplaintScreen(),
+          ),
         ],
       ),
     );

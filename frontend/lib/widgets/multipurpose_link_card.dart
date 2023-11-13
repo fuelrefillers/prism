@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/screens/books_screen.dart';
 
-class MultiPurposeCard extends StatelessWidget {
-  const MultiPurposeCard(
-      {super.key,
-      required this.category,
-      required this.height1,
-      required this.screen});
+class MultiPurposeLinkCard extends StatelessWidget {
+  const MultiPurposeLinkCard({
+    super.key,
+    required this.category,
+    required this.height1,
+  });
   final String category;
   final double height1;
-  final Widget screen;
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +23,11 @@ class MultiPurposeCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.white,
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => screen,
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => screen,
+            //   ),
+            // );
           },
           child: Card(
             child: Padding(
