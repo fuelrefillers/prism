@@ -155,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       child: const Center(
                         child: Text(
-                          "Login",
+                          "Student Login",
                           style: TextStyle(color: Colors.white),
                         ),
                       ),

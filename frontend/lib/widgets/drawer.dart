@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/profile_screen.dart';
+import 'package:frontend/screens/settings_screen.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -95,6 +96,10 @@ class Drawerwidget extends StatelessWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (ctx) => Settings()),
+              );
             },
           ),
           SizedBox(
