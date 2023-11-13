@@ -11,6 +11,16 @@ const getallUserData = asyncHandler(async(req,res)=>{
     res.json(currentUser);
 });
 
+const getAllUsersDataAsSection = asyncHandler(async(req,res)=>{
+    let filter = {};
+    if(req.query.clas){
+        filter = {clas:req.query.clas};
+    }
+    const currentUsers = await UserData.find(filter);
+    console.log(filter);
+    res.json(currentUsers);
+});
+
 const createUserData = asyncHandler(async(req,res)=>{
     const {rollno,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail} = req.body;
     const newUserDetails =await UserData.create({rollno,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail});
@@ -31,4 +41,4 @@ const validateUser = asyncHandler(async(req,res)=>{
     res.json(req.user);
 })
 
-module.exports = {getUserData,createUserData,deleteAllUsersData,deleteUserData,getallUserData,validateUser};
+module.exports = {getUserData,createUserData,deleteAllUsersData,deleteUserData,getallUserData,validateUser,getAllUsersDataAsSection};

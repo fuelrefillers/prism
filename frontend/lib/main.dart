@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Faculty_Module/home_screen.dart';
+import 'package:frontend/Faculty_Module/main_screen.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
 import 'package:frontend/providers.dart/favourite_provider.dart';
 import 'package:frontend/providers.dart/is_parent_provider.dart';
@@ -61,12 +63,12 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Node Auth',
       theme: ThemeData(useMaterial3: true),
-      home: (widget.token == null) ? const HomeScreen() : const LoginPage(),
+      home: FacultyHomeScreen(),
     );
   }
 }
 
-
+// (widget.token == null) ? const HomeScreen() : const LoginPage()
 //Provider.of<TokenProvider>(context).token.token.isEmpty ? const LoginPage() : const HomeScreen()
 // Provider.of<TokenProvider>(context).token.token.isEmpty ? const LoginPage(): const HomeScreen()
 // const ProfileScreen()

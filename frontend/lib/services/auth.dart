@@ -109,6 +109,24 @@ class Authservice {
     }
   }
 
+  void sendMessages({
+    required List<String> rollnumbers,
+  }) async {
+    try {
+      http.Response res = await http.post(
+        Uri.parse('http://192.168.29.194:5000/api/sendmessage/'),
+        body: jsonEncode({
+          'rollnumbers': rollnumbers,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+    } catch (err) {
+      print(err);
+    }
+  }
+
   void getUser(BuildContext context) async {
     try {
       var userProvider = Provider.of<UserProvider>(context, listen: false);
