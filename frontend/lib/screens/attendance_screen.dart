@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
+import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/attendance_guage.dart';
 import 'package:frontend/widgets/linear_progress_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AttendanceScreen extends StatelessWidget {
+class AttendanceScreen extends StatefulWidget {
   const AttendanceScreen({super.key});
+
+  @override
+  State<AttendanceScreen> createState() => _AttendanceScreenState();
+}
+
+class _AttendanceScreenState extends State<AttendanceScreen> {
+  final Authservice authService = Authservice();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.getAttendance(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userAttendance = Provider.of<AttendanceProvider>(context).attendance;
@@ -49,7 +64,7 @@ class AttendanceScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Total percentage :",
+                      "Total percentage ",
                       style: TextStyle(
                           fontSize: 25, color: Color.fromARGB(255, 0, 0, 0)),
                     ),
@@ -84,7 +99,7 @@ class AttendanceScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        "Monthly percentage :",
+                        "Monthly percentage ",
                         style: TextStyle(
                             fontSize: 25, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
@@ -113,7 +128,7 @@ class AttendanceScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Date  :",
+                            "Date  ",
                             style: TextStyle(
                                 fontSize: 35,
                                 color: Color.fromARGB(255, 0, 0, 0)),
@@ -139,7 +154,7 @@ class AttendanceScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            "Day :",
+                            "Day ",
                             style: TextStyle(
                                 fontSize: 25,
                                 color: Color.fromARGB(255, 0, 0, 0)),

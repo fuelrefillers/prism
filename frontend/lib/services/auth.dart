@@ -9,6 +9,7 @@ import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:frontend/util/util.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -26,7 +27,7 @@ class Authservice {
           Provider.of<IsParentLoggedIn>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
-        Uri.parse('http://192.168.29.194:5000/api/user/login'),
+        Uri.parse('http://$ip:5000/api/user/login'),
         body: jsonEncode({
           'rollno': rollno,
           'password': password,
@@ -59,6 +60,7 @@ class Authservice {
       }
     } catch (err) {
       showSnackBar(context, err.toString());
+      print(err);
     }
   }
 
@@ -73,7 +75,7 @@ class Authservice {
           Provider.of<IsParentLoggedIn>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
-        Uri.parse('http://192.168.29.194:5000/api/parent/parentlogin'),
+        Uri.parse('http://$ip:5000/api/parent/parentlogin'),
         body: jsonEncode({
           'parentphno': parentphno,
           'parentpassword': parentpassword,
@@ -114,7 +116,7 @@ class Authservice {
   }) async {
     try {
       http.Response res = await http.post(
-        Uri.parse('http://192.168.29.194:5000/api/sendmessage/'),
+        Uri.parse('http://$ip:5000/api/sendmessage/'),
         body: jsonEncode({
           'rollnumbers': rollnumbers,
         }),
@@ -122,6 +124,7 @@ class Authservice {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
+      print(res);
     } catch (err) {
       print(err);
     }
@@ -138,7 +141,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://192.168.29.194:5000/api/userdata/getuserdata'),
+        Uri.parse('http://$ip:5000/api/userdata/getuserdata'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -165,7 +168,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://192.168.29.194:5000/api/attendance/getatten'),
+        Uri.parse('http://$ip:5000/api/attendance/getatten'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -193,15 +196,15 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://192.168.29.194:5000/api/performance/getper'),
+        Uri.parse('http://$ip:5000/api/performance/getper'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
         },
       );
-      // print('Bearer $token');
+      print('Bearer $token');
       // print("attendance");
-      // print(userRes.body);
+      print(userRes.body);
       performanceProvider.setPerformance(userRes.body);
     } catch (err) {
       // print(err);
@@ -221,7 +224,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://192.168.29.194:5000/api/library/getlib'),
+        Uri.parse('http://$ip:5000/api/library/getlib'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'

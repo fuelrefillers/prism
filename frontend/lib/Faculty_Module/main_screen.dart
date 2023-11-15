@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/review_update.dart';
 import 'package:frontend/models/user_model.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
@@ -40,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
     List<User> res = [];
     try {
       var response = await http.get(Uri.parse(
-          'http://192.168.29.194:5000/api/userdata/filter?clas=${widget.category}'));
+          'http://$ip:5000/api/userdata/filter?clas=${widget.category}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {
@@ -68,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) => CheckboxListTile(
+                  shape: CircleBorder(),
                   value: selected.contains(data[index].rollno),
                   onChanged: (bool? value) {
                     onRollnoSelected(value, data[index].rollno);

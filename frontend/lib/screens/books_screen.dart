@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/services/auth.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:frontend/widgets/book_item.dart';
 import 'package:http/http.dart' as http;
 
@@ -80,7 +81,7 @@ class _BooksScreenState extends State<BooksScreen> {
     List<Books> books1 = [];
     try {
       var response = await http.get(Uri.parse(
-          'http://192.168.29.194:5000/api/books/getbook?category=${widget.category}'));
+          'http://$ip:5000/api/books/getbook?category=${widget.category}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

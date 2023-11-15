@@ -40,8 +40,8 @@ class ProfileScreen extends StatelessWidget {
               Container(
                 width: MediaQuery.of(context).size.width / 2,
                 height: MediaQuery.of(context).size.width / 2,
-                padding: const EdgeInsets.all(10.0),
-                decoration: const BoxDecoration(
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
                       color: Color.fromARGB(210, 135, 135, 135),
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                   image: DecorationImage(
-                    image: AssetImage('assets/chefs-3.jpg'),
+                    image: NetworkImage(user.imageurl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -135,7 +135,7 @@ class ProfileScreen extends StatelessWidget {
 class HeaderCurvedContainer extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Color.fromARGB(255, 151, 239, 151);
+    Paint paint = Paint()..color = Color.fromARGB(255, 181, 201, 154);
     Path path = Path()
       ..relativeLineTo(0, 150)
       ..quadraticBezierTo(size.width / 2, 250.0, size.width, 150)

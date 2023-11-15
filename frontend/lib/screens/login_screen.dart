@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:frontend/Faculty_Module/home_screen.dart';
 import 'package:frontend/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -40,20 +41,20 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Container(
               decoration: const BoxDecoration(color: Colors.white),
-              height: 300,
+              height: 250,
               child: Stack(
                 children: <Widget>[
                   Positioned(
                     top: 50,
-                    left: width / 2 - 125,
-                    height: 250,
-                    width: 250,
+                    left: width / 2 - 100,
+                    height: 200,
+                    width: 200,
                     child: FadeInUp(
                         duration: const Duration(seconds: 1),
                         child: Container(
                           decoration: const BoxDecoration(
                               image: DecorationImage(
-                                  image: AssetImage('assets/download.jpg'),
+                                  image: AssetImage('assets/MREC_logo.png'),
                                   fit: BoxFit.fill)),
                         )),
                   ),
@@ -67,12 +68,14 @@ class _LoginPageState extends State<LoginPage> {
                 children: <Widget>[
                   FadeInUp(
                       duration: const Duration(milliseconds: 1500),
-                      child: const Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Color.fromRGBO(15, 220, 66, 1),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 30),
+                      child: Center(
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                              color: Color.fromRGBO(0, 0, 0, 1),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30),
+                        ),
                       )),
                   const SizedBox(
                     height: 30,
@@ -84,10 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                             border: Border.all(
-                                color: Color.fromARGB(73, 55, 210, 3)),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
                             boxShadow: const [
                               BoxShadow(
-                                color: Color.fromARGB(73, 55, 210, 3),
+                                color: Color.fromARGB(255, 181, 181, 181),
                                 blurRadius: 20,
                                 offset: Offset(0, 10),
                               )
@@ -179,6 +183,29 @@ class _LoginPageState extends State<LoginPage> {
                             "Parent Login",
                             style: TextStyle(color: Colors.white),
                           ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  FadeInUp(
+                    duration: const Duration(milliseconds: 1900),
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => FacultyHomeScreen()));
+                      },
+                      color: const Color.fromRGBO(49, 39, 79, 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      height: 50,
+                      child: const Center(
+                        child: Text(
+                          "Faculty",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),

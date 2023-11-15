@@ -22,8 +22,8 @@ const getAllUsersDataAsSection = asyncHandler(async(req,res)=>{
 });
 
 const createUserData = asyncHandler(async(req,res)=>{
-    const {rollno,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail} = req.body;
-    const newUserDetails =await UserData.create({rollno,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail});
+    const {rollno,imageurl,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail} = req.body;
+    const newUserDetails =await UserData.create({rollno,imageurl,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail});
     res.status(200).json(newUserDetails);
 });
 

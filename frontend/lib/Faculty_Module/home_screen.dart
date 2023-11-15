@@ -30,42 +30,74 @@ class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MainScreen(
-                        category: "CSE-A",
-                      )));
-            },
-            child: Text('CSE-A'),
+          SizedBox(
+            height: 30,
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MainScreen(
-                        category: "CSE-B",
-                      )));
-            },
-            child: Text('CSE-B'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              category: "CSE-A",
+                            )));
+                  },
+                  child: Text('CSE-A'),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              category: "CSE-B",
+                            )));
+                  },
+                  child: Text('CSE-B'),
+                ),
+              ),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MainScreen(
-                        category: "CSE-C",
-                      )));
-            },
-            child: Text('CSE-C'),
+          SizedBox(
+            height: 30,
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => MainScreen(
-                        category: "CSE-D",
-                      )));
-            },
-            child: Text('CSE-D'),
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              SizedBox(
+                height: 50,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              category: "CSE-C",
+                            )));
+                  },
+                  child: Text('CSE-C'),
+                ),
+              ),
+              SizedBox(
+                height: 50,
+                width: 100,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MainScreen(
+                              category: "CSE-D",
+                            )));
+                  },
+                  child: Text('CSE-D'),
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

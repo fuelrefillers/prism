@@ -35,10 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // final token = Provider.of<TokenProvider>(context).token;
+    var parentprovider = Provider.of<IsParentLoggedIn>(context, listen: false);
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("MREC prism"),
+        title: const Text("MREC Prism"),
       ),
       drawer: const Drawerwidget(),
       body: Column(
@@ -88,43 +89,59 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontSize: 25, color: Colors.white),
                           ),
                           Consumer<IsParentLoggedIn>(
-                            builder: (_, model, child) => Text(
-                              model.isSignedIn ? user.parentname : user.name,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.white),
+                            builder: (_, model, child) => Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  model.isSignedIn
+                                      ? user.parentname
+                                      : user.name,
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                                Text(
+                                  model.isSignedIn
+                                      ? "f/o ${user.name}"
+                                      : user.rollno.toUpperCase(),
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              ],
                             ),
-                          ),
-                          Text(
-                            user.rollno.toUpperCase(),
-                            style: const TextStyle(
-                                fontSize: 20, color: Colors.white),
                           ),
                         ],
                       ),
                       const VerticalDivider(),
-                      Container(
-                        padding: const EdgeInsets.all(36),
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              width: 3.0,
+                      Visibility(
+                        visible: !parentprovider.isSignedIn,
+                        child: Container(
+                          padding: const EdgeInsets.all(36),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                width: 3.0,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Column(
-                          children: [
-                            Text(
-                              user.branch,
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.white),
+                          child: Consumer<IsParentLoggedIn>(
+                            builder: (_, model, child) => Column(
+                              children: [
+                                Text(
+                                  model.isSignedIn ? "Parent" : user.branch,
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                                Text(
+                                  model.isSignedIn
+                                      ? ""
+                                      : user.clas.toUpperCase(),
+                                  style: const TextStyle(
+                                      fontSize: 20, color: Colors.white),
+                                ),
+                              ],
                             ),
-                            Text(
-                              user.clas.toUpperCase(),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.white),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ],
@@ -163,13 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     icon: Icons.attach_money_outlined,
                     screen: FeeStatusScreen()),
                 Buttonhome(
-                    category: "library",
-                    icon: Icons.collections_bookmark_sharp,
-                    screen: LibraryScreen()),
-                Buttonhome(
-                    category: "books",
-                    icon: Icons.book,
-                    screen: BooksHomeScreen()),
+                    category: "circulars",
+                    icon: Icons.notification_add_sharp,
+                    screen: Circulars()),
                 Buttonhome(
                     category: "transport",
                     icon: Icons.bus_alert_outlined,
@@ -178,14 +191,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     category: "hostel",
                     icon: Icons.apartment,
                     screen: HostelScreen()),
-                Buttonhome(
-                    category: "Time Table",
-                    icon: Icons.view_timeline_outlined,
-                    screen: TimeTableScreen()),
-                Buttonhome(
-                    category: "circulars",
-                    icon: Icons.notification_add_sharp,
-                    screen: Circulars()),
+                Visibility(
+                  visible: !parentprovider.isSignedIn,
+                  child: Buttonhome(
+                      category: "Time Table",
+                      icon: Icons.view_timeline_outlined,
+                      screen: TimeTableScreen()),
+                ),
+                Visibility(
+                  visible: !parentprovider.isSignedIn,
+                  child: Buttonhome(
+                      category: "books",
+                      icon: Icons.book,
+                      screen: BooksHomeScreen()),
+                ),
+                Visibility(
+                  visible: !parentprovider.isSignedIn,
+                  child: Buttonhome(
+                      category: "library",
+                      icon: Icons.collections_bookmark_sharp,
+                      screen: LibraryScreen()),
+                ),
               ],
             ),
           ),

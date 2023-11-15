@@ -35,7 +35,7 @@ class _LinearProgressBarState extends State<LinearProgressBar> {
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
       backgroundColor: const Color.fromARGB(54, 64, 195, 255),
-      color: Colors.red,
+      color: const Color.fromARGB(255, 54, 60, 244),
       minHeight: 25,
       value: value,
       borderRadius: BorderRadius.circular(5),

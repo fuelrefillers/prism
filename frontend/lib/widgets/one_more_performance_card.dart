@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:frontend/widgets/linear_progress_bar.dart';
 
-class PerformanceCard extends StatelessWidget {
-  const PerformanceCard({
+class PerformanceCardB extends StatelessWidget {
+  const PerformanceCardB({
     super.key,
     required this.name,
     required this.percentage,
@@ -11,7 +11,7 @@ class PerformanceCard extends StatelessWidget {
   });
   final String name;
   final double percentage;
-  final double amount;
+  final int amount;
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/performance_provider.dart';
 import 'package:frontend/screens/previous_results.dart';
+import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:frontend/widgets/multipurpose_link_card.dart';
+import 'package:frontend/widgets/one_more_performance_card.dart';
 import 'package:frontend/widgets/performance_card.dart';
 import 'package:provider/provider.dart';
 
-class PerformanceScreen extends StatelessWidget {
+class PerformanceScreen extends StatefulWidget {
   const PerformanceScreen({super.key});
+
+  @override
+  State<PerformanceScreen> createState() => _PerformanceScreenState();
+}
+
+class _PerformanceScreenState extends State<PerformanceScreen> {
+  final Authservice authService = Authservice();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.getPerformance(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final userPerformance =
@@ -29,20 +45,20 @@ class PerformanceScreen extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PerformanceCard(
+                  PerformanceCardB(
                     percentage: midPercentage,
                     name: "Mid marks",
-                    amount: userPerformance.mid_scored.toDouble(),
+                    amount: userPerformance.mid_scored,
                   ),
                   PerformanceCard(
                     percentage: (userPerformance.cgpa / 10).toDouble(),
                     name: "CGPA",
-                    amount: userPerformance.cgpa.toDouble(),
+                    amount: userPerformance.cgpa,
                   ),
-                  PerformanceCard(
+                  PerformanceCardB(
                     percentage: (userPerformance.backlogs).toDouble(),
                     name: "Backlogs",
-                    amount: userPerformance.backlogs.toDouble(),
+                    amount: userPerformance.backlogs,
                   ),
                 ],
               ),

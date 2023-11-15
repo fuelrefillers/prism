@@ -10,6 +10,10 @@ const userDataSchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    imageurl:{
+        type:String,
+        required:true,
+    },
     name:{
         type:String,
         required:true,

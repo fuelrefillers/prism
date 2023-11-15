@@ -5,6 +5,7 @@ class UserProvider extends ChangeNotifier {
   User _user = User(
       rollno: '',
       name: '',
+      imageurl: '',
       branch: '',
       clas: '',
       studentphno: '',

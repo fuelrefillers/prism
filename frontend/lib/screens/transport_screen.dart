@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:frontend/widgets/bus_card.dart';
 import 'package:http/http.dart' as http;
 
@@ -94,8 +95,8 @@ class _TransportscreenState extends State<Transportscreen> {
   void getBusses() async {
     List<Bus> books1 = [];
     try {
-      var response = await http
-          .get(Uri.parse('http://192.168.29.194:5000/api/buses/getbuses'));
+      var response =
+          await http.get(Uri.parse('http://$ip:5000/api/buses/getbuses'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

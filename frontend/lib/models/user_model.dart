@@ -4,6 +4,7 @@ import 'dart:convert';
 class User {
   final String rollno;
   final String name;
+  final String imageurl;
   final String branch;
   final String clas;
   final String studentphno;
@@ -14,6 +15,7 @@ class User {
   User({
     required this.rollno,
     required this.name,
+    required this.imageurl,
     required this.branch,
     required this.clas,
     required this.studentphno,
@@ -27,6 +29,7 @@ class User {
     return <String, dynamic>{
       'rollno': rollno,
       'name': name,
+      'imageurl': imageurl,
       'branch': branch,
       'clas': clas,
       'studentphno': studentphno,
@@ -41,6 +44,7 @@ class User {
     return User(
       rollno: map['rollno'] as String,
       name: map['name'] as String,
+      imageurl: map['imageurl'] as String,
       branch: map['branch'] as String,
       clas: map['clas'] as String,
       studentphno: map['studentphno'] as String,

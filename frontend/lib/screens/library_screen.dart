@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
+import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/library_books_taken_screen.dart';
+import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +16,18 @@ class LibraryScreen extends StatefulWidget {
 
 class _LibraryScreenState extends State<LibraryScreen> {
   final con = FlipCardController();
+  final Authservice authService = Authservice();
+
+  @override
+  void initState() {
+    super.initState();
+    authService.getLibrary(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     final library = Provider.of<LibraryProvider>(context).library;
+    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Library"),
@@ -66,11 +76,11 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "sai tharak",
+                          user.name,
                           style: TextStyle(color: Colors.white, fontSize: 25),
                         ),
                         Text(
-                          library.rollno,
+                          library.rollno.toUpperCase(),
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                         SizedBox(
@@ -90,9 +100,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
                     width: 100,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
                     ),
                     child: Image(
-                      image: AssetImage('assets/chefs-3.jpg'),
+                      image: NetworkImage(user.imageurl),
                       fit: BoxFit.fitHeight,
                     ),
                   ))
@@ -128,7 +139,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                             ]),
                         width: 300,
                         height: 200,
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(15.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,9 +161,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                               //   height: 20,
                               // ),
                               Text("BORROWERS'S LIBRARY CARD"),
-                              Text("21J41A05R5"),
+                              Text(user.rollno.toUpperCase()),
                               Text("valid till 2025"),
-                              Text("sai tharak"),
+                              Text(user.name),
                             ],
                           ),
                         )),

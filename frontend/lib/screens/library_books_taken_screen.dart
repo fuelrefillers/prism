@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:frontend/widgets/book_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +33,7 @@ class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
         prefs.setString('x-auth-token', '');
       }
       var response = await http.get(
-        Uri.parse('http://192.168.29.194:5000/api/library/'),
+        Uri.parse('http://${ip}:5000/api/library/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'

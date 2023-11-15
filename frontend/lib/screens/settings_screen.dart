@@ -22,14 +22,14 @@ class Settings extends StatelessWidget {
                 ),
                 Container(
                   clipBehavior: Clip.hardEdge,
-                  height: 140,
+                  height: 130,
                   width: 90,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image(
-                    image: AssetImage('assets/chefs-3.jpg'),
-                    fit: BoxFit.fitHeight,
+                  child: Image.network(
+                    user.imageurl,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 SizedBox(
@@ -59,10 +59,10 @@ class Settings extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(30),
                 bottomRight: Radius.circular(30)),
-            gradient: LinearGradient(
-                colors: [Colors.red, Colors.pink],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter),
+            gradient: LinearGradient(colors: [
+              Color.fromARGB(255, 195, 199, 243),
+              Color.fromARGB(255, 200, 168, 233)
+            ], begin: Alignment.bottomCenter, end: Alignment.topCenter),
           ),
         ),
       ),

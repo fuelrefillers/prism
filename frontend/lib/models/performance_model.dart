@@ -5,7 +5,7 @@ class Performance {
   final String rollno;
   final int mid;
   final int mid_scored;
-  final int cgpa;
+  final double cgpa;
   final List<dynamic> previous_cgpa;
   final int backlogs;
   Performance({
@@ -33,7 +33,7 @@ class Performance {
       rollno: map['rollno'] as String,
       mid: map['mid'] as int,
       mid_scored: map['mid_scored'] as int,
-      cgpa: map['cgpa'] as int,
+      cgpa: map['cgpa'] as double,
       previous_cgpa:
           List<dynamic>.from((map['previous_cgpa'] as List<dynamic>)),
       backlogs: map['backlogs'] as int,
