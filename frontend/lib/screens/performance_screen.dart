@@ -72,7 +72,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
               height1: 100,
               screen: PreviousResults(),
             ),
-            MultiPurposeLinkCard(category: "Eams Fee \n Paid", height1: 100),
+            MultiPurposeLinkCard(category: "Exams Fee \n Paid", height1: 100),
           ],
         ),
       ),
