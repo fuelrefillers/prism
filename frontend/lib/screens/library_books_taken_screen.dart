@@ -33,7 +33,7 @@ class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
         prefs.setString('x-auth-token', '');
       }
       var response = await http.get(
-        Uri.parse('http://${ip}:5000/api/library/'),
+        Uri.parse('$ip/api/library/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'

@@ -40,8 +40,8 @@ class _MainScreenState extends State<MainScreen> {
   void getRollno() async {
     List<User> res = [];
     try {
-      var response = await http.get(Uri.parse(
-          'http://$ip:5000/api/userdata/filter?clas=${widget.category}'));
+      var response = await http
+          .get(Uri.parse('$ip/api/userdata/filter?clas=${widget.category}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

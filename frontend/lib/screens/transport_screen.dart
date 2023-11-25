@@ -95,8 +95,7 @@ class _TransportscreenState extends State<Transportscreen> {
   void getBusses() async {
     List<Bus> books1 = [];
     try {
-      var response =
-          await http.get(Uri.parse('http://$ip:5000/api/buses/getbuses'));
+      var response = await http.get(Uri.parse('$ip/api/buses/getbuses'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

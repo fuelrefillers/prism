@@ -27,7 +27,7 @@ class Authservice {
           Provider.of<IsParentLoggedIn>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
-        Uri.parse('http://$ip:5000/api/user/login'),
+        Uri.parse('$ip/api/user/login'),
         body: jsonEncode({
           'rollno': rollno,
           'password': password,
@@ -49,6 +49,7 @@ class Authservice {
             if (parentprovider.isSignedIn) {
               parentprovider.changeStatus();
             }
+
             navigator.pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const HomeScreen(),
@@ -58,6 +59,7 @@ class Authservice {
           },
         );
       }
+      print(res);
     } catch (err) {
       showSnackBar(context, err.toString());
       print(err);
@@ -75,7 +77,7 @@ class Authservice {
           Provider.of<IsParentLoggedIn>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
-        Uri.parse('http://$ip:5000/api/parent/parentlogin'),
+        Uri.parse('$ip/api/parent/parentlogin'),
         body: jsonEncode({
           'parentphno': parentphno,
           'parentpassword': parentpassword,
@@ -116,7 +118,7 @@ class Authservice {
   }) async {
     try {
       http.Response res = await http.post(
-        Uri.parse('http://$ip:5000/api/sendmessage/'),
+        Uri.parse('$ip/api/sendmessage/'),
         body: jsonEncode({
           'rollnumbers': rollnumbers,
         }),
@@ -141,7 +143,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://$ip:5000/api/userdata/getuserdata'),
+        Uri.parse('$ip/api/userdata/getuserdata'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -168,7 +170,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://$ip:5000/api/attendance/getatten'),
+        Uri.parse('$ip/api/attendance/getatten'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -196,7 +198,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://$ip:5000/api/performance/getper'),
+        Uri.parse('$ip/api/performance/getper'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'
@@ -224,7 +226,7 @@ class Authservice {
       }
 
       http.Response userRes = await http.get(
-        Uri.parse('http://$ip:5000/api/library/getlib'),
+        Uri.parse('$ip/api/library/getlib'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer $token'

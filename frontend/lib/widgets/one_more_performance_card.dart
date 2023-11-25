@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:frontend/widgets/linear_progress_bar.dart';
 
 class PerformanceCardB extends StatelessWidget {

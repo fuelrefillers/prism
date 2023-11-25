@@ -60,7 +60,9 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Node Auth',
       theme: ThemeData(useMaterial3: true),
-      home: (widget.token == null) ? const HomeScreen() : const LoginPage(),
+      home: (widget.token == '' || widget.token == null)
+          ? const LoginPage()
+          : const HomeScreen(),
     );
   }
 }

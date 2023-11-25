@@ -80,8 +80,8 @@ class _BooksScreenState extends State<BooksScreen> {
   void getbooks() async {
     List<Books> books1 = [];
     try {
-      var response = await http.get(Uri.parse(
-          'http://$ip:5000/api/books/getbook?category=${widget.category}'));
+      var response = await http
+          .get(Uri.parse('$ip/api/books/getbook?category=${widget.category}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {
