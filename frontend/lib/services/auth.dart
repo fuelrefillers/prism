@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
+import 'package:frontend/providers.dart/faculty_login_provider.dart';
 import 'package:frontend/providers.dart/is_parent_provider.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
 import 'package:frontend/providers.dart/performance_provider.dart';
@@ -25,6 +26,8 @@ class Authservice {
       var tokenProvider = Provider.of<TokenProvider>(context, listen: false);
       var parentprovider =
           Provider.of<IsParentLoggedIn>(context, listen: false);
+      var facultyProvider =
+          Provider.of<IsfacultyLoggedIn>(context, listen: false);
       final navigator = Navigator.of(context);
       http.Response res = await http.post(
         Uri.parse('$ip/api/user/login'),
@@ -46,8 +49,12 @@ class Authservice {
             tokenProvider.setToken(res.body);
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['token']);
+
             if (parentprovider.isSignedIn) {
               parentprovider.changeStatus();
+            }
+            if (facultyProvider.isSignedIn) {
+              facultyProvider.changeStatus();
             }
 
             navigator.pushAndRemoveUntil(
@@ -64,6 +71,19 @@ class Authservice {
       showSnackBar(context, err.toString());
       print(err);
     }
+  }
+
+  void loginfaculty({required BuildContext context}) {
+    final navigator = Navigator.of(context);
+    var facultyProvider =
+        Provider.of<IsfacultyLoggedIn>(context, listen: false);
+    facultyProvider.changeStatus();
+    navigator.pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+      (route) => false,
+    );
   }
 
   void loginParent({

@@ -30,6 +30,10 @@ class _LoginPageState extends State<LoginPage> {
         parentpassword: passwordController.text);
   }
 
+  void loginfaculty() {
+    authservice.loginfaculty(context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -194,8 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                     duration: const Duration(milliseconds: 1900),
                     child: MaterialButton(
                       onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => FacultyHomeScreen()));
+                        loginfaculty();
                       },
                       color: const Color.fromRGBO(49, 39, 79, 1),
                       shape: RoundedRectangleBorder(

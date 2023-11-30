@@ -19,7 +19,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   @override
   void initState() {
     super.initState();
-    authService.getAttendance(context);
+    // authService.getAttendance(context);
   }
 
   @override

@@ -35,7 +35,14 @@ class Buttonhome extends StatelessWidget {
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Icon(icon), Text(category)],
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(icon),
+          Text(
+            category,
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
     );
   }

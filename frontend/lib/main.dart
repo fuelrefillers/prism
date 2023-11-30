@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 // import 'package:frontend/Faculty_Module/home_screen.dart';
 // import 'package:frontend/Faculty_Module/main_screen.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
+import 'package:frontend/providers.dart/faculty_login_provider.dart';
 import 'package:frontend/providers.dart/favourite_provider.dart';
 import 'package:frontend/providers.dart/is_parent_provider.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
@@ -29,6 +30,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => AttendanceProvider()),
           ChangeNotifierProvider(create: (_) => PerformanceProvider()),
           ChangeNotifierProvider(create: (_) => LibraryProvider()),
+          ChangeNotifierProvider(create: (_) => IsfacultyLoggedIn()),
         ],
         child: MyApp(
           token: prefs.getString('x-auth-token'),
@@ -51,14 +53,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    authService.getUser(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Node Auth',
+      title: 'Prism',
       theme: ThemeData(useMaterial3: true),
       home: (widget.token == '' || widget.token == null)
           ? const LoginPage()

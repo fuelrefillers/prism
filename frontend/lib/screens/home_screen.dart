@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Faculty_Module/home_screen.dart';
 import 'package:frontend/providers.dart/is_parent_provider.dart';
+import 'package:frontend/providers.dart/faculty_login_provider.dart';
 // import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/attendance_screen.dart';
@@ -30,12 +32,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     authservice.getUser(context);
+    authservice.getAttendance(context);
+    authservice.getPerformance(context);
   }
 
   @override
   Widget build(BuildContext context) {
     // final token = Provider.of<TokenProvider>(context).token;
     var parentprovider = Provider.of<IsParentLoggedIn>(context, listen: false);
+    var facultyprovider =
+        Provider.of<IsfacultyLoggedIn>(context, listen: false);
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
@@ -157,63 +163,109 @@ class _HomeScreenState extends State<HomeScreen> {
             "Here are your latest details",
             style: TextStyle(fontSize: 20),
           ),
-          Expanded(
-            child: GridView(
-              padding: const EdgeInsets.all(15),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 30,
-                childAspectRatio: 3 / 2.5,
-              ),
-              children: [
-                Buttonhome(
-                    category: "attendace",
-                    icon: Icons.person,
-                    screen: AttendanceScreen()),
-                Buttonhome(
-                    category: "performance",
-                    icon: Icons.speed,
-                    screen: PerformanceScreen()),
-                Buttonhome(
-                    category: "fee status",
-                    icon: Icons.attach_money_outlined,
-                    screen: FeeStatusScreen()),
-                Buttonhome(
-                    category: "circulars",
-                    icon: Icons.notification_add_sharp,
-                    screen: Circulars()),
-                Buttonhome(
-                    category: "transport",
-                    icon: Icons.bus_alert_outlined,
-                    screen: Transportscreen()),
-                Buttonhome(
-                    category: "hostel",
-                    icon: Icons.apartment,
-                    screen: HostelScreen()),
-                Visibility(
-                  visible: !parentprovider.isSignedIn,
-                  child: Buttonhome(
-                      category: "Time Table",
-                      icon: Icons.view_timeline_outlined,
-                      screen: TimeTableScreen()),
-                ),
-                Visibility(
-                  visible: !parentprovider.isSignedIn,
-                  child: Buttonhome(
-                      category: "books",
-                      icon: Icons.book,
-                      screen: BooksHomeScreen()),
-                ),
-                Visibility(
-                  visible: !parentprovider.isSignedIn,
-                  child: Buttonhome(
-                      category: "library",
-                      icon: Icons.collections_bookmark_sharp,
-                      screen: LibraryScreen()),
-                ),
-              ],
-            ),
+          Consumer<IsfacultyLoggedIn>(
+            builder: (_, model, child) => !model.isSignedIn
+                ? Expanded(
+                    child: GridView(
+                      padding: const EdgeInsets.all(15),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 30,
+                        childAspectRatio: 3 / 2.5,
+                      ),
+                      children: [
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: " attendace",
+                              icon: Icons.person,
+                              screen: AttendanceScreen()),
+                        ),
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "performance",
+                              icon: Icons.speed,
+                              screen: PerformanceScreen()),
+                        ),
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "fee status",
+                              icon: Icons.attach_money_outlined,
+                              screen: FeeStatusScreen()),
+                        ),
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "circulars",
+                              icon: Icons.notification_add_sharp,
+                              screen: Circulars()),
+                        ),
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "transport",
+                              icon: Icons.bus_alert_outlined,
+                              screen: Transportscreen()),
+                        ),
+                        Visibility(
+                          visible: parentprovider.isSignedIn ||
+                              !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "hostel",
+                              icon: Icons.apartment,
+                              screen: HostelScreen()),
+                        ),
+                        Visibility(
+                          visible: !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "Time Table",
+                              icon: Icons.view_timeline_outlined,
+                              screen: TimeTableScreen()),
+                        ),
+                        Visibility(
+                          visible: !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "books",
+                              icon: Icons.book,
+                              screen: BooksHomeScreen()),
+                        ),
+                        Visibility(
+                          visible: !parentprovider.isSignedIn,
+                          child: Buttonhome(
+                              category: "library",
+                              icon: Icons.collections_bookmark_sharp,
+                              screen: LibraryScreen()),
+                        ),
+                      ],
+                    ),
+                  )
+                : Expanded(
+                    child: GridView(
+                      padding: const EdgeInsets.all(15),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 30,
+                        childAspectRatio: 3 / 2.5,
+                      ),
+                      children: [
+                        Buttonhome(
+                            category: "Student Attendace",
+                            icon: Icons.person,
+                            screen: FacultyHomeScreen()),
+                      ],
+                    ),
+                  ),
           ),
         ],
       ),

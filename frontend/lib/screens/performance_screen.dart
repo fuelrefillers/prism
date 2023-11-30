@@ -21,7 +21,6 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
   @override
   void initState() {
     super.initState();
-    authService.getPerformance(context);
   }
 
   @override
