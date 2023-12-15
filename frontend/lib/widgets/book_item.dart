@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/models/books_model.dart';
 
 class BookItem extends StatelessWidget {
   const BookItem({super.key, required this.book});

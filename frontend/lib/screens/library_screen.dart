@@ -76,7 +76,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          user.name,
+                          user.StudentName,
                           style: TextStyle(color: Colors.white, fontSize: 25),
                         ),
                         Text(
@@ -103,7 +103,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       color: Colors.white,
                     ),
                     child: Image(
-                      image: NetworkImage(user.imageurl),
+                      image: NetworkImage(user.ImageUrl),
                       fit: BoxFit.fitHeight,
                     ),
                   ))
@@ -161,9 +161,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
                               //   height: 20,
                               // ),
                               Text("BORROWERS'S LIBRARY CARD"),
-                              Text(user.rollno.toUpperCase()),
+                              Text(user.RollNo.toUpperCase()),
                               Text("valid till 2025"),
-                              Text(user.name),
+                              Text(user.StudentName),
                             ],
                           ),
                         )),

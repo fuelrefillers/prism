@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
 // import 'package:frontend/Faculty_Module/home_screen.dart';
 // import 'package:frontend/Faculty_Module/main_screen.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
 import 'package:frontend/providers.dart/faculty_login_provider.dart';
-import 'package:frontend/providers.dart/favourite_provider.dart';
-import 'package:frontend/providers.dart/is_parent_provider.dart';
+import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers.dart/is_loading_provider.dart';
+import 'package:frontend/providers.dart/who_is_signed_in.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
 import 'package:frontend/providers.dart/performance_provider.dart';
 import 'package:frontend/providers.dart/token_provider.dart';
@@ -19,21 +21,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.getString('whoIsSignedIn') == null) {
+    prefs.setString("whoIsSignedIn", "");
+  }
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
       MultiProvider(
         providers: [
+          ChangeNotifierProvider(create: (_) => isLoadinProvider()),
           ChangeNotifierProvider(create: (_) => UserProvider()),
           ChangeNotifierProvider(create: (_) => TokenProvider()),
-          ChangeNotifierProvider(create: (_) => ProductFavoriteController()),
-          ChangeNotifierProvider(create: (_) => IsParentLoggedIn()),
+          ChangeNotifierProvider(create: (_) => whoIsSignedIn()),
           ChangeNotifierProvider(create: (_) => AttendanceProvider()),
           ChangeNotifierProvider(create: (_) => PerformanceProvider()),
           ChangeNotifierProvider(create: (_) => LibraryProvider()),
           ChangeNotifierProvider(create: (_) => IsfacultyLoggedIn()),
+          ChangeNotifierProvider(create: (_) => FacultyProvider()),
         ],
         child: MyApp(
           token: prefs.getString('x-auth-token'),
+          whoIsSignedIn: prefs.getString('whoIsSignedIn'),
         ),
       ),
     ),
@@ -41,8 +49,9 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.token});
+  const MyApp({super.key, required this.token, required this.whoIsSignedIn});
   final token;
+  final whoIsSignedIn;
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -52,18 +61,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    // authService.getmarks(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final whoIs = Provider.of<whoIsSignedIn>(context, listen: false);
+    whoIs.changeStatus(widget.whoIsSignedIn);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Prism',
       theme: ThemeData(useMaterial3: true),
       home: (widget.token == '' || widget.token == null)
           ? const LoginPage()
-          : const HomeScreen(),
+          : (widget.whoIsSignedIn == 'faculty')
+              ? FacultyHomeScreen()
+              : HomeScreen(whoissignedin: widget.whoIsSignedIn),
     );
   }
 }

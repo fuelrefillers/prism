@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/transport_screen.dart';
+import 'package:frontend/models/bus_model.dart';
+
 import 'package:frontend/widgets/multipurpose_link_card.dart';
 
 class BusStopsScreen extends StatelessWidget {

@@ -30,22 +30,30 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       return formatter.format(DateTime.now());
     }
 
-    Widget dayStatus = Text(
-      "Absent",
-      style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 255, 0, 0)),
+    Widget dayStatus = Center(
+      child: Text(
+        "Absent",
+        style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 255, 0, 0)),
+      ),
     );
-    if (userAttendance.present_day == 1) {
-      dayStatus = Text(
-        "Present",
-        style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 6, 182, 0)),
+    if (userAttendance.DayPresent == 1) {
+      dayStatus = Center(
+        child: Text(
+          "Half Day Present",
+          style:
+              TextStyle(fontSize: 25, color: Color.fromARGB(255, 182, 100, 0)),
+        ),
+      );
+    } else if (userAttendance.DayPresent == 2) {
+      dayStatus = Center(
+        child: Text(
+          "Full Day Present",
+          style:
+              TextStyle(fontSize: 25, color: Color.fromARGB(255, 18, 182, 0)),
+        ),
       );
     }
 
-    final double totalAttendancePerchentage =
-        (userAttendance.total_atended_classes / userAttendance.total_classes);
-    final double monthlyAttendancePerchentage =
-        (userAttendance.monthly_attended_classes /
-            userAttendance.monthly_classes);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Attendance"),
@@ -70,19 +78,32 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                     ),
                     Stack(
                       children: [
-                        AttendanceGuage(
-                          totalAttendance: totalAttendancePerchentage,
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          left: MediaQuery.of(context).size.width / 6,
-                          child: Text(
-                            "${(totalAttendancePerchentage * 100).toStringAsFixed(2)}%",
-                            style: TextStyle(
-                                fontSize: 35,
-                                color: Color.fromARGB(255, 0, 0, 0)),
+                        SizedBox(
+                          child: Center(
+                            child: AttendanceGuage(
+                              totalAttendance:
+                                  double.parse(userAttendance.SemPercentage) /
+                                      100,
+                            ),
                           ),
                         ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height / 14,
+                            ),
+                            SizedBox(
+                              child: Center(
+                                child: Text(
+                                  "${userAttendance.SemPercentage}%",
+                                  style: TextStyle(
+                                      fontSize: 35,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
+                                ),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     )
                   ],
@@ -104,12 +125,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             fontSize: 25, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                       Text(
-                        "${(monthlyAttendancePerchentage * 100).toStringAsFixed(2)}%",
+                        "${userAttendance.MonthlyPercentage}%",
                         style: TextStyle(
                             fontSize: 35, color: Color.fromARGB(255, 0, 0, 0)),
                       ),
                       LinearProgressBar(
-                        progressPer: monthlyAttendancePerchentage,
+                        progressPer:
+                            double.parse(userAttendance.MonthlyPercentage) /
+                                100,
                       ),
                     ],
                   ),
@@ -149,7 +172,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                   width: MediaQuery.of(context).size.width / 2.2,
                   child: Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(30.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [

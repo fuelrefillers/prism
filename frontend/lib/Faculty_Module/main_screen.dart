@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/review_update.dart';
-import 'package:frontend/models/user_model.dart';
+import 'package:frontend/models/faculty_fetch_rollno.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, required this.category});
-  final String category;
+  const MainScreen({super.key, required this.section});
+  final String section;
   @override
   State<MainScreen> createState() {
     return _MainScreenState();
@@ -16,7 +16,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  List<User> data = [];
+  List<FacultyFetchRollNo> data = [];
   List<String> selected = [];
 
   @override
@@ -38,16 +38,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void getRollno() async {
-    List<User> res = [];
+    List<FacultyFetchRollNo> res = [];
     try {
-      var response = await http
-          .get(Uri.parse('$ip/api/userdata/filter?clas=${widget.category}'));
+      var response = await http.get(Uri.parse(
+          'http://192.168.29.194:3000/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {
-        User post = User.fromMap(result[i] as Map<String, dynamic>);
+        FacultyFetchRollNo post =
+            FacultyFetchRollNo.fromMap(result[i] as Map<String, dynamic>);
         res.add(post);
       }
+      print("object");
       setState(() {
         data = res;
       });
@@ -60,7 +62,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.category),
+        title: Text(
+            "${widget.section.substring(0, widget.section.length - 2)}-${widget.section[widget.section.length - 1]}"),
       ),
       body: Column(
         children: [
@@ -69,13 +72,12 @@ class _MainScreenState extends State<MainScreen> {
               child: ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context, index) => CheckboxListTile(
-                  shape: CircleBorder(),
-                  value: selected.contains(data[index].rollno),
+                  value: selected.contains(data[index].RollNo),
                   onChanged: (bool? value) {
-                    onRollnoSelected(value, data[index].rollno);
+                    onRollnoSelected(value, data[index].RollNo);
                   },
-                  title: Text(data[index].rollno.toUpperCase()),
-                  subtitle: const Text('Supporting text'),
+                  title: Text(data[index].RollNo.toUpperCase()),
+                  subtitle: Text(data[index].StudentName),
                 ),
               ),
             ),
@@ -93,7 +95,12 @@ class _MainScreenState extends State<MainScreen> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ReviewAndSubmitScreen(selected: selected)));
+              builder: (context) => ReviewAndSubmitScreen(
+                    selected: selected,
+                    section: widget.section[widget.section.length - 1],
+                    department:
+                        widget.section.substring(0, widget.section.length - 2),
+                  )));
         },
         label: const Padding(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 0),

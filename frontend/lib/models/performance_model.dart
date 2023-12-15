@@ -2,41 +2,44 @@ import 'dart:convert';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class Performance {
-  final String rollno;
-  final int mid;
-  final int mid_scored;
-  final double cgpa;
-  final List<dynamic> previous_cgpa;
-  final int backlogs;
+  final String RollNo;
+  final List<dynamic> MidTotal;
+  final List<dynamic> MidScored;
+  var CGPA;
+  final List<dynamic> PreviousSGPA;
+  final List<dynamic> Backlogs;
+  final int TotalSub;
   Performance({
-    required this.rollno,
-    required this.mid,
-    required this.mid_scored,
-    required this.cgpa,
-    required this.previous_cgpa,
-    required this.backlogs,
+    required this.RollNo,
+    required this.MidTotal,
+    required this.MidScored,
+    required this.CGPA,
+    required this.PreviousSGPA,
+    required this.Backlogs,
+    required this.TotalSub,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'rollno': rollno,
-      'mid': mid,
-      'mid_scored': mid_scored,
-      'cgpa': cgpa,
-      'previous_cgpa': previous_cgpa,
-      'backlogs': backlogs,
+      'RollNo': RollNo,
+      'MidTotal': MidTotal,
+      'MidScored': MidScored,
+      'CGPA': CGPA,
+      'PreviousSGPA': PreviousSGPA,
+      'Backlogs': Backlogs,
+      'TotalSub': TotalSub,
     };
   }
 
   factory Performance.fromMap(Map<String, dynamic> map) {
     return Performance(
-      rollno: map['rollno'] as String,
-      mid: map['mid'] as int,
-      mid_scored: map['mid_scored'] as int,
-      cgpa: map['cgpa'] as double,
-      previous_cgpa:
-          List<dynamic>.from((map['previous_cgpa'] as List<dynamic>)),
-      backlogs: map['backlogs'] as int,
+      RollNo: map['RollNo'] as String,
+      MidTotal: List<dynamic>.from(map['MidTotal'] as List<dynamic>),
+      MidScored: List<dynamic>.from(map['MidScored'] as List<dynamic>),
+      CGPA: map['CGPA'].toString(),
+      PreviousSGPA: List<dynamic>.from(map['PreviousSGPA'] as List<dynamic>),
+      Backlogs: List<dynamic>.from(map['Backlogs'] as List<dynamic>),
+      TotalSub: map['TotalSub'] as int,
     );
   }
 

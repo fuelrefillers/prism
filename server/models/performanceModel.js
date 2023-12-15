@@ -1,27 +1,31 @@
 const mongoose = require("mongoose");
 
 const preformanceSchema = mongoose.Schema({
-    rollno:{
+    RollNo:{
         type:String,
         required:true,
     },
-    mid:{
-        type:Number,
-        required:true,
-    },
-    mid_scored:{
-        type:Number,
-        required:true,
-    },
-    cgpa:{
-        type:Number,
-        required:true,
-    },
-    previous_cgpa:[{
+    MidTotal:[{
         type:Number,
         required:true,
     }],
-    backlogs:{
+    MidScored:[{
+        type:Number,
+        required:true,
+    }],
+    CGPA:{
+        type:Number,
+        required:true,
+    },
+    PreviousSGPA:[{
+        type:Number,
+        required:true,
+    }],
+    Backlogs:[{
+        type:String,
+        required:true,
+    }],
+    TotalSub:{
         type:Number,
         required:true,
     }

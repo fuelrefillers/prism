@@ -1,42 +1,31 @@
 const mongoose = require("mongoose");
 
 const booksSchema = mongoose.Schema({
-    bookid:{
+    BookName:{
         type:String,
         required:true,
     },
-    bookname:{
+    BookImageUrl:{
         type:String,
         required:true,
     },
-    bookimageurl:{
+    BookLinkUrl:{
         type:String,
         required:true,
     },
-    bookdrivelink:{
+    BookAuthor:{
         type:String,
         required:true,
     },
-    bookrating:{
-        type:Number,
-        required:true,
-    },
-    bookauthor:{
+    Semester:{
         type:String,
         required:true,
     },
-    bookedition:{
-        type:String,
-        required:true,
-    },
-    category:{
-        type:String,
-        required:true,
-    },
-    datetaken:{
+    Department:{
         type:String,
         required:true,
     }
+
 });
 
 module.exports = mongoose.model("Book",booksSchema);

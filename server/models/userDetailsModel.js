@@ -6,46 +6,77 @@ const userDataSchema = mongoose.Schema({
     //     required:true,
     //     ref:users,
     // },
-    rollno:{
+    StudentName:{
         type:String,
         required:true,
     },
-    imageurl:{
+    StudentPhnNo:{
+        type:Number,
+        required:true,
+    },
+    StudentEmail:{
         type:String,
         required:true,
     },
-    name:{
+    FatherName:{
         type:String,
         required:true,
     },
-    branch:{
+    FatherPhnNo:{
+        type:Number,
+        required:true,
+    },
+    FatherEmail:{
         type:String,
         required:true,
     },
-    clas:{
+    MotherName:{
         type:String,
         required:true,
     },
-    studentphno:{
+    MotherPhnNo:{
+        type:Number,
+        required:true,
+    },
+    MotherEmail:{
+        type:String,
+    },
+    RollNo:{
         type:String,
         required:true,
     },
-    studentemail:{
+    ImageUrl:{
         type:String,
         required:true,
     },
-    parentname:{
+    Semester:{
+        type:Number,
+        required:true,
+    },
+    Department:{
         type:String,
         required:true,
     },
-    parentphno:{
+    Section:{
         type:String,
         required:true,
     },
-    parentemail:{
+    UserName:{
         type:String,
         required:true,
     },
+    Password:{
+        type:String,
+        required:true,
+    },
+    Actions:{
+        type:String,
+        required:true,
+    },
+    FeeStatus:{
+        type:Boolean,
+        required:true,
+    }
 });
 
 module.exports = mongoose.model("UserData",userDataSchema);

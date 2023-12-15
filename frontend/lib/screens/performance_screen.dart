@@ -1,5 +1,8 @@
+import 'package:draw_graph/models/feature.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/performance_provider.dart';
+import 'package:frontend/screens/backlogs_screen.dart';
+import 'package:frontend/screens/performance_graph.dart';
 import 'package:frontend/screens/previous_results.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
@@ -25,10 +28,32 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double midPercentage = 0;
+    List<double> midsR = [];
+    List<double> semR = [];
+    final List<Feature> features1 = [];
+    final List<Feature> features2 = [];
     final userPerformance =
         Provider.of<PerformanceProvider>(context).performance;
-    final double midPercentage =
-        userPerformance.mid_scored / userPerformance.mid;
+    if (userPerformance.MidTotal.isNotEmpty) {
+      midPercentage =
+          userPerformance.MidScored.last / userPerformance.MidTotal.last;
+      for (var i = 0; i < userPerformance.MidScored.length; i++) {
+        midsR.add(userPerformance.MidScored[i] / userPerformance.MidTotal[i]);
+      }
+      for (var i = 0; i < userPerformance.MidScored.length; i++) {
+        semR.add(userPerformance.PreviousSGPA[i] / 10);
+      }
+      features1
+          .add(Feature(title: "Mid Marks", color: Colors.blue, data: midsR));
+      features2.add(Feature(
+          title: "Sem Marks",
+          color: const Color.fromARGB(255, 110, 33, 243),
+          data: semR));
+    } else {
+      midPercentage = 0;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Performance"),
@@ -44,20 +69,59 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PerformanceCardB(
-                    percentage: midPercentage,
-                    name: "Mid marks",
-                    amount: userPerformance.mid_scored,
+                  InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PerformanceGraphScreen(
+                                    fromData: features1,
+                                    category: 'Mid',
+                                    name: 'Mid Analysis',
+                                    length: midsR.length,
+                                  )));
+                    },
+                    child: PerformanceCardB(
+                      percentage: midPercentage,
+                      name: "Mid marks",
+                      amount: userPerformance.MidScored.last,
+                    ),
                   ),
-                  PerformanceCard(
-                    percentage: (userPerformance.cgpa / 10).toDouble(),
-                    name: "CGPA",
-                    amount: userPerformance.cgpa,
+                  InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PerformanceGraphScreen(
+                                    fromData: features2,
+                                    category: 'Sem',
+                                    name: 'Sem Analysis',
+                                    length: semR.length,
+                                  )));
+                    },
+                    child: PerformanceCard(
+                      percentage: double.parse(userPerformance.CGPA) / 10,
+                      name: "CGPA",
+                      amount: double.parse(userPerformance.CGPA),
+                    ),
                   ),
-                  PerformanceCardB(
-                    percentage: (userPerformance.backlogs).toDouble(),
-                    name: "Backlogs",
-                    amount: userPerformance.backlogs,
+                  InkWell(
+                    borderRadius: BorderRadius.circular(15),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => BacklogsScreen(
+                                  backlogs: userPerformance.Backlogs)));
+                    },
+                    child: PerformanceCardB(
+                      percentage: userPerformance.Backlogs.length /
+                          userPerformance.TotalSub,
+                      name: "Backlogs",
+                      amount: userPerformance.Backlogs.length,
+                    ),
                   ),
                 ],
               ),

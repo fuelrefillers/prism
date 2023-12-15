@@ -3,16 +3,22 @@ import 'package:frontend/models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
   User _user = User(
-      rollno: '',
-      name: '',
-      imageurl: '',
-      branch: '',
-      clas: '',
-      studentphno: '',
-      studentemail: '',
-      parentname: '',
-      parentphno: '',
-      parentemail: '');
+      StudentName: "",
+      StudentPhnNo: '',
+      StudentEmail: '',
+      FatherName: '',
+      FatherPhnNo: '',
+      FatherEmail: '',
+      MotherName: '',
+      MotherPhnNo: '',
+      MotherEmail: '',
+      RollNo: '',
+      ImageUrl: '',
+      Semester: 0,
+      Department: '',
+      Section: '',
+      Actions: '',
+      FeeStatus: false);
 
   User get user => _user;
 
@@ -23,6 +29,5 @@ class UserProvider extends ChangeNotifier {
 
   void setUserFromModel(User user) {
     _user = user;
-    notifyListeners();
   }
 }

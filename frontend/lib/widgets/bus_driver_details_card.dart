@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/transport_screen.dart';
+import 'package:frontend/models/bus_model.dart';
 
 class BusDriverDetailsCard extends StatelessWidget {
   const BusDriverDetailsCard({super.key, required this.bus});

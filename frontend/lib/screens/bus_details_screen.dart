@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/bus_model.dart';
 import 'package:frontend/screens/bus_stops_screen.dart';
 import 'package:frontend/screens/raise_complaint.dart';
-import 'package:frontend/screens/transport_screen.dart';
 import 'package:frontend/widgets/bus_driver_details_card.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:frontend/widgets/multipurpose_link_card.dart';

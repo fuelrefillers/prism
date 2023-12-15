@@ -35,7 +35,7 @@ class Drawerwidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  user.rollno.toUpperCase(),
+                  user.RollNo.toUpperCase(),
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),

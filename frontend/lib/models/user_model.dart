@@ -2,56 +2,80 @@
 import 'dart:convert';
 
 class User {
-  final String rollno;
-  final String name;
-  final String imageurl;
-  final String branch;
-  final String clas;
-  final String studentphno;
-  final String studentemail;
-  final String parentname;
-  final String parentphno;
-  final String parentemail;
+  final String StudentName;
+  final String StudentPhnNo;
+  final String StudentEmail;
+  final String FatherName;
+  final String FatherPhnNo;
+  final String FatherEmail;
+  final String MotherName;
+  final String MotherPhnNo;
+  final String MotherEmail;
+  final String RollNo;
+  final String ImageUrl;
+  final int Semester;
+  final String Department;
+  final String Section;
+  final String Actions;
+  final bool FeeStatus;
   User({
-    required this.rollno,
-    required this.name,
-    required this.imageurl,
-    required this.branch,
-    required this.clas,
-    required this.studentphno,
-    required this.studentemail,
-    required this.parentname,
-    required this.parentphno,
-    required this.parentemail,
+    required this.StudentName,
+    required this.StudentPhnNo,
+    required this.StudentEmail,
+    required this.FatherName,
+    required this.FatherPhnNo,
+    required this.FatherEmail,
+    required this.MotherName,
+    required this.MotherPhnNo,
+    required this.MotherEmail,
+    required this.RollNo,
+    required this.ImageUrl,
+    required this.Semester,
+    required this.Department,
+    required this.Section,
+    required this.Actions,
+    required this.FeeStatus,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'rollno': rollno,
-      'name': name,
-      'imageurl': imageurl,
-      'branch': branch,
-      'clas': clas,
-      'studentphno': studentphno,
-      'studentemail': studentemail,
-      'parentname': parentname,
-      'parentphno': parentphno,
-      'parentemail': parentemail,
+      'StudentName': StudentName,
+      'StudentPhnNo': StudentPhnNo,
+      'StudentEmail': StudentEmail,
+      'FatherName': FatherName,
+      'FatherPhnNo': FatherPhnNo,
+      'FatherEmail': FatherEmail,
+      'MotherName': MotherName,
+      'MotherPhnNo': MotherPhnNo,
+      'MotherEmail': MotherEmail,
+      'RollNo': RollNo,
+      'ImageUrl': ImageUrl,
+      'Semester': Semester,
+      'Department': Department,
+      'Section': Section,
+      'Actions': Actions,
+      'FeeStatus': FeeStatus,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      rollno: map['rollno'] as String,
-      name: map['name'] as String,
-      imageurl: map['imageurl'] as String,
-      branch: map['branch'] as String,
-      clas: map['clas'] as String,
-      studentphno: map['studentphno'] as String,
-      studentemail: map['studentemail'] as String,
-      parentname: map['parentname'] as String,
-      parentphno: map['parentphno'] as String,
-      parentemail: map['parentemail'] as String,
+      StudentName: map['StudentName'] as String,
+      StudentPhnNo: map['StudentPhnNo'] as String,
+      StudentEmail: map['StudentEmail'] as String,
+      FatherName: map['FatherName'] as String,
+      FatherPhnNo: map['FatherPhnNo'] as String,
+      FatherEmail: map['FatherEmail'] as String,
+      MotherName: map['MotherName'] as String,
+      MotherPhnNo: map['MotherPhnNo'] as String,
+      MotherEmail: map['MotherEmail'] as String,
+      RollNo: map['RollNo'] as String,
+      ImageUrl: map['ImageUrl'] as String,
+      Semester: map['Semester'] as int,
+      Department: map['Department'] as String,
+      Section: map['Section'] as String,
+      Actions: map['Actions'] as String,
+      FeeStatus: map['FeeStatus'] as bool,
     );
   }
 

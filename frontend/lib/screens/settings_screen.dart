@@ -12,7 +12,7 @@ class Settings extends StatelessWidget {
     final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 175.0,
+        toolbarHeight: 190,
         leading: Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(
@@ -28,28 +28,31 @@ class Settings extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Image.network(
-                    user.imageurl,
+                    user.ImageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(user.name,
-                        style: TextStyle(fontSize: 25, color: Colors.white)),
-                    Text(user.rollno.toUpperCase(),
-                        style: TextStyle(fontSize: 20, color: Colors.white)),
-                    Text(user.branch,
-                        style: TextStyle(fontSize: 20, color: Colors.white)),
-                    Text(user.studentphno,
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
-                    Text(user.studentemail,
-                        style: TextStyle(fontSize: 15, color: Colors.white)),
-                  ],
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.7,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(user.StudentName,
+                          style: TextStyle(fontSize: 25, color: Colors.white)),
+                      Text(user.RollNo.toUpperCase(),
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
+                      Text(user.Department,
+                          style: TextStyle(fontSize: 20, color: Colors.white)),
+                      Text(user.StudentPhnNo.toString(),
+                          style: TextStyle(fontSize: 15, color: Colors.white)),
+                      Text(user.StudentEmail,
+                          style: TextStyle(fontSize: 15, color: Colors.white)),
+                    ],
+                  ),
                 )
               ],
             )),

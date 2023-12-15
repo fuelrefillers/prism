@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  user.rollno.toUpperCase(),
+                  user.RollNo.toUpperCase(),
                   style: const TextStyle(
                     fontSize: 35.0,
                     letterSpacing: 1.5,
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: Colors.white,
                   image: DecorationImage(
-                    image: NetworkImage(user.imageurl),
+                    image: NetworkImage(user.ImageUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -93,29 +93,29 @@ class ProfileScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text("Name :"),
-                            Text(user.name),
+                            Text(user.StudentName),
                             const Divider(
                               color: Colors.black,
                             ),
                             const Text("Email :"),
-                            Text(user.studentemail),
+                            Text(user.StudentEmail),
                             const Divider(
                               color: Colors.black,
                             ),
                             const Text("Mobile :"),
-                            Text(user.studentphno),
+                            Text(user.StudentPhnNo.toString()),
                             const Divider(
                               color: Colors.black,
                             ),
                             const Text("Department :"),
-                            Text(user.branch),
+                            Text(user.Department),
                             const Divider(
                               color: Colors.black,
                             ),
                             const Text("Parent details :"),
-                            Text(user.parentname),
-                            Text(user.parentphno),
-                            Text(user.parentemail),
+                            Text(user.FatherName),
+                            Text(user.FatherPhnNo.toString()),
+                            Text(user.FatherEmail),
                           ],
                         ),
                       ),

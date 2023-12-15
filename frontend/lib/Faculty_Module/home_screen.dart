@@ -1,6 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/main_screen.dart';
+import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/widgets/multi_purpose_card.dart';
+import 'package:provider/provider.dart';
 
 class Students {
   final String rollno;
@@ -13,92 +16,29 @@ class Students {
   });
 }
 
-class FacultyHomeScreen extends StatefulWidget {
-  const FacultyHomeScreen({super.key});
+class FacultyAttendanceScreen extends StatefulWidget {
+  const FacultyAttendanceScreen({super.key});
   @override
-  State<FacultyHomeScreen> createState() {
-    return _FacultyHomeScreenState();
+  State<FacultyAttendanceScreen> createState() {
+    return _FacultyAttendanceScreen();
   }
 }
 
-class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
+class _FacultyAttendanceScreen extends State<FacultyAttendanceScreen> {
   @override
   Widget build(BuildContext context) {
+    final faculty =
+        Provider.of<FacultyProvider>(context, listen: false).faculty;
     return Scaffold(
       appBar: AppBar(
         title: Text("Select section"),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              category: "CSE-A",
-                            )));
-                  },
-                  child: Text('CSE-A'),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              category: "CSE-B",
-                            )));
-                  },
-                  child: Text('CSE-B'),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              category: "CSE-C",
-                            )));
-                  },
-                  child: Text('CSE-C'),
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                width: 100,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainScreen(
-                              category: "CSE-D",
-                            )));
-                  },
-                  child: Text('CSE-D'),
-                ),
-              ),
-            ],
-          )
-        ],
+      body: ListView.builder(
+        itemCount: faculty.Classes.length,
+        itemBuilder: (context, index) => MultiPurposeCard(
+            category: faculty.Classes[index],
+            height1: 100,
+            screen: MainScreen(section: faculty.Classes[index])),
       ),
     );
   }

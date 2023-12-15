@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/bus_model.dart';
 import 'package:frontend/screens/bus_details_screen.dart';
-import 'package:frontend/screens/transport_screen.dart';
 
 class BusCard extends StatelessWidget {
   const BusCard({super.key, required this.bus});

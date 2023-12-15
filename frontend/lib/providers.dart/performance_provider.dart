@@ -3,12 +3,13 @@ import 'package:frontend/models/performance_model.dart';
 
 class PerformanceProvider extends ChangeNotifier {
   Performance _performance = Performance(
-      rollno: '',
-      mid: 0,
-      mid_scored: 0,
-      cgpa: 0,
-      previous_cgpa: [0],
-      backlogs: 0);
+      RollNo: '',
+      MidTotal: [0],
+      MidScored: [0],
+      CGPA: '',
+      PreviousSGPA: [0],
+      Backlogs: [''],
+      TotalSub: 0);
 
   Performance get performance => _performance;
 

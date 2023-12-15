@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/Faculty_Module/home_screen.dart';
+import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
 import 'package:frontend/services/auth.dart';
 
 class ReviewAndSubmitScreen extends StatefulWidget {
-  const ReviewAndSubmitScreen({super.key, required this.selected});
+  const ReviewAndSubmitScreen(
+      {super.key,
+      required this.selected,
+      required this.section,
+      required this.department});
   final List<String> selected;
+  final String section;
+  final String department;
   @override
   State<ReviewAndSubmitScreen> createState() {
     return _ReviewAndSubmitScreenState();
@@ -84,7 +90,10 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
                 TextButton(
                   onPressed: () {
                     final Authservice authservice = Authservice();
-                    authservice.sendMessages(rollnumbers: review);
+                    authservice.setAttendance(
+                        rollnumbers: review,
+                        section: widget.section,
+                        department: widget.department);
                     Navigator.pop(context);
                     Navigator.pushAndRemoveUntil(
                         context,
@@ -92,7 +101,7 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
                             builder: (context) => const FacultyHomeScreen()),
                         (route) => false);
                     // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => FacultyHomeScreen()));
+                    //     builder: (context) => FacultyHomeScreen()));''
                   },
                   child: const Text("Okay"),
                 ),

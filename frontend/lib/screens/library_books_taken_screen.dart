@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/books_screen.dart';
+import 'package:frontend/models/books_model.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:frontend/widgets/book_item.dart';
 import 'package:http/http.dart' as http;
