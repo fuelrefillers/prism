@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/books_department_screen.dart';
 import 'package:frontend/screens/books_downloaded_screen.dart';
-import 'package:frontend/screens/books_screen.dart';
-import 'package:frontend/widgets/multi_purpose_card.dart';
 
 class BooksHomeScreen extends StatefulWidget {
   const BooksHomeScreen({super.key});

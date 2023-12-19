@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
-import 'package:provider/provider.dart';
 
 class AnnouncementsPage extends StatefulWidget {
   @override

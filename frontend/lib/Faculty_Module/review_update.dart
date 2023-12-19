@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/attendace_loading_page.dart';
-import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
 import 'package:frontend/providers.dart/is_error_provider.dart';
 import 'package:frontend/providers.dart/is_loading_provider.dart';
-import 'package:frontend/services/auth.dart';
 import 'package:frontend/services/faculty_services.dart';
 import 'package:provider/provider.dart';
 

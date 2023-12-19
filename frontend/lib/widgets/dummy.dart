@@ -34,15 +34,11 @@
 //   }
 // }
 
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 //import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/pdfff.dart';
-import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -76,31 +72,30 @@ class _DummyLinkPageState extends State<DummyLinkPage> {
                   PermissionStatus status = await Permission.storage.request();
                   if (status.isGranted) {
                     var dir = await getApplicationDocumentsDirectory();
-                    if (dir != null) {
-                      String savename = "file.pdf";
-                      String savePath = dir.path + "/$savename";
-                      setState(() {
-                        pdfPath = savePath;
-                      });
-                      print(savePath);
-                      //output:  /storage/emulated/0/Download/banner.png
 
-                      try {
-                        await Dio().download(fileurl, savePath,
-                            onReceiveProgress: (received, total) {
-                          if (total != -1) {
-                            print((received / total * 100).toStringAsFixed(0) +
-                                "%");
-                            //you can build progressbar feature too
-                          }
-                        });
-                        print("File is saved to download folder.");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("File Downloaded"),
-                        ));
-                      } on DioException catch (e) {
-                        print(e.message);
-                      }
+                    String savename = "file.pdf";
+                    String savePath = dir.path + "/$savename";
+                    setState(() {
+                      pdfPath = savePath;
+                    });
+                    print(savePath);
+                    //output:  /storage/emulated/0/Download/banner.png
+
+                    try {
+                      await Dio().download(fileurl, savePath,
+                          onReceiveProgress: (received, total) {
+                        if (total != -1) {
+                          print((received / total * 100).toStringAsFixed(0) +
+                              "%");
+                          //you can build progressbar feature too
+                        }
+                      });
+                      print("File is saved to download folder.");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("File Downloaded"),
+                      ));
+                    } on DioException catch (e) {
+                      print(e.message);
                     }
                   }
                 },

@@ -48,8 +48,8 @@ void httpErrorHandlerWithoutContext({
   required BuildContext context,
   required VoidCallback onSuccess,
 }) {
-  final isLoadingProvider =
-      Provider.of<isLoadinProvider>(context, listen: false);
+  // final isLoadingProvider =
+  //     Provider.of<isLoadinProvider>(context, listen: false);
   switch (response.statusCode) {
     case 200:
       //Future.delayed(Duration(seconds: 2));

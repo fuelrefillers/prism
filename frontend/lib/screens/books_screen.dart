@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/services/Students_Parents_services.dart';
-import 'package:frontend/services/auth.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
 import 'package:frontend/widgets/book_item.dart';
 
