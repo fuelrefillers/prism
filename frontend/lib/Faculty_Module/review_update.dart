@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Faculty_Module/attendace_loading_page.dart';
 import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
+import 'package:frontend/providers.dart/is_error_provider.dart';
+import 'package:frontend/providers.dart/is_loading_provider.dart';
 import 'package:frontend/services/auth.dart';
+import 'package:frontend/services/faculty_services.dart';
+import 'package:provider/provider.dart';
 
 class ReviewAndSubmitScreen extends StatefulWidget {
   const ReviewAndSubmitScreen(
@@ -18,6 +23,7 @@ class ReviewAndSubmitScreen extends StatefulWidget {
 }
 
 class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
+  final FacultyServices service = FacultyServices();
   List<String> review = [];
 
   @override
@@ -89,19 +95,28 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    final Authservice authservice = Authservice();
-                    authservice.setAttendance(
+                    service.setAttendance(
                         rollnumbers: review,
                         section: widget.section,
-                        department: widget.department);
+                        department: widget.department,
+                        context: context);
                     Navigator.pop(context);
+                    final loaging =
+                        Provider.of<isLoadinProvider>(context, listen: false);
+                    final Err =
+                        Provider.of<isErrorProvider>(context, listen: false);
+                    if (loaging.isloading == false) {
+                      loaging.changeStatus();
+                    }
+                    if (Err.isError == true) {
+                      Err.changeStatus();
+                    }
                     Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const FacultyHomeScreen()),
+                            builder: (context) =>
+                                const AttendanceLoadingScreen()),
                         (route) => false);
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //     builder: (context) => FacultyHomeScreen()));''
                   },
                   child: const Text("Okay"),
                 ),

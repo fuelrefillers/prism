@@ -37,3 +37,12 @@ class BusFetchingErrorState extends PrismState {}
 // class UserFetchingSuccessfullState extends PrismState {}
 
 // class UserFetchingErrorState extends PrismState {}
+
+class FacultyFetchingLoadingState extends PrismState {}
+
+class FacultyFetchingSuccessfullState extends PrismState {
+  final Faculty faculty;
+  FacultyFetchingSuccessfullState({required this.faculty});
+}
+
+class FacultyErrorState extends PrismState {}

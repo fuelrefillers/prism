@@ -11,7 +11,7 @@ const userDataSchema = mongoose.Schema({
         required:true,
     },
     StudentPhnNo:{
-        type:Number,
+        type:String,
         required:true,
     },
     StudentEmail:{
@@ -23,7 +23,7 @@ const userDataSchema = mongoose.Schema({
         required:true,
     },
     FatherPhnNo:{
-        type:Number,
+        type:String,
         required:true,
     },
     FatherEmail:{
@@ -35,7 +35,7 @@ const userDataSchema = mongoose.Schema({
         required:true,
     },
     MotherPhnNo:{
-        type:Number,
+        type:String,
         required:true,
     },
     MotherEmail:{

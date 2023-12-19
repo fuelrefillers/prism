@@ -3,7 +3,7 @@ import 'package:frontend/models/library_model.dart';
 
 class LibraryProvider extends ChangeNotifier {
   Library _library = Library(
-    rollno: '',
+    RollNo: '',
     booksTaken: [],
     dateTaken: [],
   );

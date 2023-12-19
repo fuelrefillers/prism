@@ -17,7 +17,7 @@ class PerformanceGraphScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final growableList = List<String>.generate(
-        length, (int index) => "${category} ${index}",
+        length, (int index) => "${category} ${index + 1}",
         growable: true);
     return Scaffold(
       appBar: AppBar(

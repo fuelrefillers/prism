@@ -18,7 +18,7 @@ class BusCard extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
         width: MediaQuery.of(context).size.width,
-        height: 150,
+        height: 160,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15),

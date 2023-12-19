@@ -18,23 +18,25 @@ class _LoginPageState extends State<LoginPage> {
   final Authservice authservice = Authservice();
   void login() {
     authservice.loginUser(
-        context: context,
-        rollno: rollnoController.text,
-        password: passwordController.text);
+      context: context,
+      rollno: rollnoController.text.trim(),
+      password: passwordController.text.trim(),
+    );
   }
 
   void loginParent() {
     authservice.loginParent(
-        context: context,
-        parentphno: rollnoController.text,
-        parentpassword: passwordController.text);
+      context: context,
+      parentphno: rollnoController.text.trim(),
+      parentpassword: passwordController.text.trim(),
+    );
   }
 
   void loginfaculty() {
     authservice.loginfaculty(
       context: context,
-      username: rollnoController.text,
-      password: passwordController.text,
+      username: rollnoController.text.trim(),
+      password: passwordController.text.trim(),
     );
   }
 

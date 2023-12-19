@@ -12,5 +12,16 @@ const getAllBuses = asyncHandler(async (req, res) => {
         const bus = await Bus.create({Routedesc,drivername,driverimage,Busno,Routeno,Routename,driverph,startlocation,currentlocation,starttime,reachtime,Stoplocation});
         res.status(200).json(bus);
   });
+
+  const setLiveLocation = asyncHandler(async(req,res)=>{
+      filter = {}
+      if(req.query){
+            filter = {Routeno:req.query.routeno}
+      }
+      const {LiveLocation} = req.body;
+      const bus = await Bus.findOneAndUpdate(filter,{currentlocation:LiveLocation},{new:true});
+      res.status(200).json(bus);
+
+  })
   
-  module.exports = {getAllBuses,createBus,};
+  module.exports = {getAllBuses,createBus,setLiveLocation};

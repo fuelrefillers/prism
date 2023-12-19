@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:frontend/models/semmarks_model.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
-import 'package:frontend/services/auth.dart';
-import 'package:provider/provider.dart';
+import 'package:frontend/services/Students_Parents_services.dart';
 
 class SemMarksScreen extends StatefulWidget {
   const SemMarksScreen({super.key, required this.name, required this.RollNo});
@@ -14,10 +12,10 @@ class SemMarksScreen extends StatefulWidget {
 }
 
 class _SemMarksScreenState extends State<SemMarksScreen> {
-  Authservice authservice = Authservice();
+  final StudentParentServices service = StudentParentServices();
   bool isError = false;
-  @override
   List<SemMarks> marks = [];
+  @override
   void initState() {
     super.initState();
     gettingdata();
@@ -25,7 +23,7 @@ class _SemMarksScreenState extends State<SemMarksScreen> {
 
   void gettingdata() async {
     List<SemMarks> marks1 =
-        await authservice.getmarks(context, widget.RollNo, widget.name[4]);
+        await service.getmarks(context, widget.RollNo, widget.name[4]);
     await Future.delayed(Duration(milliseconds: 700));
     setState(() {
       marks = marks1;

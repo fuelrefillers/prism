@@ -16,4 +16,8 @@ class FacultyProvider extends ChangeNotifier {
     _faculty = Faculty.fromJson(faculty);
     notifyListeners();
   }
+
+  void setFacultyFromModel(Faculty faculty) {
+    _faculty = faculty;
+  }
 }

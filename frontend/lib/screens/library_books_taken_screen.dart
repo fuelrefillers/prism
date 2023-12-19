@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/books_model.dart';
+import 'package:frontend/models/library_books_model.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:frontend/widgets/book_item.dart';
+import 'package:frontend/widgets/lib_book_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LibraryBooksTakenScreen extends StatefulWidget {
-  const LibraryBooksTakenScreen({super.key});
+  const LibraryBooksTakenScreen({super.key, required this.datelist});
+  final List<dynamic> datelist;
   @override
   State<LibraryBooksTakenScreen> createState() {
     return _LibraryBooksTakenScreenState();
@@ -15,7 +18,8 @@ class LibraryBooksTakenScreen extends StatefulWidget {
 }
 
 class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
-  List<Books> books = [];
+  bool isError = false;
+  List<LibraryBooks> books = [];
 
   @override
   void initState() {
@@ -24,7 +28,7 @@ class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
   }
 
   void getLibbooks() async {
-    List<Books> libBooks = [];
+    List<LibraryBooks> libBooks = [];
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
@@ -42,13 +46,21 @@ class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
       List result = jsonDecode(response.body);
       print(result);
       for (int i = 0; i < result.length; i++) {
-        Books post = Books.fromMap(result[i] as Map<String, dynamic>);
+        LibraryBooks post =
+            LibraryBooks.fromMap(result[i] as Map<String, dynamic>);
         libBooks.add(post);
       }
+      print(libBooks);
       setState(() {
         books = libBooks;
       });
-      print(libBooks);
+      await Future.delayed(Duration(seconds: 5));
+      if (libBooks.isEmpty) {
+        setState(() {
+          isError = true;
+        });
+      }
+      print(libBooks[0].BookName);
     } catch (err) {
       print(err.toString());
     }
@@ -60,15 +72,27 @@ class _LibraryBooksTakenScreenState extends State<LibraryBooksTakenScreen> {
         appBar: AppBar(
           title: Text("Books Taken"),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: books.length,
-                itemBuilder: (context, index) => BookItem(book: books[index]),
-              ),
-            )
-          ],
-        ));
+        body: books.isEmpty && isError == false
+            ? Center(
+                child: CircularProgressIndicator.adaptive(),
+              )
+            : isError
+                ? Center(
+                    child: Text(
+                        "Something went wrong or resultrs aren't updated yet !!!"),
+                  )
+                : Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: books.length,
+                          itemBuilder: (context, index) => LibBookLii(
+                            libbook: books[index],
+                            fetchedDate: widget.datelist[index],
+                          ),
+                        ),
+                      )
+                    ],
+                  ));
   }
 }

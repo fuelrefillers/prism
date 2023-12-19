@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/bus_model.dart';
+import 'package:frontend/models/faculty_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/services/repo.dart';
 
@@ -13,8 +14,7 @@ part 'prism_state.dart';
 class PrismBloc extends Bloc<PrismEvent, PrismState> {
   PrismBloc() : super(PrismInitial()) {
     on<UserInitialFetchEvent>(userInitialFetchEvent);
-    on<BussesInitialFetchEvent>(bussesInitialFetchEvent);
-    on<BooksInitialFetchEvent>(booksInitialFetchEvent);
+    on<FacultyInitialFetchEvent>(facultyInitialFetchEvent);
   }
 
   FutureOr<void> userInitialFetchEvent(
@@ -25,19 +25,11 @@ class PrismBloc extends Bloc<PrismEvent, PrismState> {
     emit(UserFetchingSuccessfullState(user: user));
   }
 
-  FutureOr<void> bussesInitialFetchEvent(
-      BussesInitialFetchEvent event, Emitter<PrismState> emit) async {
-    emit(BusFetchingLoadingState());
-    await Future.delayed(Duration(milliseconds: 700));
-    List<Bus> busses = await PrismRepo.getBusses();
-    emit(BusFetchingSuccessfullState(busses: busses));
-  }
-
-  FutureOr<void> booksInitialFetchEvent(
-      BooksInitialFetchEvent event, Emitter<PrismState> emit) async {
-    emit(BooksFetchingLoadingState());
-    await Future.delayed(Duration(milliseconds: 700));
-    List<Books> books = await PrismRepo.getbooks();
-    emit(BooksFetchingSuccessfullState(books: books));
+  FutureOr<void> facultyInitialFetchEvent(
+      FacultyInitialFetchEvent event, Emitter<PrismState> emit) async {
+    emit(FacultyFetchingLoadingState());
+    await Future.delayed(Duration(seconds: 2));
+    Faculty faculty = await PrismRepo.getFaculty();
+    emit(FacultyFetchingSuccessfullState(faculty: faculty));
   }
 }

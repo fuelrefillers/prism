@@ -34,6 +34,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       child: Text(
         "Absent",
         style: TextStyle(fontSize: 25, color: Color.fromARGB(255, 255, 0, 0)),
+        textAlign: TextAlign.center,
       ),
     );
     if (userAttendance.DayPresent == 1) {
@@ -42,6 +43,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           "Half Day Present",
           style:
               TextStyle(fontSize: 25, color: Color.fromARGB(255, 182, 100, 0)),
+          textAlign: TextAlign.center,
         ),
       );
     } else if (userAttendance.DayPresent == 2) {
@@ -50,6 +52,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           "Full Day Present",
           style:
               TextStyle(fontSize: 25, color: Color.fromARGB(255, 18, 182, 0)),
+          textAlign: TextAlign.center,
         ),
       );
     }
@@ -179,7 +182,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           Text(
                             "Day ",
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 35,
                                 color: Color.fromARGB(255, 0, 0, 0)),
                           ),
                           dayStatus,

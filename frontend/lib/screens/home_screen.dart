@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/Faculty_Module/home_screen.dart';
 import 'package:frontend/providers.dart/who_is_signed_in.dart';
-import 'package:frontend/providers.dart/faculty_login_provider.dart';
-// import 'package:frontend/providers.dart/token_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/attendance_screen.dart';
 import 'package:frontend/screens/books_home_screen.dart';
@@ -13,7 +10,7 @@ import 'package:frontend/screens/library_screen.dart';
 import 'package:frontend/screens/performance_screen.dart';
 import 'package:frontend/screens/time_table_screen.dart';
 import 'package:frontend/screens/transport_screen.dart';
-import 'package:frontend/services/auth.dart';
+import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
 import 'package:frontend/widgets/drawer.dart';
 import 'package:frontend/widgets/home_nav_control.dart';
@@ -30,7 +27,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final Authservice authservice = Authservice();
+  final StudentParentServices service = StudentParentServices();
   final PrismBloc prismBloc = PrismBloc();
 
   @override
@@ -38,8 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     // authservice.getUser(context);
 
-    authservice.getAttendance(context);
-    authservice.getPerformance(context);
+    service.getAttendance(context);
+    service.getPerformance(context);
     prismBloc.add(UserInitialFetchEvent());
   }
 
@@ -252,7 +249,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Buttonhome(
                               category: "circulars",
                               icon: Icons.notification_add_sharp,
-                              screen: Circulars()),
+                              screen: Circulars(
+                                department: successState.user.Department,
+                                regulation:
+                                    successState.user.RollNo.substring(0, 2),
+                              )),
                         ),
                         Visibility(
                           visible: whois.isSignedIn == 'parent' ||
@@ -275,7 +276,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Buttonhome(
                               category: "Time Table",
                               icon: Icons.view_timeline_outlined,
-                              screen: TimeTableScreen()),
+                              screen: TimeTableScreen(
+                                regulation:
+                                    successState.user.RollNo.substring(0, 2),
+                                department: successState.user.Department,
+                              )),
                         ),
                         Visibility(
                           visible: whois.isSignedIn == 'student',

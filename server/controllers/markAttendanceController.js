@@ -33,7 +33,7 @@ const setAttendance = asyncHandler(async (req, res) => {
   }
 
   // Update attendance for each student
-  for (const student of filteredListARRANGED) {
+  for (const student of filteredListARRANGED) {    
     const user = await attenn.findOneAndUpdate(
       { RollNo: student },
       updateObject
@@ -50,7 +50,7 @@ const setAttendance = asyncHandler(async (req, res) => {
     }
 
 
-    res.json({ success: true, message: 'Attendance updated successfully' });
+    res.status(200).json({ success: true, message: 'Attendance updated successfully',attendees:(filteredListARRANGED.length),absentees:rollNumbers});
   });
   
   

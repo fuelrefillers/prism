@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/models/books_model.dart';
+import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
 import 'package:frontend/widgets/book_item.dart';
@@ -15,7 +15,7 @@ class BooksScreen extends StatefulWidget {
 }
 
 class _BooksScreenState extends State<BooksScreen> {
-  final Authservice authservice = Authservice();
+  final StudentParentServices service = StudentParentServices();
   final PrismBloc prismBloc = PrismBloc();
   bool isError = false;
   List<Books> books = [];
@@ -27,7 +27,7 @@ class _BooksScreenState extends State<BooksScreen> {
   }
 
   void getBooksFrom() async {
-    List<Books> books1 = await authservice.getbooks(context, widget.category);
+    List<Books> books1 = await service.getbooks(context, widget.category);
     await Future.delayed(Duration(seconds: 1));
     setState(() {
       books = books1;
@@ -70,7 +70,10 @@ class _BooksScreenState extends State<BooksScreen> {
               child: CircularProgressIndicator.adaptive(),
             )
           : isError
-              ? Center(child: Text("Error"))
+              ? Center(
+                  child: Text(
+                      "Something went wrong or resultrs aren't updated yet !!!"),
+                )
               : Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Column(

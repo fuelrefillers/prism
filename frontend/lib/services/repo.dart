@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/bus_model.dart';
+import 'package:frontend/models/faculty_model.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:http/http.dart' as http;
@@ -22,6 +23,8 @@ class PrismRepo {
           'Authorization': 'Bearer $token'
         },
       );
+      print("dfdddddddddddddddddddddddddddddddddddddddddddd");
+      print(response.body);
       User user = User.fromJson(response.body);
       return user;
     } catch (err) {
@@ -46,20 +49,36 @@ class PrismRepo {
     }
   }
 
-  static Future<List<Bus>> getBusses() async {
-    List<Bus> busses = [];
+  static Future<Faculty> getFaculty() async {
     try {
-      var response = await http.get(Uri.parse('$ip/api/buses/getbuses'));
-      List result = jsonDecode(response.body);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('x-auth-token');
 
-      for (int i = 0; i < result.length; i++) {
-        Bus post = Bus.fromMap(result[i] as Map<String, dynamic>);
-        busses.add(post);
+      if (token == null) {
+        prefs.setString('x-auth-token', '');
       }
-      return busses;
+      var response = await http.get(
+        Uri.parse('${ip}/api/faculty/getFacultydata'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $token'
+        },
+      );
+      //print(response.body);
+      // facultyprovider.setFaculty(response.body);
+
+      Faculty faculty = Faculty.fromJson(response.body);
+
+      return faculty;
     } catch (err) {
-      print(err.toString());
-      return [];
+      print(err);
+      return Faculty(
+          FacultyId: '--',
+          FacultyName: '--',
+          FacultyDesignation: '--',
+          FacultyPhnNo: '--',
+          Classes: [0],
+          IsAdmin: false);
     }
   }
 
@@ -67,7 +86,7 @@ class PrismRepo {
     List<Books> books = [];
     try {
       var response =
-          await http.get(Uri.parse('$ip/api/books/getbook?category='));
+          await http.get(Uri.parse('${ip}/api/books/getbook?category='));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

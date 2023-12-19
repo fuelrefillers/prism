@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const librarySchema = mongoose.Schema({
-    rollno:{
+    RollNo:{
         type:String,
         required:true,
     },

@@ -1,9 +1,7 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/bus_model.dart';
-import 'package:frontend/services/auth.dart';
-import 'package:frontend/services/prismBloc/prism_bloc.dart';
+import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/widgets/bus_card.dart';
 
 // model compleated
@@ -16,13 +14,30 @@ class Transportscreen extends StatefulWidget {
 }
 
 class _TransportscreenState extends State<Transportscreen> {
-  final PrismBloc prismBloc = PrismBloc();
-
+  String searchValue = '';
+  final StudentParentServices service = StudentParentServices();
+  List<Bus> busses = [];
+  List<String> _suggestions = [];
+  bool isError = false;
   @override
   void initState() {
     super.initState();
+    set();
+  }
 
-    prismBloc.add(BussesInitialFetchEvent());
+  void set() async {
+    List<Bus> b = await service.getBusses();
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      busses = b;
+      _suggestions = busses.map((bus) => bus.Routename).toList();
+    });
+    await Future.delayed(Duration(seconds: 5));
+    if (b.isEmpty) {
+      setState(() {
+        isError = true;
+      });
+    }
   }
 
   // void search(String searchkey) {
@@ -43,59 +58,51 @@ class _TransportscreenState extends State<Transportscreen> {
   //   print(filteredList);
   // }
 
+  Future<List<String>> _fetchSuggestions(String searchValue) async {
+    await Future.delayed(const Duration(milliseconds: 750));
+
+    return _suggestions.where((element) {
+      return element.toLowerCase().contains(searchValue.toLowerCase());
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Transport"),
-        ),
-        body: BlocConsumer<PrismBloc, PrismState>(
-          bloc: prismBloc,
-          listener: (context, state) {},
-          builder: (context, state) {
-            switch (state.runtimeType) {
-              case BusFetchingLoadingState:
-                return Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              case BusFetchingSuccessfullState:
-                final successState = state as BusFetchingSuccessfullState;
-                return Padding(
+      appBar: EasySearchBar(
+        backgroundColor: Colors.white,
+        title: Text("Transport"),
+        onSearch: (value) => setState(() => searchValue = value),
+        asyncSuggestions: (value) async => await _fetchSuggestions(value),
+      ),
+      body: busses.isEmpty && isError == false
+          ? Center(
+              child: CircularProgressIndicator.adaptive(),
+            )
+          : isError
+              ? Center(
+                  child: Text(
+                      "Something went wrong or resultrs aren't updated yet !!!"),
+                )
+              : Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search...',
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {},
-                          ),
-                          prefixIcon: const Icon(Icons.search),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                        ),
-                      ),
                       // Padding(
                       //   padding: const EdgeInsets.all(15.0),
 
                       // ),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: successState.busses.length,
+                          itemCount: busses.length,
                           itemBuilder: (context, index) => BusCard(
-                            bus: successState.busses[index],
+                            bus: busses[index],
                           ),
                         ),
                       ),
                     ],
                   ),
-                );
-              default:
-                return SizedBox();
-            }
-          },
-        ));
+                ),
+    );
   }
 }

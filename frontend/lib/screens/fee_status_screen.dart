@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FeeStatusScreen extends StatelessWidget {
   const FeeStatusScreen({super.key});
@@ -77,7 +79,9 @@ class FeeStatusScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          launchUrlString('https://mrecacademics.com/');
+                        },
                         child: const Text("Pay Fee"),
                       ),
                     ],

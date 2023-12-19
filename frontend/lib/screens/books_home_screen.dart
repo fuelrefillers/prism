@@ -1,56 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/books_department_screen.dart';
+import 'package:frontend/screens/books_downloaded_screen.dart';
 import 'package:frontend/screens/books_screen.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 
-class BooksHomeScreen extends StatelessWidget {
+class BooksHomeScreen extends StatefulWidget {
   const BooksHomeScreen({super.key});
+
+  @override
+  State<BooksHomeScreen> createState() => _BooksHomeScreenState();
+}
+
+class _BooksHomeScreenState extends State<BooksHomeScreen> {
+  int _selectedScreenIndex = 0;
+  void _selectScreen(int index) {
+    setState(() {
+      _selectedScreenIndex = index;
+    });
+  }
+
+  final List<Widget> _screens = [
+    BooksDepartmentScreen(),
+    BooksDownloadedScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Books"),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            MultiPurposeCard(
-              category: "CSE",
-              height1: 80,
-              screen: BooksScreen(category: "CSE"),
-            ),
-            MultiPurposeCard(
-              category: "IT",
-              height1: 80,
-              screen: BooksScreen(category: "IT"),
-            ),
-            MultiPurposeCard(
-              category: "EMERGING",
-              height1: 80,
-              screen: BooksScreen(category: "EMERGING"),
-            ),
-            MultiPurposeCard(
-              category: "ECE",
-              height1: 80,
-              screen: BooksScreen(category: "ECE"),
-            ),
-            MultiPurposeCard(
-              category: "EEE",
-              height1: 80,
-              screen: BooksScreen(category: "EEE"),
-            ),
-            MultiPurposeCard(
-              category: "MECHANICAL",
-              height1: 80,
-              screen: BooksScreen(category: "MECHANICAL"),
-            ),
-            MultiPurposeCard(
-              category: "CIVIL",
-              height1: 80,
-              screen: BooksScreen(category: "CIVIL"),
-            ),
-          ],
-        ),
-      ),
+      body: _screens[_selectedScreenIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          onTap: _selectScreen,
+          currentIndex: _selectedScreenIndex,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.category), label: "Departments"),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.star), label: "Downloaded"),
+          ]),
     );
   }
 }

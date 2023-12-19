@@ -23,6 +23,8 @@ app.use("/api/sendmessage",require("./routes/sendMessages"));
 app.use("/api/semmarks",require("./routes/semMarksRoutes"));
 app.use("/api/faculty/",require("./routes/facultyRoutes"));
 app.use("/api/booksImage",require("./controllers/setimage"));
+app.use("/api/circularpdf",require("./controllers/circulars"));
+app.use("/api/timetable",require("./controllers/timeTableController"));
 // app.use('/profile', express.static('./upload/images'));
 
 app.use('/upload',express.static('./upload'));

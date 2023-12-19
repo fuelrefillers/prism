@@ -69,8 +69,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(15),
+                  GestureDetector(
                     onTap: () {
                       Navigator.push(
                           context,
@@ -88,8 +87,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                       amount: userPerformance.MidScored.last,
                     ),
                   ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(15),
+                  GestureDetector(
                     onTap: () {
                       Navigator.push(
                           context,
@@ -107,8 +105,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                       amount: double.parse(userPerformance.CGPA),
                     ),
                   ),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(15),
+                  GestureDetector(
                     onTap: () {
                       Navigator.push(
                           context,

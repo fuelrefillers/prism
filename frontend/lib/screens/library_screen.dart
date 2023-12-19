@@ -3,7 +3,7 @@ import 'package:flutter_flip_card/flutter_flip_card.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/library_books_taken_screen.dart';
-import 'package:frontend/services/auth.dart';
+import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';
 
@@ -16,12 +16,12 @@ class LibraryScreen extends StatefulWidget {
 
 class _LibraryScreenState extends State<LibraryScreen> {
   final con = FlipCardController();
-  final Authservice authService = Authservice();
+  final StudentParentServices service = StudentParentServices();
 
   @override
   void initState() {
     super.initState();
-    authService.getLibrary(context);
+    service.getLibrary(context);
   }
 
   @override
@@ -80,7 +80,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                           style: TextStyle(color: Colors.white, fontSize: 25),
                         ),
                         Text(
-                          library.rollno.toUpperCase(),
+                          library.RollNo.toUpperCase(),
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         ),
                         SizedBox(
@@ -193,7 +193,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                 height: 75,
                                 width: 180,
                                 child: Image.network(
-                                  'https://barcode.tec-it.com/barcode.ashx?data=${library.rollno.toUpperCase()}&code=Code128&translate-esc=on',
+                                  'https://barcode.tec-it.com/barcode.ashx?data=${library.RollNo}&code=Code128&translate-esc=on',
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -215,7 +215,9 @@ class _LibraryScreenState extends State<LibraryScreen> {
           MultiPurposeCard(
             category: "Books history",
             height1: 80,
-            screen: LibraryBooksTakenScreen(),
+            screen: LibraryBooksTakenScreen(
+              datelist: library.dateTaken,
+            ),
           )
         ],
       ),

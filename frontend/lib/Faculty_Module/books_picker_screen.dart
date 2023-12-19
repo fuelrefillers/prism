@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/services/ip.dart';
 
 class PickImage extends StatefulWidget {
   const PickImage({super.key});
@@ -23,7 +24,7 @@ class _PickImageState extends State<PickImage> {
 
   final TextEditingController BookNameController = TextEditingController();
   final TextEditingController DepartmentController = TextEditingController();
-  final TextEditingController SemesterController = TextEditingController();
+  final TextEditingController regulationController = TextEditingController();
   Uint8List? _image;
   String? fileName;
   String? path;
@@ -37,7 +38,7 @@ class _PickImageState extends State<PickImage> {
     return file;
   }
 
-  Future<void> uploadImage() async {
+  Future<void> uploadImage(BuildContext context) async {
     if (fileName == null) {
       print('No file selected.');
       return;
@@ -48,7 +49,7 @@ class _PickImageState extends State<PickImage> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.29.194:3000/api/booksImage/upload'),
+      Uri.parse('${ip}/api/booksImage/upload'),
     );
 
     // Add the image file
@@ -59,8 +60,8 @@ class _PickImageState extends State<PickImage> {
     // Add additional datd
     request.fields['bookname'] = BookNameController.text.trim();
     request.fields['department'] = DepartmentController.text.trim();
-    request.fields['semester'] = SemesterController.text.trim();
-    // Replace with your data
+    request.fields['regulation'] = regulationController.text.trim();
+    // Replace with your dataxt---,
 
     try {
       var response = await request.send();
@@ -84,84 +85,130 @@ class _PickImageState extends State<PickImage> {
       //backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Book Name'),
-              controller: BookNameController,
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'DepartMent'),
-              controller: DepartmentController,
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Semester'),
-              controller: SemesterController,
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      if (_image == null) {
-                        showImagePickerOption(context);
-                      }
-                    },
-                    child: Container(
-                      clipBehavior: Clip.hardEdge,
-                      height: 200,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      child: _image != null
-                          ? Image(
-                              image: MemoryImage(_image!),
-                              fit: BoxFit.cover,
-                            )
-                          : const CircleAvatar(
-                              radius: 100,
-                              backgroundImage: NetworkImage(
-                                  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-                            ),
-                    ),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: BookNameController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Book Name",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
-                SizedBox(width: 16.0),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      if (fileName == null) {
-                        showPdfPickerOption(context);
-                      }
-                    },
-                    child: Container(
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: DepartmentController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Department Name",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: regulationController,
+                decoration: InputDecoration(
+                  labelText: "Enter the regulation",
+                  fillColor: const Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 50.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        showImagePickerOption(context);
+                      },
+                      child: Container(
                         clipBehavior: Clip.hardEdge,
-                        height: 200,
-                        width: 100,
+                        height: MediaQuery.of(context).size.height / 4,
+                        width: MediaQuery.of(context).size.width / 2,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                        ),
+                        child: _image != null
+                            ? Image(
+                                image: MemoryImage(_image!),
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                'assets/fileadd.jpg',
+                                scale: 1.8,
+                              ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        showPdfPickerOption(context);
+                      },
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: MediaQuery.of(context).size.height / 4,
+                        width: MediaQuery.of(context).size.width / 2,
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black),
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
                         ),
                         child: fileName != null
-                            ? Center(child: Text(fileName!.toString()))
-                            : Center(child: Text("no pdf selected"))),
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/pdfexist.jpg',
+                                    scale: 1.8,
+                                  ),
+                                  Text(
+                                    fileName!.toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/addpdf.jpg',
+                                    scale: 1.8,
+                                  ),
+                                  Text("no pdf selected"),
+                                ],
+                              ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          uploadImage();
+          uploadImage(context);
         },
         child: Text("submit"),
       ),

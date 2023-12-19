@@ -17,7 +17,7 @@ const booksSchema = mongoose.Schema({
         type:String,
         required:true,
     },
-    Semester:{
+    Regulation:{
         type:String,
         required:true,
     },
@@ -27,5 +27,14 @@ const booksSchema = mongoose.Schema({
     }
 
 });
+
+booksSchema.virtual('id').get(function() {
+    return this._id.toHexString();
+});
+
+booksSchema.set('toJSON',{
+    virtuals : true,
+});
+
 
 module.exports = mongoose.model("Book",booksSchema);

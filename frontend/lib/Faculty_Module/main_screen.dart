@@ -1,9 +1,8 @@
 import 'dart:convert';
-
+import 'package:frontend/services/ip.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/review_update.dart';
 import 'package:frontend/models/faculty_fetch_rollno.dart';
-import 'package:frontend/services/ip.dart';
 import 'package:http/http.dart' as http;
 
 class MainScreen extends StatefulWidget {
@@ -41,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
     List<FacultyFetchRollNo> res = [];
     try {
       var response = await http.get(Uri.parse(
-          'http://192.168.29.194:3000/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}'));
+          '${ip}/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {
@@ -51,8 +50,10 @@ class _MainScreenState extends State<MainScreen> {
       }
       print("object");
       setState(() {
+        res.sort((a, b) => a.RollNo.compareTo(b.RollNo));
         data = res;
       });
+      print(res[0]);
     } catch (err) {
       print(err.toString());
     }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
-// import 'package:frontend/Faculty_Module/home_screen.dart';
-// import 'package:frontend/Faculty_Module/main_screen.dart';
+import 'package:frontend/providers.dart/atten_confirm_provider.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
 import 'package:frontend/providers.dart/faculty_login_provider.dart';
 import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers.dart/is_error_provider.dart';
 import 'package:frontend/providers.dart/is_loading_provider.dart';
 import 'package:frontend/providers.dart/who_is_signed_in.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
@@ -38,6 +38,8 @@ void main() async {
           ChangeNotifierProvider(create: (_) => LibraryProvider()),
           ChangeNotifierProvider(create: (_) => IsfacultyLoggedIn()),
           ChangeNotifierProvider(create: (_) => FacultyProvider()),
+          ChangeNotifierProvider(create: (_) => AttendanceConfirm()),
+          ChangeNotifierProvider(create: (_) => isErrorProvider()),
         ],
         child: MyApp(
           token: prefs.getString('x-auth-token'),

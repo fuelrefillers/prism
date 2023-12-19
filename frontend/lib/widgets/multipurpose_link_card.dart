@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 class MultiPurposeLinkCard extends StatelessWidget {
   const MultiPurposeLinkCard({
@@ -8,6 +9,13 @@ class MultiPurposeLinkCard extends StatelessWidget {
   });
   final String category;
   final double height1;
+  void openPdf(String path) {
+    try {
+      OpenFile.open(path);
+    } catch (error) {
+      print('Error opening PDF: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

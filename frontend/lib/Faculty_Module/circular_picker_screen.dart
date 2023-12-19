@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:frontend/services/ip.dart';
 
 class CircularPickerScreen extends StatefulWidget {
   const CircularPickerScreen({super.key});
@@ -18,7 +19,7 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
 
   final TextEditingController CircularNameController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
-  final TextEditingController semisterController = TextEditingController();
+  final TextEditingController regulationController = TextEditingController();
   String? fileName;
   String? path;
   File? selectedIMage;
@@ -32,16 +33,16 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
 
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.29.194:3000/api/booksImage/upload'),
+      Uri.parse('${ip}/api/circularpdf/upload'),
     );
 
     // Add the image file
     request.files.add(await http.MultipartFile.fromPath('circularPdf', path!));
 
     // Add additional datd
-    request.fields['CircularName'] = CircularNameController.text.trim();
+    request.fields['circularTitle'] = CircularNameController.text.trim();
     request.fields['department'] = departmentController.text.trim();
-    request.fields['semester'] = semisterController.text.trim();
+    request.fields['regulation'] = regulationController.text.trim();
     // Replace with your data
 
     try {
@@ -61,38 +62,66 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Books Upload"),
+        title: Text("Circular Upload"),
       ),
       //backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'circular title'),
-              controller: CircularNameController,
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'DepartMent'),
-              controller: departmentController,
-            ),
-            SizedBox(height: 16.0),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Semester'),
-              controller: semisterController,
-            ),
-            SizedBox(height: 16.0),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      if (fileName == null) {
-                        showPdfPickerOption(context);
-                      }
-                    },
-                    child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 5,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: CircularNameController,
+                decoration: InputDecoration(
+                  labelText: "circular title",
+                  fillColor: const Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: departmentController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Department Name",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: regulationController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Regulation",
+                  fillColor: const Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (fileName == null) {
+                          showPdfPickerOption(context);
+                        }
+                      },
+                      child: Container(
                         clipBehavior: Clip.hardEdge,
                         height: 200,
                         width: 100,
@@ -102,13 +131,36 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
                           color: Colors.white,
                         ),
                         child: fileName != null
-                            ? Center(child: Text(fileName!.toString()))
-                            : Center(child: Text("no pdf selected"))),
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/pdfexist.jpg',
+                                    scale: 1.8,
+                                  ),
+                                  Text(
+                                    fileName!.toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/addpdf.jpg',
+                                    scale: 1.8,
+                                  ),
+                                  Text("no pdf selected"),
+                                ],
+                              ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
