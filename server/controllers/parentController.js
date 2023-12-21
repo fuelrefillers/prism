@@ -27,7 +27,7 @@ const parentLogin = asyncHandler(async(req,res)=>{
         //console.log("hiiiiii");
         const child = await UserData.findOne({FatherPhnNo:parentphno});
     if(child){
-        const foundParent = await Parent.create({parentphno:toString(child.FatherPhnNo),parentpassword:toString(child.FatherPhnNo),childrollno:child.RollNo});
+        const foundParent = await Parent.create({parentphno:child.FatherPhnNo,parentpassword:child.FatherPhnNo,childrollno:child.RollNo});
         const validateParent = await Parent.findOne({parentphno});
     if(validateParent && (validateParent.parentpassword===parentpassword)){
         const accessToken = jwt.sign(

@@ -28,15 +28,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage,});
 
-router.post("/upload", upload.fields([{name:'booksCover',maxCount:1},{name:'booksPdf',maxCount:1}]), asynchandler(async(req, res) => {
-    const {bookname,department,regulation}=req.body;
+router.post("/upload", upload.fields([{name:'booksCover',maxC5ount:1},{name:'booksPdf',maxCount:1}]), asynchandler(async(req, res) => {
+    const {booksname,department,regulation}=req.body;
 
     const file1 = req.files['booksCover'][0].filename;
     const file2 = req.files['booksPdf'][0].filename;
-
-    const book = await Book.create({BookName:bookname,Department:department,Regulation:regulation,BookImageUrl:`http://10.0.2.2:3000/upload/booksCover/${file1}`,BookLinkUrl:`http://10.0.2.2:3000/upload/booksPdf/${file2}`,BookAuthor:"sai"});
-
+    const book = await Book.create({BookName:booksname,Department:department,Regulation:regulation,BookImageUrl:`http://15.20.17.222:3000/upload/booksCover/${file1}`,BookLinkUrl:`http://15.20.17.222:3000/upload/booksPdf/${file2}`,BookAuthor:"sai"});
     res.status(200).json(req.files);
+
+    
 }));
 
 module.exports = router;

@@ -17,8 +17,9 @@ const getAllBooks = asynchandler(async(req,res)=>{
 
 const getBooksForCategory = asynchandler(async(req,res)=>{
     let filter = {};
-    if(req.query.category){
-        filter = {Department:req.query.category}
+    if(req.query){
+        const { regulation, department } = req.query;
+        filter = {Regulation: { '$in': [ regulation, 'ALL' ]}, Department: { $in: [department, 'ALL'] }}
     }
     const book = await Book.find(filter);
     res.status(200).json(book);

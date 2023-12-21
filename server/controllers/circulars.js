@@ -18,9 +18,9 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage,});
 
 router.post("/upload", upload.single('circularPdf'), asynchandler(async(req, res) => {
-    const {circularTitle,department,regulation}=req.body;
+    const {circularname,department,regulation}=req.body;
     const file1 = req.file;
-    const circular = await Circular.create({circularTitle:circularTitle,Department:department,Regulation:regulation,CircularUrl:`http://10.0.2.2:3000/upload/circulars/${file1.filename}`});
+    const circular = await Circular.create({circularTitle:circularname,Department:department,Regulation:regulation,CircularUrl:`http://15.20.17.222:3000/upload/circulars/${file1.filename}`});
     res.status(200).json(circular);
 }));
 

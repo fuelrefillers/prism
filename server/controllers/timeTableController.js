@@ -17,10 +17,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage,});
 
-router.post("/upload", upload.single('timetablepdf'), asynchandler(async(req, res) => {
-    const {TimeTableTitle,department,regulation}=req.body;
+router.post("/upload", upload.single('timetablePdf'), asynchandler(async(req, res) => {
+    const {timetablename,department,regulation}=req.body;
     const file1 = req.file;
-    const TimeTableRes = await TimeTable.create({TimeTableTitle:TimeTableTitle,Department:department,Regulation:regulation,TimeTableUrl:`http://10.0.2.2:3000/upload/timetable/${file1.filename}`});
+    const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,TimeTableUrl:`http://15.20.17.222:3000/upload/timetable/${file1.filename}`});
     res.status(200).json(TimeTableRes);
 }));
 

@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.dart';
+import 'package:frontend/Faculty_Module/selection_pannel/photo_selection_pannel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:frontend/services/ip.dart';
+import 'package:frontend/providers.dart/download_provider.dart';
+import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/services/faculty_services.dart';
+import 'package:provider/provider.dart';
 
 class PickImage extends StatefulWidget {
   const PickImage({super.key});
@@ -15,9 +16,22 @@ class PickImage extends StatefulWidget {
 }
 
 class _PickImageState extends State<PickImage> {
+  FacultyServices facultyServices = FacultyServices();
+  late UploadPercentageProvider progressProvider;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final download = Provider.of<DownloadProvider>(context, listen: false);
+      progressProvider =
+          Provider.of<UploadPercentageProvider>(context, listen: false);
+      progressProvider.setprogress(0.00);
+
+      if (download.isDownloaded == true) {
+        download.changeStatus();
+      }
+    });
   }
 
   final TextEditingController BookNameController = TextEditingController();
@@ -29,58 +43,17 @@ class _PickImageState extends State<PickImage> {
   File? selectedIMage;
   File? selectedFile;
 
-  Future<File> saveImage(Uint8List imageData) async {
-    final tempDir = await getTemporaryDirectory();
-    final file = File('${tempDir.path}/temp_image.jpg');
-    await file.writeAsBytes(imageData);
-    return file;
-  }
-
-  Future<void> uploadImage(BuildContext context) async {
-    if (fileName == null) {
-      print('No file selected.');
-      return;
-    }
-    if (_image == null) return;
-
-    final tempFile = await saveImage(_image!);
-
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('${ip}/api/booksImage/upload'),
-    );
-
-    // Add the image file
-    request.files
-        .add(await http.MultipartFile.fromPath('booksCover', tempFile.path));
-    request.files.add(await http.MultipartFile.fromPath('booksPdf', path!));
-
-    // Add additional datd
-    request.fields['bookname'] = BookNameController.text.trim();
-    request.fields['department'] = DepartmentController.text.trim();
-    request.fields['regulation'] = regulationController.text.trim();
-    // Replace with your dataxt---,
-
-    try {
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Image and data uploaded successfully');
-      } else {
-        print(
-            'Failed to upload image and data. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error uploading image and data: $e ');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    // final progress =
+    //     Provider.of<UploadPercentageProvider>(context, listen: false);
+
+    // progress.setprogress(0.00);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Books Upload"),
       ),
-      //backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -132,8 +105,11 @@ class _PickImageState extends State<PickImage> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: () {
-                        showImagePickerOption(context);
+                      onTap: () async {
+                        Uint8List? dummy = await showImagePickerOption(context);
+                        setState(() {
+                          _image = dummy;
+                        });
                       },
                       child: Container(
                         clipBehavior: Clip.hardEdge,
@@ -159,8 +135,18 @@ class _PickImageState extends State<PickImage> {
                   SizedBox(width: 16.0),
                   Expanded(
                     child: InkWell(
-                      onTap: () {
-                        showPdfPickerOption(context);
+                      onTap: () async {
+                        List<String>? ans = await showPdfPickerOption(context);
+
+                        if (ans.isNotEmpty && ans.length == 2) {
+                          setState(() {
+                            fileName = ans[0];
+                            path = ans[1];
+                          });
+                        } else {
+                          showTypeError(context,
+                              "Error: Invalid response from showPdfPickerOption");
+                        }
                       },
                       child: Container(
                         clipBehavior: Clip.hardEdge,
@@ -200,194 +186,108 @@ class _PickImageState extends State<PickImage> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 50,
+              ),
+              Consumer<UploadPercentageProvider>(
+                builder: (context, Progressfinal, child) =>
+                    Progressfinal.progress == 0.00
+                        ? Text("not uploaded")
+                        : Consumer<DownloadProvider>(
+                            builder: (context, value, child) => double.parse(
+                                            Progressfinal.progress
+                                                .toStringAsFixed(2)) ==
+                                        1.00 &&
+                                    value.isDownloaded == true
+                                ? Column(
+                                    children: [
+                                      Text("Download complete"),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            BookNameController.clear();
+                                            DepartmentController.clear();
+                                            regulationController.clear();
+                                            final download =
+                                                Provider.of<DownloadProvider>(
+                                                    context,
+                                                    listen: false);
+                                            progressProvider = Provider.of<
+                                                    UploadPercentageProvider>(
+                                                context,
+                                                listen: false);
+                                            progressProvider.setprogress(0.00);
+
+                                            if (download.isDownloaded == true) {
+                                              download.changeStatus();
+                                            }
+                                            setState(() {
+                                              _image = null;
+                                              path = null;
+                                              fileName = null;
+                                            });
+                                          },
+                                          child: Text("upload another book"))
+                                    ],
+                                  )
+                                : LinearProgressIndicator(
+                                    value: Progressfinal.progress,
+                                  ),
+                          ),
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          uploadImage(context);
+          if (_image != null &&
+              path != null &&
+              BookNameController.text.isNotEmpty &&
+              DepartmentController.text.isNotEmpty &&
+              regulationController.text.isNotEmpty) {
+            facultyServices.uploadImage(
+                context: context,
+                filePath: path!,
+                image: _image!,
+                type: 'books',
+                api: 'booksImage',
+                typename: BookNameController.text,
+                regulation: DepartmentController.text,
+                department: regulationController.text);
+          } else if (_image == null && path == null) {
+            showTypeError(context, "image and file not selected");
+          } else if (_image == null && path != null) {
+            showTypeError(context, "image  not selected");
+          } else if (_image != null && path == null) {
+            showTypeError(context, "file  not selected");
+          } else if (BookNameController.text.isEmpty ||
+              DepartmentController.text.isEmpty ||
+              regulationController.text.isEmpty) {
+            showTypeError(context, "text field is empty");
+          } else {
+            showTypeError(context, "something went wrong");
+          }
         },
-        child: Text("submit"),
+        child: Text("Submit"),
       ),
     );
   }
 
-  void showImagePickerOption(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.blue[100],
-        context: context,
-        builder: (builder) {
-          return Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 4.5,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        _pickImageFromGallery();
-                      },
-                      child: const SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.image,
-                              size: 70,
-                            ),
-                            Text("Gallery")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        _pickImageFromCamera();
-                      },
-                      child: const SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.camera_alt,
-                              size: 70,
-                            ),
-                            Text("Camera")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-  void showPdfPickerOption(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.blue[100],
-        context: context,
-        builder: (builder) {
-          return Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 4.5,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        _pickFile();
-                      },
-                      child: const SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.file_copy_sharp,
-                              size: 70,
-                            ),
-                            Text("Files")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-//Gallery
-  Future _pickImageFromGallery() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.of(context).pop(); //close the model sheet
-  }
-
-//Camera
-  Future _pickImageFromCamera() async {
-    final returnImage =
-        await ImagePicker().pickImage(source: ImageSource.camera);
-    if (returnImage == null) return;
-    setState(() {
-      selectedIMage = File(returnImage.path);
-      _image = File(returnImage.path).readAsBytesSync();
-    });
-    Navigator.of(context).pop();
-  }
-
-//pdf
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      File file = File(result.files.single.path ?? '');
-
-      setState(() {
-        fileName = file.path.split('/').last;
-        path = file.path;
-      });
-
-      Navigator.of(context).pop(); // Close the file picker
-    }
+  void showTypeError(BuildContext context, String errtxt) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Conformation"),
+        content: Text(errtxt),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Okay"),
+          ),
+        ],
+      ),
+    );
   }
 }
-
-
-
- 
-
-// Column(
-//         children: [
-//           Center(
-//             child: Stack(
-//               children: [
-//                 _image != null
-//                     ? SizedBox(
-//                         height: 200,
-//                         width: 200,
-//                         child: Image(image: MemoryImage(_image!)),
-//                       )
-//                     : const CircleAvatar(
-//                         radius: 100,
-//                         backgroundImage: NetworkImage(
-//                             "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-//                       ),
-//                 Positioned(
-//                     bottom: -0,
-//                     left: 140,
-//                     child: IconButton(
-//                         onPressed: () {
-//                           showImagePickerOption(context);
-//                         },
-//                         icon: const Icon(Icons.add_a_photo)))
-//               ],
-//             ),
-//           ),
-//           fileName != null
-//               ? SizedBox(
-//                   height: 200,
-//                   width: 200,
-//                   child: Image(image: MemoryImage(_image!)),
-//                 )
-//               : Text("not uploaded"),
-//           IconButton(
-//               onPressed: () {
-//                 showPdfPickerOption(context);
-//               },
-//               icon: const Icon(Icons.file_copy))
-//         ],
-//       ),

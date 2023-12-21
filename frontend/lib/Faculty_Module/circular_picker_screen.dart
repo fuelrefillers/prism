@@ -1,8 +1,9 @@
-import 'dart:io';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:frontend/services/ip.dart';
+import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.dart';
+import 'package:frontend/providers.dart/download_provider.dart';
+import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/services/faculty_services.dart';
+import 'package:provider/provider.dart';
 
 class CircularPickerScreen extends StatefulWidget {
   const CircularPickerScreen({super.key});
@@ -12,51 +13,28 @@ class CircularPickerScreen extends StatefulWidget {
 }
 
 class _CircularPickerScreenState extends State<CircularPickerScreen> {
+  late UploadPercentageProvider progressProvider;
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final download = Provider.of<DownloadProvider>(context, listen: false);
+      progressProvider =
+          Provider.of<UploadPercentageProvider>(context, listen: false);
+      progressProvider.setprogress(0.00);
+
+      if (download.isDownloaded == true) {
+        download.changeStatus();
+      }
+    });
   }
 
+  FacultyServices facultyServices = FacultyServices();
   final TextEditingController CircularNameController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
   final TextEditingController regulationController = TextEditingController();
   String? fileName;
   String? path;
-  File? selectedIMage;
-  File? selectedFile;
-
-  Future<void> uploadImage() async {
-    if (fileName == null) {
-      print('No file selected.');
-      return;
-    }
-
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse('${ip}/api/circularpdf/upload'),
-    );
-
-    // Add the image file
-    request.files.add(await http.MultipartFile.fromPath('circularPdf', path!));
-
-    // Add additional datd
-    request.fields['circularTitle'] = CircularNameController.text.trim();
-    request.fields['department'] = departmentController.text.trim();
-    request.fields['regulation'] = regulationController.text.trim();
-    // Replace with your data
-
-    try {
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Image and data uploaded successfully');
-      } else {
-        print(
-            'Failed to upload image and data. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      print('Error uploading image and data: $e ');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +94,17 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
                 children: [
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {
-                        if (fileName == null) {
-                          showPdfPickerOption(context);
+                      onTap: () async {
+                        List<String>? ans = await showPdfPickerOption(context);
+
+                        if (ans.isNotEmpty && ans.length == 2) {
+                          setState(() {
+                            fileName = ans[0];
+                            path = ans[1];
+                          });
+                        } else {
+                          showTypeError(context,
+                              "Error: Invalid response from showPdfPickerOption");
                         }
                       },
                       child: Container(
@@ -159,69 +145,99 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
                   ),
                 ],
               ),
+              Consumer<UploadPercentageProvider>(
+                builder: (context, Progressfinal, child) =>
+                    Progressfinal.progress == 0.00
+                        ? Text("not uploaded")
+                        : Consumer<DownloadProvider>(
+                            builder: (context, value, child) => double.parse(
+                                            Progressfinal.progress
+                                                .toStringAsFixed(2)) ==
+                                        1.00 &&
+                                    value.isDownloaded == true
+                                ? Column(
+                                    children: [
+                                      Text("Download complete"),
+                                      ElevatedButton(
+                                          onPressed: () {
+                                            CircularNameController.clear();
+                                            departmentController.clear();
+                                            regulationController.clear();
+                                            final download =
+                                                Provider.of<DownloadProvider>(
+                                                    context,
+                                                    listen: false);
+                                            progressProvider = Provider.of<
+                                                    UploadPercentageProvider>(
+                                                context,
+                                                listen: false);
+                                            progressProvider.setprogress(0.00);
+
+                                            if (download.isDownloaded == true) {
+                                              download.changeStatus();
+                                            }
+                                            setState(() {
+                                              path = null;
+                                              fileName = null;
+                                            });
+                                          },
+                                          child: Text("upload another book"))
+                                    ],
+                                  )
+                                : LinearProgressIndicator(
+                                    value: Progressfinal.progress,
+                                  ),
+                          ),
+              ),
             ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          uploadImage();
+          if (path != null &&
+              CircularNameController.text.isNotEmpty &&
+              departmentController.text.isNotEmpty &&
+              regulationController.text.isNotEmpty) {
+            facultyServices.uploadImage(
+                context: context,
+                filePath: path!,
+                image: null,
+                type: 'circular',
+                api: 'circularpdf',
+                typename: CircularNameController.text,
+                regulation: departmentController.text,
+                department: regulationController.text);
+          } else if (path == null) {
+            showTypeError(context, "image and file not selected");
+          } else if (CircularNameController.text.isEmpty ||
+              departmentController.text.isEmpty ||
+              regulationController.text.isEmpty) {
+            showTypeError(context, "text field is empty");
+          } else {
+            showTypeError(context, "something went wrong");
+          }
         },
         child: Text("submit"),
       ),
     );
   }
 
-  void showPdfPickerOption(BuildContext context) {
-    showModalBottomSheet(
-        backgroundColor: Colors.blue[100],
-        context: context,
-        builder: (builder) {
-          return Padding(
-            padding: const EdgeInsets.all(18.0),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height / 4.5,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        _pickFile();
-                      },
-                      child: const SizedBox(
-                        child: Column(
-                          children: [
-                            Icon(
-                              Icons.file_copy_sharp,
-                              size: 70,
-                            ),
-                            Text("Files")
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-
-//pdf
-  Future<void> _pickFile() async {
-    final result = await FilePicker.platform.pickFiles();
-
-    if (result != null) {
-      File file = File(result.files.single.path ?? '');
-
-      setState(() {
-        fileName = file.path.split('/').last;
-        path = file.path;
-      });
-
-      Navigator.of(context).pop(); // Close the file picker
-    }
+  void showTypeError(BuildContext context, String errtxt) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Conformation"),
+        content: Text(errtxt),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Okay"),
+          ),
+        ],
+      ),
+    );
   }
 }

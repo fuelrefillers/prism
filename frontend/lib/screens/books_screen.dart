@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/books_model.dart';
+import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
 import 'package:frontend/widgets/book_item.dart';
+import 'package:provider/provider.dart';
 
 class BooksScreen extends StatefulWidget {
   const BooksScreen({super.key, required this.category});
+
   final String category;
   @override
   State<BooksScreen> createState() {
@@ -14,19 +17,26 @@ class BooksScreen extends StatefulWidget {
 }
 
 class _BooksScreenState extends State<BooksScreen> {
+  late UserProvider userProvider;
   final StudentParentServices service = StudentParentServices();
   final PrismBloc prismBloc = PrismBloc();
   bool isError = false;
   List<Books> books = [];
   @override
   void initState() {
+    print(widget.category);
     super.initState();
-    getBooksFrom();
+    userProvider = Provider.of<UserProvider>(context, listen: false);
+    String regulation = userProvider.user.RollNo.substring(0, 2);
+    getBooksFrom(regulation: regulation);
     //prismBloc.add(BooksInitialFetchEvent(category: widget.category));
   }
 
-  void getBooksFrom() async {
-    List<Books> books1 = await service.getbooks(context, widget.category);
+  void getBooksFrom({required String regulation}) async {
+    List<Books> books1 = await service.getbooks(
+        context: context,
+        category: widget.category,
+        regulation: "MR${regulation}");
     await Future.delayed(Duration(seconds: 1));
     setState(() {
       books = books1;

@@ -113,12 +113,15 @@ class StudentParentServices {
   // getBusses function ends here
 
 // To get all availabe books from server as filtered by department
-  Future<List<Books>> getbooks(BuildContext context, String category) async {
+  Future<List<Books>> getbooks(
+      {required BuildContext context,
+      required String category,
+      required String regulation}) async {
     List<Books> books = [];
     try {
-      var response = await http
-          .get(Uri.parse('${ip}/api/books/getbook?category=${category}'));
-      print(response.body);
+      var response = await http.get(Uri.parse(
+          '${ip}/api/books/getbook?department=${category}&regulation=${regulation}'));
+      print(response.statusCode);
       httpErrorHandlerWithoutContext(
           response: response,
           context: context,
@@ -131,9 +134,10 @@ class StudentParentServices {
             }
           });
 
+      print(books);
       return books;
     } catch (err) {
-      //print(err.toString());
+      print(err.toString());
       return [];
     }
   }
