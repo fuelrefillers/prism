@@ -1,5 +1,6 @@
 {
     "githubPullRequests.ignoredPullRequestBranches": [
         "main"
-    ]
+    ],
+    "cmake.sourceDirectory": "D:/Sai Tharak/prism/prism/frontend/linux"
 }

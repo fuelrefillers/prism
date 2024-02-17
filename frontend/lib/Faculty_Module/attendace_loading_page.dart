@@ -11,10 +11,8 @@ class AttendanceLoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         body: Consumer<isLoadinProvider>(
           builder: (context, value, child) => value.isloading

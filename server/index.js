@@ -25,10 +25,17 @@ app.use("/api/faculty/",require("./routes/facultyRoutes"));
 app.use("/api/booksImage",require("./controllers/setimage"));
 app.use("/api/circularpdf",require("./controllers/circulars"));
 app.use("/api/timetable",require("./controllers/timeTableController"));
-// app.use('/profile', express.static('./upload/images'));
+app.use("/api/attendanceHistory",require("./routes/attendanceHistoryRoutes"));
+app.use("/api/setTimetable",require("./routes/timeTableRoutes"));
 
+app.use("/api/semesterdata",require("./routes/acedemicsRoutes"));
+// app.use('/profile', express.static('./upload/images'));
+ 
 app.use('/upload',express.static('./upload'));
 // app.use('/booksPdf',express.static('./upload/booksPdf'));
+
+
+
 
 
 

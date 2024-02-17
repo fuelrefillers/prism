@@ -206,8 +206,8 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
                 type: 'circular',
                 api: 'circularpdf',
                 typename: CircularNameController.text,
-                regulation: departmentController.text,
-                department: regulationController.text);
+                regulation: regulationController.text,
+                department: departmentController.text);
           } else if (path == null) {
             showTypeError(context, "image and file not selected");
           } else if (CircularNameController.text.isEmpty ||

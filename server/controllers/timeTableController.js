@@ -11,9 +11,11 @@ const storage = multer.diskStorage({
             cb(null, './upload/timetable');
      },
     filename: (req, file, cb) => {
-            return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+            return cb(null, `${file.originalname}`);
     }
 })
+
+// return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
 
 const upload = multer({storage: storage,});
 

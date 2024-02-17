@@ -212,8 +212,8 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 type: 'timetable',
                 api: 'timetable',
                 typename: TimeTableController.text,
-                regulation: departmentController.text,
-                department: regulationController.text);
+                regulation: regulationController.text,
+                department: departmentController.text);
           } else if (path == null) {
             showTypeError(context, "image and file not selected");
           } else if (TimeTableController.text.isEmpty ||

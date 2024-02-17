@@ -7,7 +7,8 @@ class AnnouncementsPage extends StatefulWidget {
 
 class _AnnouncementsPageState extends State<AnnouncementsPage> {
   List<String> categories = ['General', 'Important', 'Urgent', 'Event'];
-  List<String> stringList = ['CSE-A', 'CSE-B', 'CSE-C', 'CSE-D'];
+  List<String> department = ['CSE', 'AIML', 'CS', 'AA'];
+  List<String> sectionsList = ['A', 'B', 'C', 'D'];
   String selectedCategory = 'General';
   String selectedClass = 'CSE-A';
   TextEditingController announcementController = TextEditingController();
@@ -69,7 +70,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     selectedClass = newValue!;
                   });
                 },
-                items: stringList.map<DropdownMenuItem<String>>((String value) {
+                items: department.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -104,8 +105,10 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 // Handle the announcement submission here
                 String category = selectedCategory;
                 String announcement = announcementController.text;
+                String clas = selectedClass;
                 // Perform actions with the selected category and announcement text
                 print('Selected Category: $category');
+                print('Selected class: $clas');
                 print('Announcement Text: $announcement');
               },
               child: Text('Submit'),

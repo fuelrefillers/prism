@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
     List<FacultyFetchRollNo> res = [];
     try {
       var response = await http.get(Uri.parse(
-          '${ip}/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}'));
+          '${ip}/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}&regulation=21'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {

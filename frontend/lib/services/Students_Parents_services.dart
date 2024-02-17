@@ -60,9 +60,10 @@ class StudentParentServices {
           'Authorization': 'Bearer $token'
         },
       );
+      print(jsonDecode(userRes.body));
       attendanceProvider.setAttendance(userRes.body);
     } catch (err) {
-      //print(err);
+      print(err);
     }
   }
   // getAttendance function ends here

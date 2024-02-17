@@ -7,9 +7,12 @@ const createAttendance = asyncHandler(async(req,res)=>{
 });
 
 const getAttendance = asyncHandler(async(req,res)=>{
+    console.log({RollNo:req.user});
     const userAtten = await attenn.findOne({RollNo:req.user.roolno});
+    console.log(userAtten);
     //res.status(200).json({SemPercentage:userAtten.SemesterData.SemPercentage,MonthlyPercentage:userAtten.MonthlyData.MonthlyPercentage,DayPresent:userAtten.CurrentDay.MorningAttended+userAtten.CurrentDay.AfternoonAttended});
     res.status(200).json({SemPercentage:userAtten.SemesterData.SemPercentage,MonthlyPercentage:userAtten.MonthlyData.MonthlyPercentage,DayPresent:userAtten.CurrentDay.MorningAttended+userAtten.CurrentDay.AfternoonAttended});
+    
 });
 
 

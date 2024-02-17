@@ -13,10 +13,13 @@ const getallUserData = asyncHandler(async(req,res)=>{
 });
 
 const getAllUsersDataAsSection = asyncHandler(async(req,res)=>{
+    
     let filter = {};
-    if(req.query){
-        filter = {Section:req.query.section,Department:req.query.department};
+    if(req.query){ 
+        const rollNoRegExp = new RegExp(`^${req.query.regulation}`);
+        filter = {Section:req.query.section,Department:req.query.department,RollNo:rollNoRegExp};
     }
+
     const currentUsers = await UserData.find(filter,{'RollNo':1,'StudentName':1,'_id':0});
     console.log(filter);
     res.json(currentUsers);

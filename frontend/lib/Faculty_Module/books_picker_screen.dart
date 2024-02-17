@@ -252,8 +252,8 @@ class _PickImageState extends State<PickImage> {
                 type: 'books',
                 api: 'booksImage',
                 typename: BookNameController.text,
-                regulation: DepartmentController.text,
-                department: regulationController.text);
+                regulation: regulationController.text,
+                department: DepartmentController.text);
           } else if (_image == null && path == null) {
             showTypeError(context, "image and file not selected");
           } else if (_image == null && path != null) {

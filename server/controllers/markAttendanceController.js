@@ -1,12 +1,17 @@
 const asyncHandler = require("express-async-handler");
 const attenn = require("../models/attendanceModel");
 const UserData = require("../models/userDetailsModel");
+const AttendanceHistory = require("../models/attendanceHistory");
+
 
 const setAttendance = asyncHandler(async (req, res) => {
   let filter = {};
+  
   if(req.query){
-      filter = {Section:req.query.section,Department:req.query.department};
+    const rollNoRegExp = new RegExp(`^${req.query.regulation}`);
+    filter = {Section:req.query.section,Department:req.query.department,RollNo:rollNoRegExp};
   }
+  console.log(filter);
 
     const { rollNumbers } = req.body;
     const rollNumberslist = await UserData.find(filter,{RollNo:1,_id:0});
@@ -48,11 +53,24 @@ const setAttendance = asyncHandler(async (req, res) => {
         }
       );
     }
+    AttendanceHistoryManuplation(req,res,rollNumbers);
+    // console.log(filteredListARRANGED);
+
 
 
     res.status(200).json({ success: true, message: 'Attendance updated successfully',attendees:(filteredListARRANGED.length),absentees:rollNumbers});
   });
+
+const AttendanceHistoryManuplation = asyncHandler(async(req,res,rollNumbers)=>{
+  for(rno in rollNumbers){
+    const rollNumberEntry = await RollNumber.findOne({
+      RollNumber: rollNumber,
+      "TimeTable.date": date
+    });
+  }
+});
   
+// setAttendance();
   
  
 module.exports = {setAttendance}; 
