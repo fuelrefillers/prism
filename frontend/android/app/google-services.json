@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "844973679036",
+    "project_id": "help-e1e53",
+    "storage_bucket": "help-e1e53.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844973679036:android:dfc10d6c5cd51aced18bb9",
+        "android_client_info": {
+          "package_name": "com.example.Prism"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtHfO93sEgvTmc_mBvu6EZ9LCGuAMf1BY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844973679036:android:1bab83cd415f1f19d18bb9",
+        "android_client_info": {
+          "package_name": "com.example.frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtHfO93sEgvTmc_mBvu6EZ9LCGuAMf1BY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

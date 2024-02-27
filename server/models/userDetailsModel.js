@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const userDataSchema = mongoose.Schema({
-    // user_id :{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     required:true,
-    //     ref:users,
-    // },
     StudentName:{
         type:String,
         required:true,
@@ -42,6 +37,10 @@ const userDataSchema = mongoose.Schema({
         type:String,
     },
     RollNo:{
+        type:String,
+        required:true,
+    },
+    Regulation:{
         type:String,
         required:true,
     },

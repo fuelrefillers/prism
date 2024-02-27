@@ -17,9 +17,25 @@ const facultySchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    FacultyDepartment:{
+        type:String,required:true,
+    },
     Classes:[{
-        type:String,
-        required:true,
+        Department : {type:String,required:true},
+        Section : {type:String,required:true},
+        Regulation : {type:String,required:true},
+        Year : {type:String,required:true}
+    }],
+    SubstitueInfo:[{
+        Date:{type:String},
+        Day:{type:String},
+        StartTime:{type:String},
+        EndTime:{type:String},
+        Department : {type:String},
+        Section : {type:String},
+        Regulation : {type:String},
+        Year : {type:String},
+        OriginalLecturer : {type:String},
     }],
     IsAdmin:{
         type:Boolean,

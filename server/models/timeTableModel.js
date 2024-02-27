@@ -13,6 +13,14 @@ const TimeTableSchema = mongoose.Schema({
         type:String,
         required:true,
     },
+    Section:{
+        type:String,
+        required:true,
+    },
+    TimeTableAddress:{
+        type:String,
+        required:true,
+    },
     TimeTableUrl:{
         type:String,
         required:true,

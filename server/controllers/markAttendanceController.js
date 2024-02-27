@@ -54,23 +54,60 @@ const setAttendance = asyncHandler(async (req, res) => {
       );
     }
     AttendanceHistoryManuplation(req,res,rollNumbers);
-    // console.log(filteredListARRANGED);
 
 
 
-    res.status(200).json({ success: true, message: 'Attendance updated successfully',attendees:(filteredListARRANGED.length),absentees:rollNumbers});
+  res.status(200).json({ success: true, message: 'Attendance updated successfully',attendees:(filteredListARRANGED.length),absentees:rollNumbers});
+});
+
+
+
+function getCurrentTimestamp(currentDate) {
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const day = String(currentDate.getDate()).padStart(2, '0');
+  const hours = String(currentDate.getHours()).padStart(2, '0');
+  const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+  const milliseconds = String(currentDate.getMilliseconds()).padStart(6, '0');
+
+  const formattedDate = `${year}-${month}-${day}`;
+
+  return formattedDate;
+}
+
+function getCurrentPeriod(periods) {
+  const currentTime = new Date(2024, 1, 19, 11, 0, 0).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format time for HH:MM comparison
+  
+  return periods.find(period => {
+    const startTime = new Date('2024-02-19 ' + period.StartTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    const endTime = new Date('2024-02-19 ' + period.EndTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    console.log(currentTime,startTime,endTime);
+    return (currentTime >= startTime && currentTime <= endTime);
   });
+}
 
 const AttendanceHistoryManuplation = asyncHandler(async(req,res,rollNumbers)=>{
-  for(rno in rollNumbers){
-    const rollNumberEntry = await RollNumber.findOne({
-      RollNumber: rollNumber,
-      "TimeTable.date": date
+  console.log(new Date());
+rollNumbers.map(async(rno)=>{
+    const rollNumberEntry = await AttendanceHistory.findOne({
+      RollNumber: rno,
     });
-  }
+    const currentPeriod = getCurrentPeriod(rollNumberEntry.TimeTable.find(entry => entry.date === '2024-02-12').Periods);
+
+    if (currentPeriod) {
+      console.log(currentPeriod);
+      currentPeriod.present = false;
+    } else {
+      console.log("No period found for the current time.");
+    }
+
+    await rollNumberEntry.save();
+});
+
 });
   
-// setAttendance();
+
   
  
 module.exports = {setAttendance}; 

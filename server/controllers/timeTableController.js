@@ -5,6 +5,7 @@ const router = express.Router();
 const TimeTable = require("../models/timeTableModel");
 const asynchandler = require("express-async-handler");
 const { log } = require("console");
+const { convertTimeTable } = require("./TimeTableController1");
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
@@ -20,10 +21,20 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage,});
 
 router.post("/upload", upload.single('timetablePdf'), asynchandler(async(req, res) => {
-    const {timetablename,department,regulation}=req.body;
-    const file1 = req.file;
-    const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,TimeTableUrl:`http://15.20.17.222:3000/upload/timetable/${file1.filename}`});
-    res.status(200).json(TimeTableRes);
+    const {timetablename,department,regulation,section}=req.body;
+
+
+    const TimeTablea = await TimeTable.findOne({TimeTableTitle:timetablename,Department:department,Regulation:regulation,Section:section});
+    if(TimeTablea){
+        res.json({message:"already exists"});
+    }
+    else{
+        const file1 = req.file;
+        const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,Section:section,TimeTableAddress:`upload/timetable/${file1.filename}`,TimeTableUrl:`http://15.20.17.222:3000/upload/timetable/${file1.filename}`});
+        const hello = `upload/timetable/${file1.filename}`;
+        await convertTimeTable(req,res,hello);
+        res.status(200).json(TimeTableRes);
+    }
 }));
 
 router.get("/getTimetable",asynchandler(async(req,res)=>{

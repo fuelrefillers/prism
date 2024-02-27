@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/chatting/UI/screens/chat_home_screen.dart';
+import 'package:frontend/chatting/socketio.dart';
 import 'package:frontend/providers.dart/who_is_signed_in.dart';
 import 'package:frontend/providers.dart/user_provider.dart';
 import 'package:frontend/screens/attendance_screen.dart';
@@ -17,6 +19,7 @@ import 'package:frontend/widgets/home_nav_control.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.whoissignedin});
@@ -42,6 +45,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    io.Socket socket = SocketService().socket;
+
     // final token = Provider.of<TokenProvider>(context).token;
     var whois = Provider.of<whoIsSignedIn>(context, listen: false);
     whois.changeStatus(widget.whoissignedin);
@@ -64,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           case UserFetchingSuccessfullState:
             final successState = state as UserFetchingSuccessfullState;
+            socket.emit("signin", successState.user.RollNo);
             userprovider.setUserFromModel(successState.user);
             return Scaffold(
               appBar: AppBar(
@@ -270,6 +276,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               category: "hostel",
                               icon: Icons.apartment,
                               screen: HostelScreen()),
+                        ),
+                        Visibility(
+                          visible: whois.isSignedIn == 'parent' ||
+                              whois.isSignedIn == 'student',
+                          child: Buttonhome(
+                              category: "Chatt",
+                              icon: Icons.apartment,
+                              screen: ChattingHomeScreen()),
                         ),
                         Visibility(
                           visible: whois.isSignedIn == 'student',
