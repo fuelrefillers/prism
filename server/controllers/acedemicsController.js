@@ -1,9 +1,18 @@
 const asynchandler = require("express-async-handler");
 const Semester = require("../models/acedemicsModel");
+const AttendanceHistory = require("../models/attendanceHistory");
+
+const {assignAttendance} = require("./attendanceHistoryController");
+const {createAttendance} = require("./attendanceController")
 
 const addSemesterData = asynchandler(async(req,res)=>{
     const newData =await Semester.create(req.body);
-    res.json(newData);
+    console.log(newData);
+    if(newData){
+        const result = await AttendanceHistory.deleteMany({Regulation:req.body.Regulation});
+        assignAttendance(req,res,newData.StartDates[0],newData.EndDates[newData.EndDates.length-1],newData);
+        createAttendance(req,res,newData);
+    }
 });
 
 const updateSemesterData = asynchandler(async(req,res)=>{

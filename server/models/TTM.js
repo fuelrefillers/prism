@@ -1,20 +1,9 @@
 const mongoose = require("mongoose");
 
 const TimeTableSchema = mongoose.Schema({
-    Regulation: {
-      title: { type: String, required: true },
-      active: { type: Boolean, default: true }
-    },
-    // Semester: {
-    //   name: { type: String, required: true },
-    //   start_date: { type: Date, required: true },
-    //   end_date: { type: Date, required: true }
-    // },
-    Department: {
-      name: { type: String, required: true }
-    },
-    Section: {
-      Name: { type: String, required: true },
+    Regulation: { type: String, required: true },
+    Department:{ type: String, required: true },
+    Section: { type: String, required: true },
       TimeTable: [
         {
           Day: { type: String, required: true },
@@ -32,11 +21,11 @@ const TimeTableSchema = mongoose.Schema({
               Substitute : {type: Boolean,default:false, required: true}, 
               SubstituteId : {type: String},
               SubstituteName:{type: String},
+              ClassDuration:{type:Number}
             }
           ]
         }
-      ]
-    },
+      ],
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
   });

@@ -4,7 +4,7 @@ import 'dart:convert';
 class SemMarks {
   final String RollNo;
   final String CourseCode;
-  final String CourseName;
+  String CourseName;
   final int Ext;
   final int Int;
   final int Total;

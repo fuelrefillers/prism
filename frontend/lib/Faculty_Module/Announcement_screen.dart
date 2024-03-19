@@ -1,120 +1,272 @@
+import 'dart:io';
+import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.dart';
+import 'package:frontend/Faculty_Module/selection_pannel/photo_selection_pannel.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/services/faculty_services.dart';
+import 'package:provider/provider.dart';
 
-class AnnouncementsPage extends StatefulWidget {
+class UpdatesScreen extends StatefulWidget {
+  const UpdatesScreen({Key? key}) : super(key: key);
+
   @override
-  _AnnouncementsPageState createState() => _AnnouncementsPageState();
+  State<UpdatesScreen> createState() => _UpdatesScreenState();
 }
 
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
-  List<String> categories = ['General', 'Important', 'Urgent', 'Event'];
-  List<String> department = ['CSE', 'AIML', 'CS', 'AA'];
-  List<String> sectionsList = ['A', 'B', 'C', 'D'];
-  String selectedCategory = 'General';
-  String selectedClass = 'CSE-A';
-  TextEditingController announcementController = TextEditingController();
+class _UpdatesScreenState extends State<UpdatesScreen> {
+  FacultyServices facultyServices = FacultyServices();
+  late UploadPercentageProvider progressProvider;
+  final TextEditingController sectionController = TextEditingController();
+  final TextEditingController DepartmentController = TextEditingController();
+  final TextEditingController regulationController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
+  final TextEditingController TitleController = TextEditingController();
+
+  List<Uint8List> _images = [];
+  List<File> _pdfFiles = [];
+  List<String> _pdfNames = [];
+
+  List<File> convertPathsToFiles(List<String> filePaths) {
+    List<File> files = [];
+    for (String path in filePaths) {
+      files.add(File(path));
+    }
+    return files;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final faculty =
+        Provider.of<FacultyProvider>(context, listen: false).faculty;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Announcements'),
+        title: Text("Post Updates"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: DropdownButton<String>(
-                value: selectedCategory,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedCategory = newValue!;
-                  });
-                },
-                items: categories.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
-                    ),
-                  );
-                }).toList(),
-                isExpanded: true,
-                underline: SizedBox(), // Hide the default underline
-                icon: Icon(Icons.arrow_drop_down, color: Colors.blue),
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
-                hint: Text(
-                  'Select Category',
-                  style: TextStyle(color: Colors.grey),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10.0),
+
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: regulationController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Regulation",
+                  fillColor: const Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: DropdownButton<String>(
-                value: selectedClass,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedClass = newValue!;
-                  });
-                },
-                items: department.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(fontSize: 16.0, color: Colors.black),
-                    ),
-                  );
-                }).toList(),
-                isExpanded: true,
-                underline: SizedBox(), // Hide the default underline
-                icon: Icon(Icons.arrow_drop_down, color: Colors.blue),
-                style: TextStyle(fontSize: 16.0, color: Colors.black),
-                hint: Text(
-                  'Select Category',
-                  style: TextStyle(color: Colors.grey),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: DepartmentController,
+                decoration: InputDecoration(
+                  labelText: "Enter the Department Name",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16),
-            TextFormField(
-              controller: announcementController,
-              maxLines: 5,
-              decoration: InputDecoration(
-                hintText: 'Enter your announcement...',
-                border: OutlineInputBorder(),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: sectionController,
+                decoration: InputDecoration(
+                  labelText: "Enter section",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
               ),
-              style: TextStyle(fontSize: 16.0, color: Colors.black),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                // Handle the announcement submission here
-                String category = selectedCategory;
-                String announcement = announcementController.text;
-                String clas = selectedClass;
-                // Perform actions with the selected category and announcement text
-                print('Selected Category: $category');
-                print('Selected class: $clas');
-                print('Announcement Text: $announcement');
-              },
-              child: Text('Submit'),
-            ),
-          ],
+              SizedBox(height: 20.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: TitleController,
+                decoration: InputDecoration(
+                  labelText: "Enter Title(max 5 words)",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: messageController,
+                decoration: InputDecoration(
+                  labelText: "Enter message",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  Uint8List? image = await showImagePickerOption(context);
+                  if (image != null) {
+                    setState(() {
+                      _images.add(image);
+                    });
+                  }
+                },
+                child: Text("Add Image"),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildImagePreview(),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () async {
+                  List<String>? filePaths = await showPdfPickerOption(context);
+                  print(filePaths);
+                  if (filePaths != null) {
+                    _pdfNames.add(filePaths[0]);
+                    print(filePaths[0]);
+                    _pdfFiles.add(File(filePaths[1]));
+                  }
+                },
+                child: Text("Add PDF Files"),
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _buildPdfFilesPreview(),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20.0),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     _uploadFiles();
+              //   },
+              //   child: Text("Submit"),
+              // ),
+              SizedBox(height: 20.0),
+              SizedBox(height: 20.0),
+            ],
+          ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _uploadFiles("${faculty.FacultyName} - ${faculty.FacultyId}");
+        },
+        child: Text("Submit"),
+      ),
+    );
+  }
+
+  Widget _buildImagePreview() {
+    return _images.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Image Preview:",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 10.0),
+              Wrap(
+                spacing: 10.0,
+                runSpacing: 10.0,
+                children: _images.map((image) {
+                  return Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Image.memory(image, fit: BoxFit.cover),
+                  );
+                }).toList(),
+              ),
+            ],
+          )
+        : SizedBox.shrink();
+  }
+
+  Widget _buildPdfFilesPreview() {
+    return _pdfNames.isNotEmpty
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "PDF Files:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _pdfNames.map((name) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: Text(name),
+                  );
+                }).toList(),
+              ),
+            ],
+          )
+        : SizedBox.shrink();
+  }
+
+  void _uploadFiles(String sentBy) {
+    if (_images.isNotEmpty &&
+        _pdfFiles.isNotEmpty &&
+        sectionController.text.isNotEmpty &&
+        messageController.text.isNotEmpty &&
+        DepartmentController.text.isNotEmpty &&
+        regulationController.text.isNotEmpty) {
+      facultyServices.uploadFiles(
+        context: context,
+        imageFiles: _images,
+        pdfFiles: _pdfFiles,
+        Section: sectionController.text.toUpperCase(),
+        SentBy: sentBy,
+        Message: messageController.text,
+        Regulation: regulationController.text,
+        Department: DepartmentController.text,
+        Title: TitleController.text,
+      );
+    } else {
+      showTypeError(context, "Please fill all fields and add files.");
+    }
+  }
+
+  void showTypeError(BuildContext context, String errtxt) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Error"),
+        content: Text(errtxt),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("OK"),
+          ),
+        ],
       ),
     );
   }

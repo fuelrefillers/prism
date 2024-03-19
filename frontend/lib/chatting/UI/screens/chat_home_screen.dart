@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/chatting/UI/screens/chat_page_screen.dart';
+import 'package:frontend/chatting/UI/screens/faculty_chat_screen_page.dart';
+import 'package:frontend/chatting/UI/screens/parents_chat_page.dart';
 // import 'package:flutter/widgets.dart';
 
 class ChattingHomeScreen extends StatefulWidget {
@@ -22,7 +24,7 @@ class _ChattingHomeScreen extends State<ChattingHomeScreen>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        title: Text("CHATTTT BABES"),
+        title: Text("CHAT"),
         bottom: TabBar(
           // isScrollable: true,
           controller: _controller,
@@ -43,18 +45,9 @@ class _ChattingHomeScreen extends State<ChattingHomeScreen>
       body: TabBarView(
         controller: _controller,
         children: [
-          // CameraPage(),
-          // ChatPage(
-          //   chatmodels: widget.chatmodels,
-          //   sourchat: widget.sourchat,
-          // ),
-          // Text(
-          //   "Students",
-          //   style: TextStyle(color: Colors.white),
-          // ),
           ChatPageScreen(),
-          Text("Parents"),
-          Text("Faculty"),
+          ParentsChatPage(),
+          FacultyChatPage(),
         ],
       ),
     );

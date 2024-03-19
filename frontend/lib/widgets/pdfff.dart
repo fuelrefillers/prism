@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
-class PdfViewerPage extends StatelessWidget {
-  final String pdfPath;
+class PDFViewerScreen extends StatelessWidget {
+  final String pdfUrl;
 
-  PdfViewerPage({required this.pdfPath});
+  const PDFViewerScreen({Key? key, required this.pdfUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +13,24 @@ class PdfViewerPage extends StatelessWidget {
         title: Text('PDF Viewer'),
       ),
       body: PDFView(
-        filePath:
-            'http://192.168.29.194:3000/upload/circulars/circularPdf_1702824581530.pdf',
+        filePath: pdfUrl,
+        autoSpacing: true,
         enableSwipe: true,
-        swipeHorizontal: true,
-        autoSpacing: false,
-        pageSnap: true,
-        defaultPage: 0,
-        fitPolicy: FitPolicy.BOTH,
+        pageFling: true,
+        onRender: (pages) {
+          // Do something when the PDF is rendered
+        },
+        onError: (error) {
+          // Handle error when PDF fails to load
+          print(error.toString());
+        },
+        onPageError: (page, error) {
+          // Handle error for specific page
+          print('Error on page $page: $error');
+        },
+        onViewCreated: (PDFViewController controller) {
+          // Do something when the PDF view is created
+        },
       ),
     );
   }

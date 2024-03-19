@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class LinearProgressBar extends StatefulWidget {
-  const LinearProgressBar({super.key, required this.progressPer});
+  const LinearProgressBar(
+      {super.key, required this.progressPer, required this.barcolor});
   final double progressPer;
+  final Color barcolor;
   @override
   State<LinearProgressBar> createState() {
     return _LinearProgressBarState();
@@ -34,11 +36,11 @@ class _LinearProgressBarState extends State<LinearProgressBar> {
   @override
   Widget build(BuildContext context) {
     return LinearProgressIndicator(
-      backgroundColor: const Color.fromARGB(54, 64, 195, 255),
-      color: const Color.fromARGB(255, 54, 60, 244),
+      backgroundColor: Color.fromARGB(255, 217, 217, 217),
+      valueColor: AlwaysStoppedAnimation<Color>(widget.barcolor),
       minHeight: 25,
       value: value,
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(20),
     );
   }
 }

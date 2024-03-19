@@ -33,6 +33,8 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
   final TextEditingController CircularNameController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
   final TextEditingController regulationController = TextEditingController();
+  final TextEditingController sectionController = TextEditingController();
+
   String? fileName;
   String? path;
 
@@ -200,14 +202,15 @@ class _CircularPickerScreenState extends State<CircularPickerScreen> {
               departmentController.text.isNotEmpty &&
               regulationController.text.isNotEmpty) {
             facultyServices.uploadImage(
-                context: context,
-                filePath: path!,
-                image: null,
-                type: 'circular',
-                api: 'circularpdf',
-                typename: CircularNameController.text,
-                regulation: regulationController.text,
-                department: departmentController.text);
+              context: context,
+              filePath: path!,
+              image: null,
+              type: 'circular',
+              api: 'circularpdf',
+              typename: CircularNameController.text,
+              regulation: regulationController.text,
+              department: departmentController.text,
+            );
           } else if (path == null) {
             showTypeError(context, "image and file not selected");
           } else if (CircularNameController.text.isEmpty ||

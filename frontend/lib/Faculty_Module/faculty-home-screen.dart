@@ -2,17 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/Faculty_Module/Acedemics.dart';
 import 'package:frontend/Faculty_Module/Announcement_screen.dart';
-import 'package:frontend/Faculty_Module/circular_picker_screen.dart';
-import 'package:frontend/Faculty_Module/home_screen.dart';
+import 'package:frontend/Faculty_Module/adjust_attendance.dart';
 import 'package:frontend/Faculty_Module/books_picker_screen.dart';
+import 'package:frontend/Faculty_Module/circular_picker_screen.dart';
+import 'package:frontend/Faculty_Module/download_attendance.dart';
+import 'package:frontend/Faculty_Module/faculty_classes_assignment_deletion_screen.dart';
+import 'package:frontend/Faculty_Module/home_screen.dart';
+import 'package:frontend/Faculty_Module/mid_marks_screen.dart';
+import 'package:frontend/Faculty_Module/new_faculty_or_class_assignment_screen.dart';
+import 'package:frontend/Faculty_Module/substitue_page.dart';
 import 'package:frontend/Faculty_Module/time_table_picker_screen.dart';
+import 'package:frontend/Faculty_Module/uploadPrevQuestionPapers.dart';
+import 'package:frontend/chatting/UI/screens/chat_home_screen.dart';
+import 'package:frontend/location/location_sharing.dart';
 import 'package:frontend/providers.dart/faculty_provider.dart';
 import 'package:frontend/services/auth.dart';
+import 'package:frontend/services/faculty_services.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
+import 'package:frontend/widgets/custom_button.dart';
 import 'package:frontend/widgets/drawer.dart';
-import 'package:frontend/widgets/home_nav_control.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class FacultyHomeScreen extends StatefulWidget {
   const FacultyHomeScreen({super.key});
@@ -24,7 +33,9 @@ class FacultyHomeScreen extends StatefulWidget {
 
 class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
   Authservice authservice = Authservice();
-  final PrismBloc prismBloc = PrismBloc();
+  FacultyServices ss = FacultyServices();
+  final PrismBloc prismBloc =
+      PrismBloc(); // Create an instance of SocketService
   @override
   void initState() {
     super.initState();
@@ -52,146 +63,217 @@ class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
             );
           case FacultyFetchingSuccessfullState:
             final successState = state as FacultyFetchingSuccessfullState;
+            ss.setFacultyTimeTable(
+                facultyId: successState.faculty.FacultyId, context: context);
             facultyprovider.setFacultyFromModel(successState.faculty);
             return Scaffold(
               appBar: AppBar(
-                title: const Text("MREC Prism"),
+                elevation: 1.0,
+                shadowColor: Color.fromARGB(255, 59, 58, 58),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'MREC',
+                          style: TextStyle(
+                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        const Text(
+                          'PRISM',
+                          style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green),
+                        ),
+                      ],
+                    ),
+                    //const SizedBox(width: 100),
+                    Image.asset(
+                      'assets/MREC_logo.png',
+                      height: MediaQuery.of(context).size.height / 8,
+                      width: MediaQuery.of(context).size.width / 8,
+                    ),
+                  ],
+                ),
               ),
               drawer: const Drawerwidget(),
-              body: Column(
-                children: [
-                  Stack(
+              body: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: FadeInImage(
-                          fadeInDuration: Duration(milliseconds: 100),
-                          fadeOutDuration: Duration(milliseconds: 100),
-                          placeholder: MemoryImage(kTransparentImage),
-                          image: AssetImage("assets/home-screen-hero.png"),
-                          fit: BoxFit.cover,
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF7F8FB),
+                          borderRadius: BorderRadius.circular(20.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
-                      ),
-                      Center(
-                        child: Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.all(20),
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(145, 164, 164, 164),
-                          ),
+                        height: MediaQuery.of(context).size.height / 4.8,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
+                                width: MediaQuery.of(context).size.width / 2,
                                 child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
-                                      "Welcome,",
-                                      style: TextStyle(
-                                          fontSize: 25, color: Colors.white),
+                                    SizedBox(
+                                      height: 22.5,
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          successState.faculty.FacultyName,
-                                          style: const TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.white),
-                                        ),
-                                        Text(
-                                          successState.faculty.FacultyId,
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white),
-                                        ),
-                                      ],
+                                    Text(
+                                      'WELCOME,',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                    Text(
+                                      successState.faculty.FacultyName,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20,
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                                    Text(
+                                      successState.faculty.FacultyId,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Color.fromARGB(255, 0, 0, 0)),
+                                    ),
+                                    Text(
+                                      successState.faculty.FacultyDesignation,
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const VerticalDivider(),
                               Container(
-                                padding:
-                                    const EdgeInsets.fromLTRB(20, 30, 10, 30),
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    left: BorderSide(
-                                      color: Color.fromARGB(255, 255, 255, 255),
-                                      width: 3.0,
-                                    ),
-                                  ),
+                                clipBehavior: Clip.hardEdge,
+                                height: MediaQuery.of(context).size.height / 6,
+                                width: MediaQuery.of(context).size.width / 4,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
                                 ),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      "ss",
-                                      style: const TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                    Text(
-                                      "ll",
-                                      style: const TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                  ],
+                                child: Image(
+                                  image: AssetImage('assets/placeHolder.png'),
+                                  fit: BoxFit.fill,
                                 ),
                               ),
                             ],
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10.0),
+                      const Center(
+                        child: Text(
+                          'Here are your latest updates',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Expanded(
+                        child: GridView(
+                          padding: const EdgeInsets.all(3),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 2 / 0.8,
+                          ),
+                          children: [
+                            CustomButton(
+                                buttonText: "Student Attendace",
+                                icon: Icons.person,
+                                onPressed: MarkAttendacePage(
+                                    title: "Mark Attendance")),
+                            CustomButton(
+                                buttonText: "upload books",
+                                icon: Icons.person,
+                                onPressed: PickImage()),
+                            CustomButton(
+                                buttonText: "upload circular",
+                                icon: Icons.person,
+                                onPressed: CircularPickerScreen()),
+                            CustomButton(
+                                buttonText: "upload Time Table  ",
+                                icon: Icons.person,
+                                onPressed: TimeTablePickerScreen()),
+                            CustomButton(
+                                buttonText: "Acedemics",
+                                icon: Icons.person,
+                                onPressed: AcademicsPage()),
+                            CustomButton(
+                                buttonText: "Post Updates",
+                                icon: Icons.person,
+                                onPressed: UpdatesScreen()),
+                            CustomButton(
+                                buttonText: "chat",
+                                icon: Icons.person,
+                                onPressed: ChattingHomeScreen()),
+                            CustomButton(
+                                buttonText: "faculty assign",
+                                icon: Icons.person,
+                                onPressed: NewFacultyOrChangeClassesScreen()),
+                            CustomButton(
+                                buttonText: "Faculty management",
+                                icon: Icons.person,
+                                onPressed:
+                                    FacultyClassAssignmentOrdeletionScreen()),
+                            CustomButton(
+                                buttonText: "Substitute",
+                                icon: Icons.person,
+                                onPressed: SubstitutePage()),
+                            CustomButton(
+                                buttonText: "Adjust Attendance",
+                                icon: Icons.person,
+                                onPressed: AdjustAttendacePage(title: "hello")),
+                            CustomButton(
+                                buttonText: "Download Attendance",
+                                icon: Icons.person,
+                                onPressed: DownloadAttendanceScreen()),
+                            CustomButton(
+                                buttonText: "mid",
+                                icon: Icons.person,
+                                onPressed: MidMarksScreen()),
+                            CustomButton(
+                                buttonText: "prevQP",
+                                icon: Icons.person,
+                                onPressed: UploadPrevQPScreen()),
+                            CustomButton(
+                                buttonText: "Location Demo",
+                                icon: Icons.person,
+                                onPressed: LocationTracker()),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Expanded(
-                    child: GridView(
-                      padding: const EdgeInsets.all(15),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 30,
-                        childAspectRatio: 3 / 2.5,
-                      ),
-                      children: [
-                        Buttonhome(
-                            category: "Student Attendace",
-                            icon: Icons.person,
-                            screen: FacultyAttendanceScreen()),
-                        Buttonhome(
-                            category: "upload books",
-                            icon: Icons.person,
-                            screen: PickImage()),
-                        Buttonhome(
-                            category: "upload circular",
-                            icon: Icons.person,
-                            screen: CircularPickerScreen()),
-                        Buttonhome(
-                            category: "upload Time Table  ",
-                            icon: Icons.person,
-                            screen: TimeTablePickerScreen()),
-                        Buttonhome(
-                            category: "Acedemics",
-                            icon: Icons.person,
-                            screen: AcademicsPage()),
-                        Buttonhome(
-                            category: "Announcements",
-                            icon: Icons.person,
-                            screen: AnnouncementsPage()),
-                      ],
-                    ),
-                  ),
-                ],
+                ),
               ),
             );
           default:

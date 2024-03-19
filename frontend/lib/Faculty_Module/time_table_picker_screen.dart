@@ -36,6 +36,7 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
   final TextEditingController TimeTableController = TextEditingController();
   final TextEditingController departmentController = TextEditingController();
   final TextEditingController regulationController = TextEditingController();
+  final TextEditingController sectionController = TextEditingController();
   String? fileName;
   String? path;
   File? selectedIMage;
@@ -88,6 +89,19 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 decoration: InputDecoration(
                   labelText: "Enter the Regulation",
                   fillColor: const Color.fromARGB(255, 215, 224, 243),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: sectionController,
+                decoration: InputDecoration(
+                  labelText: "Enter section",
+                  fillColor: Color.fromARGB(255, 215, 224, 243),
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
@@ -205,7 +219,7 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
               TimeTableController.text.isNotEmpty &&
               departmentController.text.isNotEmpty &&
               regulationController.text.isNotEmpty) {
-            facultyServices.uploadImage(
+            facultyServices.timeTableUpload(
                 context: context,
                 filePath: path!,
                 image: null,
@@ -213,7 +227,8 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 api: 'timetable',
                 typename: TimeTableController.text,
                 regulation: regulationController.text,
-                department: departmentController.text);
+                department: departmentController.text,
+                section: sectionController.text);
           } else if (path == null) {
             showTypeError(context, "image and file not selected");
           } else if (TimeTableController.text.isEmpty ||

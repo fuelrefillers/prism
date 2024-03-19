@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/chatting/socketio.dart';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/faculty_model.dart';
 import 'package:frontend/services/ip.dart';
@@ -22,13 +23,12 @@ class PrismRepo {
           'Authorization': 'Bearer $token'
         },
       );
-      print("dfdddddddddddddddddddddddddddddddddddddddddddd");
-      print(response.body);
       User user = User.fromJson(response.body);
       return user;
     } catch (err) {
       print(err);
       return User(
+          Regulation: "--s",
           StudentName: '--',
           StudentPhnNo: '--',
           StudentEmail: '--',
@@ -48,6 +48,14 @@ class PrismRepo {
     }
   }
 
+  // static Future<TimeTableForStudents> getStudentTimeTable() async {
+  //   try {
+
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
   static Future<Faculty> getFaculty() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -63,21 +71,26 @@ class PrismRepo {
           'Authorization': 'Bearer $token'
         },
       );
-      //print(response.body);
+      // print(response.body);
       // facultyprovider.setFaculty(response.body);
 
       Faculty faculty = Faculty.fromJson(response.body);
+      var result = jsonDecode(response.body);
+      SocketService().emitSignInEvent(result['FacultyId']);
 
       return faculty;
     } catch (err) {
-      print(err);
+      print("Hello from repo ${err}");
       return Faculty(
-          FacultyId: '--',
-          FacultyName: '--',
-          FacultyDesignation: '--',
-          FacultyPhnNo: '--',
-          Classes: [0],
-          IsAdmin: false);
+          FacultyId: "--",
+          FacultyName: "--",
+          FacultyDesignation: "--",
+          FacultyPhnNo: "--",
+          FacultyDepartment: "--",
+          Classes: [],
+          IsAdmin: false,
+          AcceptedSubstitueInfo: [],
+          InQueueSubstituteInfo: []);
     }
   }
 

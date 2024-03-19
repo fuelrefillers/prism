@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+
+const DateRangeSchema = new mongoose.Schema({
+    startDate: { type: String, required: true },
+    endDate: { type: String, required: true }
+});
+
 const aceschema = mongoose.Schema({
     Regulation:{
         type:String,
@@ -28,7 +34,15 @@ const aceschema = mongoose.Schema({
     HolidaysForMonth:[{
         type:Number,
     }],
-    
+    StartDates:[{
+        type:String,
+    }],
+    EndDates:[{
+        type:String,
+    }], 
+    Holidays:[{
+        type:String,
+    }]  
 });
 
 module.exports = mongoose.model("acedemics",aceschema);

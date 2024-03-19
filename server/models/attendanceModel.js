@@ -6,23 +6,28 @@ const attendanceSchema = mongoose.Schema({
         required: true,
         unique: true,
       },
+    Regulation:{
+      type: String,
+      required: true,
+    },
       SemesterData: {
         TotalForSem: { type: Number, required: true },
         ClassesAttendedForSem: { type: Number, required: true },
-        HolidaysForSem: { type: Number, required: true },
-        SemPercentage: { type: Number },
-        TotalDaysAbsentForSem: { type: Number, required: true },
+        HolidaysForSem: { type: Number},
+        SemPercentage: { type: Number,default:0 },
+        TotalDaysAbsentForSem: { type: Number,default:0},
       },
       MonthlyData: {
         TotalForMonth: { type: Number, required: true },
         ClassesAttendedForMonth: { type: Number, required: true },
-        HolidaysForMonth: { type: Number, required: true },
-        MonthlyPercentage: { type: Number },
-        TotalDaysAbsentForMonth: { type: Number, required: true },
+        HolidaysForMonth: { type: Number},
+        MonthlyPercentage: { type: Number,default:0 },
+        TotalDaysAbsentForMonth: { type: Number,default:0},
+        TotalDaysPresentForMonth: { type: Number,default:0},
       },
       CurrentDay:{
-        MorningAttended: { type: Number, required: true },
-        AfternoonAttended: { type: Number, required: true },
+        MorningAttended: { type: Number,default:0},
+        AfternoonAttended: { type: Number,default:0},
       }
 
     

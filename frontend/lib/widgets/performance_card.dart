@@ -15,8 +15,8 @@ class PerformanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(),
-      height: 150,
-      width: 150,
+      height: MediaQuery.of(context).size.height / 5.9,
+      width: MediaQuery.of(context).size.width / 2.7,
       child: Card(
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -36,6 +36,7 @@ class PerformanceCard extends StatelessWidget {
                 children: [
                   LinearProgressBar(
                     progressPer: percentage,
+                    barcolor: Color.fromARGB(255, 17, 79, 90),
                   ),
                   Center(
                       child: Text(

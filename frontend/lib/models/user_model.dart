@@ -15,6 +15,8 @@ class User {
   final String ImageUrl;
   final int Semester;
   final String Department;
+  final String Regulation;
+
   final String Section;
   final String Actions;
   final bool FeeStatus;
@@ -32,6 +34,7 @@ class User {
     required this.ImageUrl,
     required this.Semester,
     required this.Department,
+    required this.Regulation,
     required this.Section,
     required this.Actions,
     required this.FeeStatus,
@@ -52,6 +55,7 @@ class User {
       'ImageUrl': ImageUrl,
       'Semester': Semester,
       'Department': Department,
+      'Regulation': Regulation,
       'Section': Section,
       'Actions': Actions,
       'FeeStatus': FeeStatus,
@@ -73,6 +77,7 @@ class User {
       ImageUrl: map['ImageUrl'] as String,
       Semester: map['Semester'] as int,
       Department: map['Department'] as String,
+      Regulation: map['Regulation'] as String,
       Section: map['Section'] as String,
       Actions: map['Actions'] as String,
       FeeStatus: map['FeeStatus'] as bool,

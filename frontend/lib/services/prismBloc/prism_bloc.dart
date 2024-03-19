@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/bus_model.dart';
 import 'package:frontend/models/faculty_model.dart';
+import 'package:frontend/models/time_table_view_model.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:frontend/services/repo.dart';
 

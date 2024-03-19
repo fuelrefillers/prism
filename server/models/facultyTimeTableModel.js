@@ -24,7 +24,7 @@ const FacultyTimeTableSchema = mongoose.Schema({
             Section:{ type: String, required: true},
             Department:{type: String, required: true},
             Year:{type: String, required: true},
-            regulation:{type: String, required: true},
+            Regulation:{type: String,required: true},
             SubjectName:{ type: String, required: true},
             Subjectcode:{ type: String, required: true},
         }

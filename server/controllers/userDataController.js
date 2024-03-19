@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const UserData = require("../models/userDetailsModel");
 const jwt=require("jsonwebtoken");
+const Faculty = require("../models/facultyModel");
 
 const getUserData = asyncHandler(async(req,res)=>{
     const currentUser = await UserData.findOne({RollNo : req.user.roolno});
@@ -16,15 +17,126 @@ const getAllUsersDataAsSection = asyncHandler(async(req,res)=>{
     
     let filter = {};
     if(req.query){ 
-        const rollNoRegExp = new RegExp(`^${req.query.regulation}`);
-        filter = {Section:req.query.section,Department:req.query.department,RollNo:rollNoRegExp};
+        filter = {Section:req.query.section,Department:req.query.department,Regulation:req.query.regulation};
     }
 
     const currentUsers = await UserData.find(filter,{'RollNo':1,'StudentName':1,'_id':0});
     console.log(filter);
     res.json(currentUsers);
-
 });
+
+
+const getStudentsDataFORchat = asyncHandler(async(req,res)=>{
+    filter = {};
+    if(req.body){
+        filter = {FacultyId:req.body.Id};
+    }
+
+    const faculty = await Faculty.findOne(filter);
+
+    const result = [];
+    for(clas of faculty.Classes){
+        const students = await UserData.find({Regulation:clas.Regulation,Department:clas.Department,Section:clas.Section},{RollNo:1,StudentName:1,Department:1,Section:1,_id:0});
+        changed = students.map((obj)=>{
+            sai = {
+                Id:obj.RollNo,
+                Name:obj.StudentName,
+                Department:clas.Department,
+                optional:clas.Section
+            }
+            result.push(sai);
+        });
+        // console.log(changed);
+    }
+
+    res.json(result);
+});
+
+
+const getParentsForChat = asyncHandler(async(req,res)=>{
+    filter = {};
+    if(req.body){
+        filter = {FacultyId:req.body.Id};
+    }
+
+    const faculty = await Faculty.findOne(filter);
+
+    const result = [];
+    for(clas of faculty.Classes){
+        const students = await UserData.find({Regulation:clas.Regulation,Department:clas.Department,Section:clas.Section},{RollNo:1,StudentName:1,FatherName:1,FatherPhnNo:1,Department:1,_id:0});
+        changed = students.map((obj)=>{
+            sai = {
+                Id:`${obj.RollNo}-${obj.FatherPhnNo}`,
+                Name:obj.FatherName,
+                Department:obj.Department,
+                optional:obj.StudentName
+            }
+            result.push(sai);
+        });
+        // console.log(changed);
+    }
+
+    res.json(result);
+});
+
+
+
+const getFacultyForChat = asyncHandler(async(req,res)=>{
+    filter = {};
+    if(req.body){
+        filter = {FacultyId:req.body.Id};
+    }
+
+    const faculty = await Faculty.findOne(filter);
+
+    const result = [];
+    for(clas of faculty.Classes){
+        const students = await Faculty.find({FacultyDepartment:clas.Department},{FacultyId:1,FacultyName:1,FacultyPhnNo:1,FacultyDepartment:1,_id:0});
+        changed = students.map((obj)=>{
+            sai = {
+                Id:obj.FacultyId,
+                Name:obj.FacultyName,
+                Department:obj.FacultyDepartment,
+                optional:obj.FacultyPhnNo
+            }
+            result.push(sai);
+        });
+        // console.log(changed);
+    }
+    res.json(result);
+});
+
+
+
+
+
+const getFacultyStudentForChat = asyncHandler(async(req,res)=>{
+    filter = {};
+    if(req.body){
+        filter = {RollNo:req.body.Id};
+    }
+
+    const stu = await UserData.findOne(filter);
+
+    const result = [];
+        const students = await Faculty.find({FacultyDepartment:stu.Department},{FacultyId:1,FacultyName:1,FacultyPhnNo:1,FacultyDepartment:1,_id:0});
+        changed = students.map((obj)=>{
+            sai = {
+                Id:obj.FacultyId,
+                Name:obj.FacultyName,
+                Department:obj.FacultyDepartment,
+                optional:obj.FacultyPhnNo
+            }
+            result.push(sai);
+        });
+        // console.log(changed);
+    res.json(result);
+});
+
+
+
+
+
 
 const createUserData = asyncHandler(async(req,res)=>{
     //const {rollno,imageurl,name,branch,clas,studentphno,studentemail,parentname,parentphno,parentemail} = req.body;
@@ -70,4 +182,4 @@ const loginUser = asyncHandler(async (req,res) =>{
     
 });
 
-module.exports = {getUserData,createUserData,deleteAllUsersData,deleteUserData,getallUserData,validateUser,getAllUsersDataAsSection,loginUser};
+module.exports = {getUserData,createUserData,deleteAllUsersData,deleteUserData,getallUserData,validateUser,getAllUsersDataAsSection,loginUser,getStudentsDataFORchat,getParentsForChat,getFacultyForChat,getFacultyStudentForChat};

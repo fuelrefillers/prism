@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/services/ip.dart';
 import 'package:http/http.dart ' as http;
 
 class ChangeAcedemicsScreen extends StatefulWidget {
@@ -11,8 +12,10 @@ class ChangeAcedemicsScreen extends StatefulWidget {
 }
 
 class _ChangeAcedemicsScreen extends State<ChangeAcedemicsScreen> {
-  String _selectedRegulation = 'MR21';
-  String _selectedSemester = '1';
+  // String _selectedRegulation = 'MR21';
+  // String _selectedSemester = '1';
+  final regulationController = TextEditingController();
+  final semesterController = TextEditingController();
   // String _selectedMonth = 'January';
   bool dataFetched = false;
   int _numberOfHolidays = 0;
@@ -79,7 +82,7 @@ class _ChangeAcedemicsScreen extends State<ChangeAcedemicsScreen> {
               try {
                 var response = await http.post(
                   Uri.parse(
-                      'http://15.20.17.222:3000/api/semesterdata/update?regulation=MR21&semester=1&month=1'),
+                      '${ip}/api/semesterdata/update?regulation=${regulationController.text.toUpperCase()}&semester=${semesterController.text.toUpperCase()}&month=${_selectedMonth}'),
                   body: jsonEncode({"intValue": _numberOfHolidays}),
                   headers: <String, String>{
                     'Content-Type': 'application/json; charset=UTF-8',
@@ -105,43 +108,20 @@ class _ChangeAcedemicsScreen extends State<ChangeAcedemicsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Select Regulation:'),
-            DropdownButton<String>(
-              value: _selectedRegulation,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedRegulation = newValue!;
-                });
-              },
-              items: regulations.map((regulation) {
-                return DropdownMenuItem<String>(
-                  value: regulation,
-                  child: Text(regulation),
-                );
-              }).toList(),
+            TextFormField(
+              controller: regulationController,
+              decoration: InputDecoration(labelText: 'Regulation'),
             ),
-            SizedBox(height: 20.0),
-            Text('Select Semester:'),
-            DropdownButton<String>(
-              value: _selectedSemester,
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedSemester = newValue!;
-                });
-              },
-              items: semesters.map((semester) {
-                return DropdownMenuItem<String>(
-                  value: semester,
-                  child: Text(semester),
-                );
-              }).toList(),
+            TextFormField(
+              controller: semesterController,
+              decoration: InputDecoration(labelText: 'Semester'),
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () async {
                 try {
                   var response = await http.get(Uri.parse(
-                      'http://15.20.17.222:3000/api/semesterdata/fetch?regulation=${_selectedRegulation}&semester=${_selectedSemester}'));
+                      '${ip}/api/semesterdata/fetch?regulation=${regulationController.text.toUpperCase()}&semester=${semesterController.text.toUpperCase()}'));
                   if (response.statusCode == 200) {
                     setState(() {
                       dataFetched = true;

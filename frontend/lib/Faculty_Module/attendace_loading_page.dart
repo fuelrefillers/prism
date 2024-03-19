@@ -55,6 +55,8 @@ class AttendanceLoadingScreen extends StatelessWidget {
                                       MultiPurposeLinkCard(
                                     category:
                                         atten.attenConfirm.absentees[index],
+                                    subcategory1: '',
+                                    subcategory: '',
                                     height1: 50,
                                   ),
                                 ),

@@ -30,6 +30,15 @@ class BusFetchingSuccessfullState extends PrismState {
   BusFetchingSuccessfullState({required this.busses});
 }
 
+class TimeTableErrorState extends PrismState {}
+
+class TimeTableLoadingState extends PrismState {}
+
+class TimeTableSuccessfullState extends PrismState {
+  final TimeTableForStudents timeTableForStudents;
+  TimeTableSuccessfullState({required this.timeTableForStudents});
+}
+
 class BusFetchingErrorState extends PrismState {}
 
 // class FetchingLoadingState extends PrismState {}

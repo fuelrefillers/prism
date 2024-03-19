@@ -1,8 +1,10 @@
 const express = require("express");
-const { assignAttendance } = require("../controllers/attendanceHistoryController");
+const { assignAttendance, DataToExcel, dataToExcelForIndividualClassSubjects } = require("../controllers/attendanceHistoryController");
 
 const router = express.Router();
 
 router.route("/").get(assignAttendance);
+router.route("/downloadAttendance").post(DataToExcel);
+router.route("/downloadSubjectWiseAttendance").get(dataToExcelForIndividualClassSubjects);
 
 module.exports = router;

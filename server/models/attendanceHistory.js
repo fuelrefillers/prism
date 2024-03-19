@@ -9,6 +9,7 @@ const RollNumberSchema = mongoose.Schema({
         date: {type: String, required: true},
         day: {type: String, required: true},
         PresentStatus : {type:Number},
+        TotalPeriods : {type:Number},
         Periods: [
           {
             StartTime: { type: String, required: true },
@@ -25,7 +26,8 @@ const RollNumberSchema = mongoose.Schema({
             SubstituteName:{type: String},
             ClassType: { type: String},
             ClassDuration: { type: Number },
-            present: {type: Boolean, required: true} 
+            present: {type: Boolean, required: true},
+            MarkedAt:{ type: Date, default: Date.now }
           }
         ]
     }],

@@ -156,6 +156,13 @@ const cron = require('node-cron');
 
   const updateCurrentDayAttendanceAtMidnight = async () => {
     try {
+      const attendanceRecords = await Attendance.find({ 'CurrentDay.MorningAttended': 0, 'CurrentDay.AfternoonAttended': 0 });
+
+      for (const record of attendanceRecords) {
+          record.SemesterData.TotalDaysAbsentForSem += 1;
+          record.MonthlyData.TotalDaysAbsentForMonth += 1;
+          await record.save();
+      }
       // First, unset the fields
       const unsetResult = await attenn.updateMany({}, { $unset: { 'CurrentDay.MorningAttended': '', 'CurrentDay.AfternoonAttended': '' } });
   

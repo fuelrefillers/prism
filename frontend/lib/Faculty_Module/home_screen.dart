@@ -1,44 +1,97 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/main_screen.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers.dart/time_table_view_provider.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';
 
-class Students {
-  final String rollno;
-  final String name;
-  final String section;
-  Students({
-    required this.rollno,
-    required this.name,
-    required this.section,
-  });
-}
+class MarkAttendacePage extends StatefulWidget {
+  const MarkAttendacePage({super.key, required this.title});
 
-class FacultyAttendanceScreen extends StatefulWidget {
-  const FacultyAttendanceScreen({super.key});
+  final String title;
+
   @override
-  State<FacultyAttendanceScreen> createState() {
-    return _FacultyAttendanceScreen();
-  }
+  State<MarkAttendacePage> createState() => _MarkAttendacePageState();
 }
 
-class _FacultyAttendanceScreen extends State<FacultyAttendanceScreen> {
+class _MarkAttendacePageState extends State<MarkAttendacePage> {
+  DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
-    final faculty =
-        Provider.of<FacultyProvider>(context, listen: false).faculty;
+    final FTP = Provider.of<FacultyTimeTableProvider>(context, listen: false)
+        .facultyTimeTable;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Select section"),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
       ),
-      body: ListView.builder(
-        itemCount: faculty.Classes.length,
-        itemBuilder: (context, index) => MultiPurposeCard(
-            category: faculty.Classes[index],
-            height1: 100,
-            screen: MainScreen(section: faculty.Classes[index])),
+      body: Column(
+        children: [
+          _customBackgroundExample(),
+          Expanded(
+            child: date.weekday <= 6
+                ? FTP.TimeTable[date.weekday - 1].Periods.isNotEmpty
+                    ? ListView.builder(
+                        itemCount:
+                            FTP.TimeTable[date.weekday - 1].Periods.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final temp =
+                              FTP.TimeTable[date.weekday - 1].Periods[index];
+                          return MultiPurposeCard(
+                            category:
+                                "${temp.Department}-${temp.Section}  ${temp.StartTime} - ${temp.EndTime}",
+                            subcategory: "${temp.SubjectName}",
+                            subcategory1: "",
+                            height1: 100,
+                            screen: MainScreen(
+                              department: temp.Department,
+                              section: temp.Section,
+                              regulation: temp.Regulation,
+                              startTime: temp.StartTime,
+                              endTime: temp.EndTime,
+                              selectedDate: date,
+                            ),
+                          );
+                        },
+                      )
+                    : Text("No Classes")
+                : Text("Today is sunday"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  EasyDateTimeLine _customBackgroundExample() {
+    return EasyDateTimeLine(
+      initialDate: DateTime.now(),
+      onDateChange: (selectedDate) {
+        //`selectedDate` the new date selected.
+        setState(() {
+          date = selectedDate;
+        });
+      },
+      headerProps: const EasyHeaderProps(
+        monthPickerType: MonthPickerType.switcher,
+        dateFormatter: DateFormatter.fullDateDMY(),
+      ),
+      dayProps: const EasyDayProps(
+        dayStructure: DayStructure.dayStrDayNum,
+        activeDayStyle: DayStyle(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xff3371FF),
+                Color(0xff8426D6),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

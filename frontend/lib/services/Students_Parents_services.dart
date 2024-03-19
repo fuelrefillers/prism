@@ -4,6 +4,7 @@ import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/bus_model.dart';
 import 'package:frontend/models/circularModel.dart';
 import 'package:frontend/models/semmarks_model.dart';
+import 'package:frontend/models/time_table_view_model.dart';
 import 'package:frontend/models/timetable_model.dart';
 import 'package:frontend/providers.dart/attendance_provider.dart';
 import 'package:frontend/providers.dart/library_provider.dart';
@@ -173,6 +174,58 @@ class StudentParentServices {
     }
   }
   // getMarks function ends here
+
+  Future<List<TimeTableView>> getTimeTableForStudents({
+    required String regulation,
+    required String department,
+    required String section,
+  }) async {
+    try {
+      http.Response response = await http.get(
+        Uri.parse(
+            '${ip}/api/setTimetable/getsectionSpecificTimeTable?regulation=${regulation}&department=${department}&section=${section}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if (response.statusCode == 200) {
+        var result = jsonDecode(response.body);
+        List<TimeTableView> timeTableViews = [];
+        for (var item in result) {
+          String day = item['Day'];
+          List<Period> periods = [];
+          for (var periodData in item['Periods']) {
+            Period period = Period(
+              id: periodData['_id'],
+              startTime: periodData['StartTime'],
+              endTime: periodData['EndTime'],
+              classType: periodData['ClassType'],
+              className: periodData['ClassName'],
+              subjectName: periodData['SubjectName'],
+              subjectCode: periodData['Subjectcode'],
+              lecturerName: periodData['LecturerName'],
+              lecturerId: periodData['LecturerId'],
+              lecturerNumber: periodData['LecturerNumber'],
+              substitute: periodData['Substitute'],
+            );
+            periods.add(period);
+          }
+
+          TimeTableView timeTableView = TimeTableView(
+            Day: day,
+            Periods: periods,
+          );
+          timeTableViews.add(timeTableView);
+        }
+        return timeTableViews;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 
 // To get circulars from backend by filtering through department and regulation
   Future<List<CircularsModel>> getCirculars(

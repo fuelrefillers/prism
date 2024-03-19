@@ -51,7 +51,7 @@ class _BookItemState extends State<BookItem> {
     setState(() {
       if (existingBookList.length > 0) {
         isAlreadyDownloaded = existingBookList.any((book) => book.id == bookId);
-        
+
         if (isAlreadyDownloaded) {
           Books alreadyDownloadedBook =
               existingBookList.firstWhere((book) => book.id == bookId);
@@ -145,22 +145,23 @@ class _BookItemState extends State<BookItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 8, 10, 5),
+      margin: EdgeInsets.fromLTRB(4, 8, 4, 5),
       width: MediaQuery.of(context).size.width,
-      height: 170,
+      height: MediaQuery.of(context).size.height / 4.8,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 10,
-              offset: Offset(0, 3),
-            ),
-          ]),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 10,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(15, 5, 15, 5),
+        padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         child: Row(
           children: [
             Container(
@@ -168,8 +169,8 @@ class _BookItemState extends State<BookItem> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
               ),
-              height: 140,
-              width: 100,
+              height: MediaQuery.of(context).size.height / 4.8,
+              width: MediaQuery.of(context).size.width / 3.8,
               child: Image.network(
                 widget.book.BookImageUrl,
                 fit: BoxFit.fill,
@@ -185,75 +186,82 @@ class _BookItemState extends State<BookItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Book Name:',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        SizedBox(
+                          child: Text(
+                            widget.book.BookName.toUpperCase(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Color.fromARGB(255, 17, 79, 90),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Author:',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        Text(
+                          widget.book.BookAuthor,
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 17, 79, 90),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'Department:',
+                          style: TextStyle(fontWeight: FontWeight.w300),
+                        ),
+                        Text(
+                          "${widget.book.Department}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Color.fromARGB(255, 17, 79, 90),
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
-                      child: Text(
-                        widget.book.BookName,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 18),
-                      ),
+                      height: 10.0,
                     ),
-                    Text(
-                      widget.book.BookAuthor,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Text("${widget.book.Department}"),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (pdfPath11 != null) {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         PdfViewerPage(pdfPath: pdfPath11!),
-                              //   ),
-                              // );
-                              openPdf();
-                            } else if (isAlreadyDownloaded &&
-                                alreadyDownloadedPath != '') {
-                              openPdf();
-                            } else {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text("Not Downloded"),
-                              ));
-                            }
-                          },
-                          child: Text("open"),
-                        ),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            if (!isAlreadyDownloaded)
-                              CircularProgressIndicator(
-                                value: progress,
-                              ),
-                            if (!DownloadStarted &&
-                                !DownloadCompleated &&
-                                !isAlreadyDownloaded)
-                              GestureDetector(
-                                onTap: () {
-                                  downloadPdf();
+                        isAlreadyDownloaded || DownloadCompleated
+                            ? ElevatedButton.icon(
+                                onPressed: () {
+                                  openPdf();
                                 },
-                                child: Icon(
-                                  Icons.download,
-                                  size: 50,
-                                  color: Colors.blue,
-                                ),
-                              ),
-                            if (DownloadCompleated || isAlreadyDownloaded)
-                              Icon(
-                                Icons.check_circle,
-                                size: 50,
-                                color: Colors.green,
-                              ),
-                          ],
-                        ),
+                                icon: Icon(Icons.check),
+                                label: Text("Tap to open"))
+                            : DownloadStarted
+                                ? Center(
+                                    child: CircularProgressIndicator.adaptive(
+                                    value: progress,
+                                  ))
+                                : ElevatedButton.icon(
+                                    onPressed: () {
+                                      // openPdf();
+                                      downloadPdf();
+                                    },
+                                    icon: Icon(Icons.download),
+                                    label: Text("Downlad"))
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -264,8 +272,6 @@ class _BookItemState extends State<BookItem> {
     );
   }
 }
-
-
 
 //  CircularProgressIndicator(
 //                               value: progress,
@@ -287,7 +293,3 @@ class _BookItemState extends State<BookItem> {
 //                                 size: 50,
 //                                 color: Colors.green,
 //                               ),
-
-
-
-

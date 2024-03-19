@@ -4,10 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/review_update.dart';
 import 'package:frontend/models/faculty_fetch_rollno.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key, required this.section});
+  const MainScreen(
+      {super.key,
+      required this.department,
+      required this.section,
+      required this.regulation,
+      required this.startTime,
+      required this.endTime,
+      required this.selectedDate});
   final String section;
+  final String department;
+  final String regulation;
+  final String startTime;
+  final String endTime;
+  final DateTime selectedDate;
   @override
   State<MainScreen> createState() {
     return _MainScreenState();
@@ -40,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
     List<FacultyFetchRollNo> res = [];
     try {
       var response = await http.get(Uri.parse(
-          '${ip}/api/userdata/filter?section=${widget.section[widget.section.length - 1]}&department=${widget.section.substring(0, widget.section.length - 2)}&regulation=21'));
+          '${ip}/api/userdata/filter?section=${widget.section}&department=${widget.department}&regulation=${widget.regulation}'));
       List result = jsonDecode(response.body);
 
       for (int i = 0; i < result.length; i++) {
@@ -63,8 +76,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            "${widget.section.substring(0, widget.section.length - 2)}-${widget.section[widget.section.length - 1]}"),
+        title: Text("${widget.department}-${widget.section}"),
       ),
       body: Column(
         children: [
@@ -95,13 +107,37 @@ class _MainScreenState extends State<MainScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ReviewAndSubmitScreen(
+          if (DateFormat('yyyy-MM-dd').format(DateTime.now()) ==
+              DateFormat('yyyy-MM-dd').format(widget.selectedDate)) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ReviewAndSubmitScreen(
                     selected: selected,
-                    section: widget.section[widget.section.length - 1],
-                    department:
-                        widget.section.substring(0, widget.section.length - 2),
-                  )));
+                    section: widget.section,
+                    department: widget.department,
+                    regulation: widget.regulation,
+                    startTime: widget.startTime,
+                    endTime: widget.endTime),
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text("Warning"),
+                content: const Text(
+                    "Date does not match you cannot mark attendance !"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("cancel"),
+                  ),
+                ],
+              ),
+            );
+          }
         },
         label: const Padding(
           padding: EdgeInsets.fromLTRB(20, 0, 20, 0),

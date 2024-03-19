@@ -8,3 +8,5 @@ class UserInitialFetchEvent extends PrismEvent {}
 class BussesInitialFetchEvent extends PrismEvent {}
 
 class FacultyInitialFetchEvent extends PrismEvent {}
+
+class TimeTableInitialFetchEvent extends PrismEvent {}

@@ -64,6 +64,17 @@ class Books {
     return [];
   }
 
+  // Delete a book with a specific ID from SharedPreferences
+  static Future<void> deleteBookFromLocalStorage(String key, String id) async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString(key);
+    if (jsonString != null) {
+      final decodedList = jsonDecode(jsonString) as List<dynamic>;
+      final updatedList = decodedList.where((map) => map['id'] != id).toList();
+      prefs.setString(key, jsonEncode(updatedList));
+    }
+  }
+
   String toJson() => json.encode(toMap());
 
   factory Books.fromJson(String source) =>

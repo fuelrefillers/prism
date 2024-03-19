@@ -3,6 +3,7 @@ import 'package:frontend/models/user_model.dart';
 
 class UserProvider extends ChangeNotifier {
   User _user = User(
+      Regulation: "",
       StudentName: "",
       StudentPhnNo: '',
       StudentEmail: '',

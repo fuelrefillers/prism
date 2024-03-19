@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/chatting/models/ChatModel.dart';
+// import 'package:frontend/chatting/models/ChatModel.dart';
 
 class ChatSelectScreen extends StatefulWidget {
   const ChatSelectScreen({super.key});
@@ -10,12 +10,12 @@ class ChatSelectScreen extends StatefulWidget {
 class _StateChatSelectScreen extends State<ChatSelectScreen> {
   @override
   Widget build(BuildContext context) {
-    List<ChatModel> data = [
-      ChatModel(
-          Id: "21J41A05R5", Name: "THARAK", Department: "CSE", optional: "D"),
-      ChatModel(
-          Id: "21J41A05R1", Name: "sravana", Department: "CSE", optional: "D")
-    ];
+    // List<ChatModel> data = [
+    //   ChatModel(
+    //       Id: "21J41A05R5", Name: "THARAK", Department: "CSE", optional: "D"),
+    //   ChatModel(
+    //       Id: "21J41A05R1", Name: "sravana", Department: "CSE", optional: "D")
+    // ];
     return Scaffold();
   }
 }

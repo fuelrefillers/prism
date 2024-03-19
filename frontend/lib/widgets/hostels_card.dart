@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/individeual_hostel_screens.dart';
+import 'package:frontend/screens/singleScreens/individeual_hostel_screens.dart';
 
 class HostelsCard extends StatelessWidget {
   const HostelsCard({super.key});

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/chatting/UI/widgets/Chat_card.dart';
+import 'package:frontend/chatting/UI/screens/individual_chat_screen.dart';
+import 'package:frontend/chatting/UI/screens/new_chat_screen.dart';
 import 'package:frontend/chatting/models/ChatModel.dart';
+import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ChatPageScreen extends StatefulWidget {
@@ -14,55 +17,79 @@ class ChatPageScreen extends StatefulWidget {
 
 class _ChatPageScreen extends State<ChatPageScreen> {
   late IO.Socket socket;
+  List<ChatModel> data = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // connect();
+    getChats();
   }
 
-  // void connect() {
-  //   // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-  //   socket = IO.io("http://192.168.29.194:3000", <String, dynamic>{
-  //     "transports": ["websocket"],
-  //     "autoConnect": false,
-  //   });
-  //   socket.connect();
-  //   socket.emit("signin", "21J41A05R5");
-  //   socket.emit("signin", {
-  //     "message": "hiiiiiiiiiiiiii",
-  //     "sourceId": "21J41A05R1",
-  //     "targetId": "21J41A05R5"
-  //   });
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getChats();
+  }
 
-  //   socket.onConnect((data) {
-  //     print("Connected");
-  //     socket.on("message", (msg) {
-  //       print(msg);
-  //     });
-  //   });
-  //   // print(socket.connected);
-  // }
+  void getChats() async {
+    List<ChatModel> temp = await ChatModel.getAllFromStorage("students");
+    setState(() {
+      data = temp;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<ChatModel> data = [
-      ChatModel(
-          Id: "21J41A05R5",
-          Name: "SAI THARAK REDDY VEERAVELLY",
-          Department: "CSE",
-          optional: "D"),
-      ChatModel(
-          Id: "21J41A05R1",
-          Name: "Sravana Jyothi",
-          Department: "CSE",
-          optional: "D"),
-    ];
+    final faculty =
+        Provider.of<FacultyProvider>(context, listen: false).faculty;
     return Scaffold(
-      body: ListView.builder(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          itemCount: data.length,
-          itemBuilder: (contetxt, index) => ChartCard(data: data[index])),
+      body: data.isEmpty
+          ? Center(
+              child: Text("Start a chat"),
+            )
+          : ListView.builder(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+              itemCount: data.length,
+              itemBuilder: (contetxt, index) {
+                ChatModel contact = data[index];
+                return ListTile(
+                  leading: Text(
+                    contact.Id,
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  title: Text(contact.Name),
+                  subtitle: Text("${contact.Department}-${contact.optional}"),
+                  // You can add more details here as needed
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => IndividualPage(
+                          chatModel: contact,
+                          current: faculty.FacultyId,
+                          type: "students",
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => newchatScreen(
+                type: "students",
+                ID: faculty.FacultyId,
+              ),
+            ),
+          );
+          getChats();
+        },
+        child: Icon(Icons.message),
+      ),
     );
   }
 }

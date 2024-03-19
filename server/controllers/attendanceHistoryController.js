@@ -3,6 +3,10 @@ const UserDetails = require("../models/userDetailsModel");
 const TimeTable = require("../models/TTM"); // Assuming your time table model is named TTM
 const AttendanceHistory = require("../models/attendanceHistory");
 const xlsx = require('xlsx');
+const downloadAttendanceModel = require("../models/downloadAttendanceModel");
+const path = require('path');
+const individualClassSubjectsModel = require("../models/individualClassSubjectsModel");
+const individualClassAttendance = require("../models/individualClassAttendance");
 
 
 
@@ -27,16 +31,13 @@ function getCurrentTimestamp(currentDate) {
   return formattedDate;
 }
 
-const assignAttendance = asyncHandler(async (req, res) => {
-  const startDate = new Date("2024-02-05");
-  const endDate = new Date("2024-06-17");
-
-  // Fetch all students
-  const allStudents = await UserDetails.find();
-
+const assignAttendance = asyncHandler(async (req,res,startdate,enddate,newData) => {
+  const startDate = new Date(startdate);
+  const endDate = new Date(enddate);
+  const allStudents = await UserDetails.find({Regulation:req.body.Regulation});
   for (const student of allStudents) {
     // Fetch the section timetable
-    const sectionTimetable = await TimeTable.findOne({ "Section.Name": student.Section });
+    const sectionTimetable = await TimeTable.findOne( {Regulation: student.Regulation,Department: student.Department,Section: student.Section });
 
     if (!sectionTimetable) {
       console.log("Section timetable not found for student", student.RollNo);
@@ -44,7 +45,7 @@ const assignAttendance = asyncHandler(async (req, res) => {
     }
 
     const attendanceEntry = new AttendanceHistory({
-      Regulation: "MR21",
+      Regulation: student.Regulation,
       Department: student.Department,
       Section: student.Section,
       RollNumber: student.RollNo,
@@ -53,11 +54,12 @@ const assignAttendance = asyncHandler(async (req, res) => {
 
     for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
       const dayOfWeek = getDayOfWeek(currentDate);
-      if (dayOfWeek === 'Sunday') {
+      if (dayOfWeek === 'Sunday'|| newData.Holidays.includes(getCurrentTimestamp(currentDate))) {
         continue;
       }
 
-      const timetableEntry = sectionTimetable.Section.TimeTable.find(entry => entry.Day === dayOfWeek);
+
+      const timetableEntry = sectionTimetable.TimeTable.find(entry => entry.Day === dayOfWeek);
 
       if (!timetableEntry) {
         console.log("Timetable entry not found for", student.RollNo, "on", dayOfWeek);
@@ -89,50 +91,63 @@ const assignAttendance = asyncHandler(async (req, res) => {
 
 
 
-// const targetDate = '2024-02-12';
-// const specificRollNumber = '21J41A05R5'; // Replace with actual roll number
-
-// AttendanceHistory.findOne({ RollNumber: specificRollNumber })
-//   .then(doc => {
-//     if (doc) {
-//       const timetableToUpdate = doc.TimeTable.find(timetable => timetable.date === targetDate);
-//       console.log(timetableToUpdate);
-//       if (timetableToUpdate) {
-//         const noOfPeriods = timetableToUpdate.Periods.length;
-//         timetableToUpdate.PresentStatus = timetableToUpdate.Periods.reduce((sum, period) => sum + (period.present ? 1 : 0), 0) / noOfPeriods;
-        
-//         console.log("noOfPeriods : ",noOfPeriods);
-//         // Optionally save the updated document:
-//         doc.save()
-//           .then(() => console.log('PresentStatus updated successfully!'))
-//           .catch(error => console.error('Error saving document:', error));
-//         console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
-//       } else {
-//         console.log('TimeTable not found for the specified date.');
-//       }
-//     } else {
-//       console.log('Document not found for the specified roll number.');
-//     }
-//   })
-//   .catch(error => console.error('Error retrieving document:', error));
 
 
+
+
+const caluclateDayAttendance = asyncHandler(async(req,res)=>{
+  const targetDate = '2024-02-05';
+  const AllRollNo = await UserDetails.find({},{RollNo:1,_id:0});
+  for(rno of AllRollNo){
+    AttendanceHistory.findOne({ RollNumber: rno.RollNo })
+  .then(doc => {
+    if (doc) {
+      const timetableToUpdate = doc.TimeTable.find(timetable => timetable.date === targetDate);
+      console.log(timetableToUpdate);
+      if (timetableToUpdate) {
+        const noOfPeriods = timetableToUpdate.Periods.length;
+        timetableToUpdate.PresentStatus = timetableToUpdate.Periods.reduce((sum, period) => sum + (period.present ? period.ClassDuration : 0), 0);
+        doc.save()
+          .then(() => console.log('PresentStatus updated successfully!'))
+          .catch(error => console.error('Error saving document:', error));
+        console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
+      } else {
+        console.log('TimeTable not found for the specified date.');
+      }
+    } else {
+      console.log('Document not found for the specified roll number.');
+    }
+  })
+  .catch(error => console.error('Error retrieving document:', error));
+
+  }
+
+});
+
+// caluclateDayAttendance();
 
 
 
 const DataToExcel = asyncHandler(async(req,res)=>{
-  const doc = await  AttendanceHistory.find();
-  const startDate = '2024-02-12';
-  const endDate = '2024-02-29';
+  let filter = {};
+  if(req.query){
+    filter = {Regulation:req.query.regulation,Department:req.query.department,Section:req.query.section}
+  }
 
+  const {startDate,endDate} = req.body;
 
+  const fileName = `Attendance_${filter.Regulation}-${filter.Department}-${filter.Section}_${startDate}_${endDate}.xlsx`;
+  const excelPresent = await downloadAttendanceModel.findOne({AttendanceExcelName:fileName});
 
-  const attendanceData = await AttendanceHistory.find({
-    'TimeTable.date': { $gte: startDate, $lte: endDate }
-  });
-  const sheetData = [];
-
-  const uniqueDates = new Set();
+  if(!excelPresent){
+    const doc = await AttendanceHistory.find(filter);
+    const attendanceData = await AttendanceHistory.find({
+      'TimeTable.date': { $gte: startDate, $lte: endDate }
+    });
+  
+    const sheetData = [];
+    const uniqueDates = new Set();
+  
     attendanceData.forEach(doc => {
       doc.TimeTable.forEach(timetable => {
         if (timetable.date >= startDate && timetable.date <= endDate) {
@@ -140,70 +155,121 @@ const DataToExcel = asyncHandler(async(req,res)=>{
         }
       });
     });
-
-
+  
     const dateColumns = [...uniqueDates].sort((a, b) => new Date(a) - new Date(b)); 
-
-    const columnHeaders = ['RollNumber',"Regulation","Department","Section", ...dateColumns];
+  
+    const columnHeaders = ['RollNumber',"Regulation","Department","Section", ...dateColumns, "TotalPresentStatus", "Percentage"];
     sheetData.push(columnHeaders);
-
+  
     attendanceData.forEach(doc => {
-      const rowData = [doc.RollNumber,doc.Regulation,doc.Department,doc.Section];
-
+      let totalPresentStatus = 0; // Initialize total PresentStatus for each RollNumber
+      const rowData = [doc.RollNumber, doc.Regulation, doc.Department, doc.Section];
+      const totalDays = dateColumns.length; // Total number of days
+  
       dateColumns.forEach(date => {
         const foundTimetable = doc.TimeTable.find(timetable => timetable.date === date);
-        rowData.push(foundTimetable ? foundTimetable.day : null); 
+        const presentStatus = foundTimetable ? foundTimetable.PresentStatus : null;
+        rowData.push(presentStatus);
+        if (presentStatus) {
+          totalPresentStatus += presentStatus; // Add presentStatus to totalPresentStatus
+        }
       });
-
+  
+      rowData.push(totalPresentStatus); // Push totalPresentStatus to the rowData array
+  
+      // Calculate the percentage
+      const percentage = (totalPresentStatus / (totalDays * 7)) * 100; // Assuming 7 hours per day
+      rowData.push(percentage);
+  
       sheetData.push(rowData);
     });
-
     // console.log(sheetData);
+  
+    const workbook = xlsx.utils.book_new();
+    const worksheet = xlsx.utils.json_to_sheet(sheetData);
+    xlsx.utils.book_append_sheet(workbook, worksheet, 'Attendance');
+    // xlsx.writeFile(workbook, `Attedance ${startDate} - ${endDate}.xlsx`);
+  
+  
+    const folderPath = path.join(__dirname, '../created');
+    // console.log(folderPath);
+    
+    // Save the Excel file to the specific folder
+    const filePath = path.join(folderPath, fileName);
+    xlsx.writeFile(workbook, filePath);
+  
+    // Generate a URL for the saved Excel file
+    const fileURL = `http://192.168.4.142:3000/downloadAttendance/${fileName}`;
+  
+  
+  const AttendaceDownload = await downloadAttendanceModel.create({AttendanceExcelName:fileName,Department:filter.Department,Regulation:filter.Regulation,Section:filter.Section,AttendanceExcelAddress:filePath,AttendanceExcelUrl:fileURL});
+  
+  
+  res.status(200).json(AttendaceDownload);
+  console.log('Excel sheet generated successfully!');
+  }
+  else{
+    res.status(200).json(excelPresent);
 
-// try{
-//   const worksheet = xlsx.utils.json_to_sheet(sheetData);
-//   console.log(worksheet);
-//   const workbook = xlsx.utils.book_new();
-
-//   xlsx.utils.sheet_add_aoa(workbook, worksheet, 'Attendance');
-//   console.log("hoii");
-//   // Save the Excel file
-//   xlsx.writeFile(workbook, `attendance_data_${startDate}_${endDate}.xlsx`); // Include dates in filename
-//   console.log('Excel sheet generated successfully!');
-//   console.log("hoi");
-// }
-// catch(err){
-//   console.log(err);
-// }
-
-const workbook = xlsx.utils.book_new();
-
-// Convert the worksheet data to a worksheet object
-const worksheet = xlsx.utils.json_to_sheet(sheetData);
-
-// Add the worksheet to the workbook
-xlsx.utils.book_append_sheet(workbook, worksheet, 'Attendance');
-
-// Save the Excel file
-xlsx.writeFile(workbook, 'attendance.xlsx');
-
-console.log('Excel sheet generated successfully!');
+  }
+});
 
 
 
-// const filteredData = Object.keys(data)
-//   .filter(key => !/^[A-Z]+\d+$/.test(key)) // Filter out keys like "A1", "B1", etc.
-//   .reduce((obj, key) => {
-//     obj[key] = data[key];
-//     return obj;
-//   }, {});
 
-// // Now, pass filteredData to xlsx.utils.sheet_add_aoa()
 
+const dataToExcelForIndividualClassSubjects = asyncHandler(async(req,res)=>{
+  let filter = {};
+  if(req.query){
+    filter = {Regulation:req.query.regulation,Department:req.query.department,Section:req.query.section}
+  }
+
+  // filter = {Regulation:"MR21",Department:"CSE",Section:"D"}
+
+  const fileName = `Subject wise Attendance_${filter.Regulation}-${filter.Department}-${filter.Section}.xlsx`;
+
+
+  const excelPresent = await downloadAttendanceModel.findOne({AttendanceExcelName:fileName});
+
+  if(!excelPresent){
+
+  const classTimeTable = await individualClassSubjectsModel.findOne(filter);
+  const classAttendance = await individualClassAttendance.findOne(filter);
+
+  subjects = classTimeTable.Subjects.map(obj=>obj.SubjectName);
+
+  console.log(subjects);
+  const columnHeaders = ['RollNumber',"Regulation","Department","Section", ...subjects];
+
+  const sheetdata = [];
+  sheetdata.push(columnHeaders);
+
+  classAttendance.Students.forEach( stu =>{
+    rowData = [stu.RollNo,classAttendance.Regulation,classAttendance.Department,classAttendance.Section];
+    stu.Subjects.forEach(sub=>{
+      rowData.push(sub.Attendance);
+    })
+    sheetdata.push(rowData);
+  });
+
+  // console.log(sheetdata);
+  const workbook = xlsx.utils.book_new();
+  const worksheet = xlsx.utils.json_to_sheet(sheetdata);
+  xlsx.utils.book_append_sheet(workbook, worksheet, 'Subject wise Attendance');
+  const folderPath = path.join(__dirname, '../created');
+  const filePath = path.join(folderPath, fileName);
+  xlsx.writeFile(workbook, filePath);
+  const fileURL = `http://192.168.4.142:3000/downloadAttendance/${fileName}`;
+  const AttendaceDownload = await downloadAttendanceModel.create({AttendanceExcelName:fileName,Department:filter.Department,Regulation:filter.Regulation,Section:filter.Section,AttendanceExcelAddress:filePath,AttendanceExcelUrl:fileURL});
+  res.status(200).json(AttendaceDownload);
+  console.log('Excel sheet generated successfully!');
+}else{
+  res.status(200).json(excelPresent);
+}
 
 });
 
-// DataToExcel();
+// dataToExcelForIndividualClassSubjects();
 
 
 
@@ -215,5 +281,4 @@ console.log('Excel sheet generated successfully!');
 
 
 
-
-module.exports = { assignAttendance };
+module.exports = {assignAttendance,getCurrentTimestamp,DataToExcel,dataToExcelForIndividualClassSubjects};

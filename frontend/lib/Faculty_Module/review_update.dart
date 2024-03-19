@@ -9,11 +9,17 @@ class ReviewAndSubmitScreen extends StatefulWidget {
   const ReviewAndSubmitScreen(
       {super.key,
       required this.selected,
+      required this.regulation,
       required this.section,
-      required this.department});
+      required this.department,
+      required this.startTime,
+      required this.endTime});
   final List<String> selected;
   final String section;
   final String department;
+  final String regulation;
+  final String startTime;
+  final String endTime;
   @override
   State<ReviewAndSubmitScreen> createState() {
     return _ReviewAndSubmitScreenState();
@@ -97,6 +103,9 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
                         rollnumbers: review,
                         section: widget.section,
                         department: widget.department,
+                        regulation: widget.regulation,
+                        startTime: widget.startTime,
+                        endTime: widget.endTime,
                         context: context);
                     Navigator.pop(context);
                     final loaging =
