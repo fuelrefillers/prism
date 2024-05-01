@@ -19,7 +19,7 @@ const hostelRoomsSchema = mongoose.Schema({
            required:true
         },
         isBooked:{
-            type:bool,
+            type:Boolean,
             required:true,
             default:false,
         },
@@ -32,8 +32,20 @@ const hostelRoomsSchema = mongoose.Schema({
             type:String,
             required:true,
             default:"No one Booked"
-        }
+        },
     }]
 });
 
-module.exports = mongoose.Schema("hostelRooms",hostelRoomsSchema);
+hostelRoomsSchema.virtual('totalBeds').get(function() {
+    return this.beds.length;
+});
+
+hostelRoomsSchema.virtual('bedsNotBooked').get(function() {
+    return this.beds.filter(bed => !bed.isBooked).length;
+});
+
+hostelRoomsSchema.set('toJSON',{
+    virtuals : true,
+});
+
+module.exports = mongoose.model("hostelRooms",hostelRoomsSchema);

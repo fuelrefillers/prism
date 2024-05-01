@@ -92,77 +92,172 @@ const getFacultyTimeTable = asyncHandler(async(req,res)=>{
 
 
 
-async function assignDataToFaculty() {
-    const AllFaculty = await Faculty.find();
-    for(const faculty of AllFaculty){
-        for(const classes of faculty.Classes){
-            const CurrentClassTimeTable = await timeTablesModel.findOne({Department: classes.Department, Regulation: classes.Regulation, Section: classes.Section});
-            if(CurrentClassTimeTable){
-                const transformedTimetable = CurrentClassTimeTable.TimeTable.map((week) => {
-                    return {
-                        Day: week.Day,
-                        Periods: week.Periods.filter(period => {
-                            const lecturers = period.LecturerId.split(",");
-                            return lecturers.includes(faculty.FacultyId);
-                        }).map(period => ({
-                            StartTime: period.StartTime,
-                            EndTime: period.EndTime,
-                            ClassType: period.ClassType,
-                            Section: classes.Section,
-                            Department: classes.Department,
-                            Year: classes.Year,
-                            Regulation: classes.Regulation,
-                            SubjectName: period.SubjectName,
-                            Subjectcode: period.Subjectcode,
-                        }))
-                    };
+// async function assignDataToFaculty() {
+//     const AllFaculty = await Faculty.find();
+//     for(const faculty of AllFaculty){
+//         for(const classes of faculty.Classes){
+//             const CurrentClassTimeTable = await timeTablesModel.findOne({Department: classes.Department, Regulation: classes.Regulation, Section: classes.Section});
+//             if(CurrentClassTimeTable){
+//                 const transformedTimetable = CurrentClassTimeTable.TimeTable.map((week) => {
+//                     return {
+//                         Day: week.Day,
+//                         Periods: week.Periods.filter(period => {
+//                             const lecturers = period.LecturerId.split(",");
+//                             return lecturers.includes(faculty.FacultyId);
+//                         }).map(period => ({
+//                             StartTime: period.StartTime,
+//                             EndTime: period.EndTime,
+//                             ClassType: period.ClassType,
+//                             Section: classes.Section,
+//                             Department: classes.Department,
+//                             Year: classes.Year,
+//                             Regulation: classes.Regulation,
+//                             SubjectName: period.SubjectName,
+//                             Subjectcode: period.Subjectcode,
+//                         }))
+//                     };
+//                 });
+
+//                 const existingFacultyTimeTable = await facultyTimeTableModel.findOne({
+//                     FacultyId: faculty.FacultyId,
+//                 });
+
+//                 if (existingFacultyTimeTable) {
+//                     const existingPeriods = existingFacultyTimeTable.TimeTable.reduce((existing, week) => {
+//                         existing[week.Day] = existing[week.Day] || [];
+//                         existing[week.Day].push(...week.Periods);
+//                         return existing;
+//                     }, {});
+
+//                     const newPeriods = transformedTimetable.reduce((newPeriods, week) => {
+//                         newPeriods[week.Day] = newPeriods[week.Day] || [];
+//                         newPeriods[week.Day].push(...week.Periods);
+//                         return newPeriods;
+//                     }, {});
+
+//                     const updatedTimetable = Object.entries(existingPeriods).map(([day, periods]) => {
+//                         const combinedPeriods = [...periods, ...newPeriods[day] || []];
+//                         // Filter out duplicates based on start time and end time
+//                         const uniquePeriods = combinedPeriods.filter((period, index, self) =>
+//                             index === self.findIndex((p) => (
+//                                 p.StartTime === period.StartTime && p.EndTime === period.EndTime
+//                             ))
+//                         );
+//                         return { Day: day, Periods: uniquePeriods };
+//                     });
+
+//                     existingFacultyTimeTable.TimeTable = updatedTimetable;
+//                     await existingFacultyTimeTable.save();
+//                     console.log(`Updated timetable for Faculty ${existingFacultyTimeTable._id}`);
+//                 } else {
+//                     const FacultyTimeTable = await facultyTimeTableModel.create({
+//                         FacultyId: faculty.FacultyId,
+//                         FacultyName: faculty.FacultyName,
+//                         FacultyDepartment: faculty.FacultyDepartment,
+//                         TimeTable: transformedTimetable,
+//                     });
+//                     console.log(`Created new timetable for Faculty ${FacultyTimeTable._id}`);
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
+
+async function assignDataToFaculty(req, res) {
+    try {
+        const AllFaculty = await Faculty.find();
+        let updatedFaculties = 0;
+        let createdFaculties = 0;
+
+        for(const faculty of AllFaculty){
+            for(const classes of faculty.Classes){
+                const CurrentClassTimeTable = await timeTablesModel.findOne({
+                    Department: classes.Department,
+                    Regulation: classes.Regulation,
+                    Section: classes.Section
                 });
 
-                const existingFacultyTimeTable = await facultyTimeTableModel.findOne({
-                    FacultyId: faculty.FacultyId,
-                });
-
-                if (existingFacultyTimeTable) {
-                    const existingPeriods = existingFacultyTimeTable.TimeTable.reduce((existing, week) => {
-                        existing[week.Day] = existing[week.Day] || [];
-                        existing[week.Day].push(...week.Periods);
-                        return existing;
-                    }, {});
-
-                    const newPeriods = transformedTimetable.reduce((newPeriods, week) => {
-                        newPeriods[week.Day] = newPeriods[week.Day] || [];
-                        newPeriods[week.Day].push(...week.Periods);
-                        return newPeriods;
-                    }, {});
-
-                    const updatedTimetable = Object.entries(existingPeriods).map(([day, periods]) => {
-                        const combinedPeriods = [...periods, ...newPeriods[day] || []];
-                        // Filter out duplicates based on start time and end time
-                        const uniquePeriods = combinedPeriods.filter((period, index, self) =>
-                            index === self.findIndex((p) => (
-                                p.StartTime === period.StartTime && p.EndTime === period.EndTime
-                            ))
-                        );
-                        return { Day: day, Periods: uniquePeriods };
+                if(CurrentClassTimeTable){
+                    const transformedTimetable = CurrentClassTimeTable.TimeTable.map((week) => {
+                        return {
+                            Day: week.Day,
+                            Periods: week.Periods.filter(period => {
+                                const lecturers = period.LecturerId.split(",");
+                                return lecturers.includes(faculty.FacultyId);
+                            }).map(period => ({
+                                StartTime: period.StartTime,
+                                EndTime: period.EndTime,
+                                ClassType: period.ClassType,
+                                Section: classes.Section,
+                                Department: classes.Department,
+                                Year: classes.Year,
+                                Regulation: classes.Regulation,
+                                SubjectName: period.SubjectName,
+                                Subjectcode: period.Subjectcode,
+                            }))
+                        };
                     });
 
-                    existingFacultyTimeTable.TimeTable = updatedTimetable;
-                    await existingFacultyTimeTable.save();
-                    console.log(`Updated timetable for Faculty ${existingFacultyTimeTable._id}`);
-                } else {
-                    const FacultyTimeTable = await facultyTimeTableModel.create({
+                    const existingFacultyTimeTable = await facultyTimeTableModel.findOne({
                         FacultyId: faculty.FacultyId,
-                        FacultyName: faculty.FacultyName,
-                        FacultyDepartment: faculty.FacultyDepartment,
-                        TimeTable: transformedTimetable,
                     });
-                    console.log(`Created new timetable for Faculty ${FacultyTimeTable._id}`);
+
+                    if (existingFacultyTimeTable) {
+                        const existingPeriods = existingFacultyTimeTable.TimeTable.reduce((existing, week) => {
+                            existing[week.Day] = existing[week.Day] || [];
+                            existing[week.Day].push(...week.Periods);
+                            return existing;
+                        }, {});
+
+                        const newPeriods = transformedTimetable.reduce((newPeriods, week) => {
+                            newPeriods[week.Day] = newPeriods[week.Day] || [];
+                            newPeriods[week.Day].push(...week.Periods);
+                            return newPeriods;
+                        }, {});
+
+                        const updatedTimetable = Object.entries(existingPeriods).map(([day, periods]) => {
+                            const combinedPeriods = [...periods, ...newPeriods[day] || []];
+                            const uniquePeriods = combinedPeriods.filter((period, index, self) =>
+                                index === self.findIndex((p) => (
+                                    p.StartTime === period.StartTime && p.EndTime === period.EndTime
+                                ))
+                            );
+                            return { Day: day, Periods: uniquePeriods };
+                        });
+
+                        existingFacultyTimeTable.TimeTable = updatedTimetable;
+                        await existingFacultyTimeTable.save();
+                        updatedFaculties++;
+                        console.log(`Updated timetable for Faculty ${existingFacultyTimeTable._id}`);
+                    } else {
+                        const FacultyTimeTable = await facultyTimeTableModel.create({
+                            FacultyId: faculty.FacultyId,
+                            FacultyName: faculty.FacultyName,
+                            FacultyDepartment: faculty.FacultyDepartment,
+                            TimeTable: transformedTimetable,
+                        });
+                        createdFaculties++;
+                        console.log(`Created new timetable for Faculty ${FacultyTimeTable._id}`);
+                    }
                 }
             }
         }
+
+        res.json({
+            message: 'Timetables assignment completed successfully',
+            updatedFaculties,
+            createdFaculties
+        });
+
+    } catch (error) {
+        console.error('Error in assignDataToFaculty:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 }
+
 // assignDataToFaculty();
 
 
-module.exports = {createFaculty,loginFaculty,getFacultyData,getFacultyByDepartment,getFacultyTimeTable,getFacultyByDepartmentShort,getFacultyById,updateFaculty};
+module.exports = {assignDataToFaculty,createFaculty,loginFaculty,getFacultyData,getFacultyByDepartment,getFacultyTimeTable,getFacultyByDepartmentShort,getFacultyById,updateFaculty};

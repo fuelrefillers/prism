@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flip_card/flutter_flip_card.dart';
-import 'package:frontend/providers.dart/library_provider.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/library_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/libraryScreens/library_books_taken_screen.dart';
 import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
@@ -225,7 +225,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                                     MediaQuery.of(context).size.height / 12.5,
                                 width: MediaQuery.of(context).size.width / 2,
                                 child: Image.network(
-                                  'https://barcode.tec-it.com/barcode.ashx?data=${library.RollNo}&code=Code128&translate-esc=on',
+                                  'https://barcode.tec-it.com/barcode.ashx?data=${user.RollNo.toUpperCase()}&code=Code128&translate-esc=on',
                                   fit: BoxFit.fill,
                                 ),
                               ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:frontend/chatting/socketio.dart';
 import 'package:frontend/models/books_model.dart';
 import 'package:frontend/models/faculty_model.dart';
 import 'package:frontend/services/ip.dart';
@@ -75,12 +74,12 @@ class PrismRepo {
       // facultyprovider.setFaculty(response.body);
 
       Faculty faculty = Faculty.fromJson(response.body);
-      var result = jsonDecode(response.body);
-      SocketService().emitSignInEvent(result['FacultyId']);
+      // var result = jsonDecode(response.body);
+      // SocketService().emitSignInEvent(result['FacultyId']);
 
       return faculty;
     } catch (err) {
-      print("Hello from repo ${err}");
+      print("Hello from repo11111111 ${err}");
       return Faculty(
           FacultyId: "--",
           FacultyName: "--",

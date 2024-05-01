@@ -27,6 +27,7 @@ class BusStopsScreen extends StatelessWidget {
       body: ListView.builder(
         itemCount: bus.Stoplocation.length,
         itemBuilder: (context, index) => MultiPurposeLinkCard(
+          url: "",
           category: '',
           height1: MediaQuery.of(context).size.height / 12,
           subcategory: '',

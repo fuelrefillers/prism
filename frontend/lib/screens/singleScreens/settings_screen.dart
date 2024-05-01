@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:frontend/widgets/switch.dart';
 import 'package:provider/provider.dart';

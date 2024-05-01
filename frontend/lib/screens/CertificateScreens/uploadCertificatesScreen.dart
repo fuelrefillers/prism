@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.dart';
 import 'package:frontend/services/ip.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class StudentForm extends StatefulWidget {

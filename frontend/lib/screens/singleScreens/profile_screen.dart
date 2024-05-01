@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {

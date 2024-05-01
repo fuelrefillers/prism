@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/faculty_time.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/singleScreens/profile_screen.dart';
 import 'package:frontend/screens/singleScreens/settings_screen.dart';
 import 'package:frontend/services/auth.dart';
+import 'package:frontend/todo/screens/home.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/screens/singleScreens/student_time_table_screen.dart';
 
 class Drawerwidget extends StatefulWidget {
   const Drawerwidget({super.key});
-
   @override
   State<Drawerwidget> createState() => _DrawerwidgetState();
 }
@@ -82,6 +82,9 @@ class _DrawerwidgetState extends State<Drawerwidget> {
               ),
               onTap: () {
                 Navigator.of(context).pop();
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomeScreenToDo()));
               },
             ),
             ListTile(
@@ -198,65 +201,65 @@ class _DrawerwidgetState extends State<Drawerwidget> {
                 ],
               ),
             ),
-            ListTile(
-              leading: Icon(
-                Icons.note_add_sharp,
-                size: 26,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-              title: Text(
-                'ToDo',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 24,
-                    ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.person,
-                size: 26,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-              title: Text(
-                'Profile',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 24,
-                    ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctx) => ProfileScreen()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-                size: 26,
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
-              title: Text(
-                'Settings ',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontSize: 24,
-                    ),
-              ),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (ctx) => Settings()),
-                );
-              },
-            ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.note_add_sharp,
+            //     size: 26,
+            //     color: Theme.of(context).colorScheme.onBackground,
+            //   ),
+            //   title: Text(
+            //     'ToDo',
+            //     style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            //           color: Theme.of(context).colorScheme.onBackground,
+            //           fontSize: 24,
+            //         ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.person,
+            //     size: 26,
+            //     color: Theme.of(context).colorScheme.onBackground,
+            //   ),
+            //   title: Text(
+            //     'Profile',
+            //     style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            //           color: Theme.of(context).colorScheme.onBackground,
+            //           fontSize: 24,
+            //         ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (ctx) => ProfileScreen()),
+            //     );
+            //   },
+            // ),
+            // ListTile(
+            //   leading: Icon(
+            //     Icons.settings,
+            //     size: 26,
+            //     color: Theme.of(context).colorScheme.onBackground,
+            //   ),
+            //   title: Text(
+            //     'Settings ',
+            //     style: Theme.of(context).textTheme.titleSmall!.copyWith(
+            //           color: Theme.of(context).colorScheme.onBackground,
+            //           fontSize: 24,
+            //         ),
+            //   ),
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(builder: (ctx) => Settings()),
+            //     );
+            //   },
+            // ),
             ListTile(
               leading: Icon(
                 Icons.calendar_view_month_sharp,

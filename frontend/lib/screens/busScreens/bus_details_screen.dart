@@ -148,7 +148,9 @@ class BusScreenDetails extends StatelessWidget {
           MultiPurposeCard(
             category: "Live Location",
             height1: MediaQuery.of(context).size.height / 12,
-            screen: MapScreen(),
+            screen: MapScreen(
+              busno: bus.Busno,
+            ),
             subcategory: '',
             subcategory1: 'Live Location',
           ),

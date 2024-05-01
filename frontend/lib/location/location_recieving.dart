@@ -102,13 +102,16 @@ import 'package:latlong2/latlong.dart';
 
 class MapScreen extends StatefulWidget {
   // Replace with your server URL
-  static final String serverUrl = "${ip}/api/liveloction/get?busno=6280";
+  final String busno;
+  const MapScreen({super.key, required this.busno});
 
   @override
   _MapScreenState createState() => _MapScreenState();
 }
 
 class _MapScreenState extends State<MapScreen> {
+  // static final String serverUrl = "${ip}/api/liveloction/get?busno=${busno}";
+
   final _updateDuration =
       Duration(seconds: 1); // Time interval between location updates
   Timer? _timer;
@@ -129,7 +132,8 @@ class _MapScreenState extends State<MapScreen> {
 
   Future<void> _fetchData() async {
     try {
-      var response = await http.get(Uri.parse(MapScreen.serverUrl));
+      var response = await http
+          .get(Uri.parse("${ip}/api/liveloction/get?busno=${widget.busno}"));
       var data = jsonDecode(response.body);
       double latitude = data['latitude'];
       double longitude = data['longitude'];

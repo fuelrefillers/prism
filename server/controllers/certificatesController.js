@@ -3,6 +3,7 @@ const multer = require("multer");
 const router = express.Router();
 const asynchandler = require("express-async-handler");
 const cerificatesModel = require("../models/cerificatesModel");
+const domain = process.env.DOMAIN;
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
@@ -27,7 +28,7 @@ router.post("/upload", upload.single('certificatePdf'), asynchandler(async(req, 
     }
     else{
         const file1 = req.file;
-        const TimeTableRes = await cerificatesModel.create({RollNo:rollno,Department:department,Regulation:regulation,Section:section,CertificationBy:certificationBy,Course:course,Name:name,CertificateAddress:`upload/certificates/${file1.filename}`,CertificateUrl:`http://15.20.17.222:3000/upload/certificates/${file1.filename}`});
+        const TimeTableRes = await cerificatesModel.create({RollNo:rollno,Department:department,Regulation:regulation,Section:section,CertificationBy:certificationBy,Course:course,Name:name,CertificateAddress:`upload/certificates/${file1.filename}`,CertificateUrl:`${domain}/upload/certificates/${file1.filename}`});
         res.status(200).json({message:"uploaded successfully"});
     }
 },),);
@@ -42,6 +43,17 @@ router.get("/getCertificates",asynchandler(async(req,res)=>{
 
     res.status(200).json(response);
 }))
+
+router.delete("/deleteCertificate/:id",asynchandler(async(req,res)=>{
+
+    const deleted = await cerificatesModel.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+        return res.status(404).json({ message: 'Update not found' });
+    }
+    res.status(200).json({ message: 'Update deleted successfully' });
+}));
+
+
 
 
 

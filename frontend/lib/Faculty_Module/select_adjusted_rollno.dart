@@ -73,75 +73,81 @@ class _AdjustSelectedScreenState extends State<AdjustSelectedScreen> {
       appBar: AppBar(
         title: Text("${widget.department}-${widget.section}"),
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Expanded(
-              child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) => ListTile(
-                  shape: Border.all(),
-                  tileColor: data[index].Present
-                      ? Color.fromARGB(255, 34, 140, 43) // Green color
-                      : Color.fromARGB(255, 159, 16, 16), // Red color
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: Text("Confirmation"),
-                        content: Text(
-                          data[index].Present
-                              ? "Do you want to mark present student ${data[index].RollNo.toUpperCase()} as absent?"
-                              : "Do you want to mark absent student ${data[index].RollNo.toUpperCase()} as present?",
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text("Cancel"),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              var response = await http.post(
-                                Uri.parse(
-                                    '${ip}/api/attendance/setAdjustRno?rollNo=${data[index].RollNo.toUpperCase()}'),
-                                body: jsonEncode({
-                                  "selectedDate": DateFormat('yyyy-MM-dd')
-                                      .format(widget.selectedDate),
-                                  "startTime": widget.startTime,
-                                  "endTime": widget.endTime,
-                                }),
-                                headers: <String, String>{
-                                  'Content-Type':
-                                      'application/json; charset=UTF-8',
-                                },
-                              );
+      body: data.isEmpty
+          ? Center(
+              child: CircularProgressIndicator.adaptive(),
+            )
+          : Column(
+              children: [
+                Container(
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) => ListTile(
+                        shape: Border.all(),
+                        tileColor: data[index].Present
+                            ? Color.fromARGB(255, 34, 140, 43) // Green color
+                            : Color.fromARGB(255, 159, 16, 16), // Red color
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: Text("Confirmation"),
+                              content: Text(
+                                data[index].Present
+                                    ? "Do you want to mark present student ${data[index].RollNo.toUpperCase()} as absent?"
+                                    : "Do you want to mark absent student ${data[index].RollNo.toUpperCase()} as present?",
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text("Cancel"),
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    var response = await http.post(
+                                      Uri.parse(
+                                          '${ip}/api/attendance/setAdjustRno?rollNo=${data[index].RollNo.toUpperCase()}'),
+                                      body: jsonEncode({
+                                        "selectedDate": DateFormat('yyyy-MM-dd')
+                                            .format(widget.selectedDate),
+                                        "startTime": widget.startTime,
+                                        "endTime": widget.endTime,
+                                      }),
+                                      headers: <String, String>{
+                                        'Content-Type':
+                                            'application/json; charset=UTF-8',
+                                      },
+                                    );
 
-                              if (response.statusCode == 200) {
-                                setState(() {
-                                  // Toggle the Present value
-                                  data[index].Present = !data[index].Present;
-                                });
-                              }
+                                    if (response.statusCode == 200) {
+                                      setState(() {
+                                        // Toggle the Present value
+                                        data[index].Present =
+                                            !data[index].Present;
+                                      });
+                                    }
 
-                              Navigator.pop(
-                                  context); // Dismiss the dialog after action
-                            },
-                            child: Text("Okay"),
-                          ),
-                        ],
+                                    Navigator.pop(
+                                        context); // Dismiss the dialog after action
+                                  },
+                                  child: Text("Okay"),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        title: Text(data[index].RollNo.toUpperCase()),
+                        subtitle:
+                            Text(data[index].Present ? "Present" : "Abscent"),
                       ),
-                    );
-                  },
-                  title: Text(data[index].RollNo.toUpperCase()),
-                  subtitle: Text(data[index].Present.toString()),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

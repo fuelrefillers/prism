@@ -6,6 +6,8 @@ class ClassesModel {
   String Section;
   String Regulation;
   String Year;
+  // String Subject;
+  // String SubjectCode;
   ClassesModel({
     required this.Department,
     required this.Section,

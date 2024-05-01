@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/attendace_loading_page.dart';
-import 'package:frontend/providers.dart/is_error_provider.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
+import 'package:frontend/providers/is_error_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
 import 'package:frontend/services/faculty_services.dart';
 import 'package:provider/provider.dart';
 
@@ -13,13 +13,16 @@ class ReviewAndSubmitScreen extends StatefulWidget {
       required this.section,
       required this.department,
       required this.startTime,
-      required this.endTime});
+      required this.endTime,
+      required this.type});
   final List<String> selected;
   final String section;
   final String department;
   final String regulation;
   final String startTime;
   final String endTime;
+  final String type;
+
   @override
   State<ReviewAndSubmitScreen> createState() {
     return _ReviewAndSubmitScreenState();
@@ -56,6 +59,10 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
       ),
       body: Column(
         children: [
+          Text(
+            "Confirm ${widget.type}",
+            style: TextStyle(fontSize: 20),
+          ),
           Container(
             child: Expanded(
               child: ListView.builder(
@@ -106,7 +113,8 @@ class _ReviewAndSubmitScreenState extends State<ReviewAndSubmitScreen> {
                         regulation: widget.regulation,
                         startTime: widget.startTime,
                         endTime: widget.endTime,
-                        context: context);
+                        context: context,
+                        type: widget.type);
                     Navigator.pop(context);
                     final loaging =
                         Provider.of<isLoadinProvider>(context, listen: false);

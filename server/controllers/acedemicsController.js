@@ -1,19 +1,64 @@
 const asynchandler = require("express-async-handler");
 const Semester = require("../models/acedemicsModel");
 const AttendanceHistory = require("../models/attendanceHistory");
-
+const SubjectsModel = require("../models/individualClassSubjectsModel");
 const {assignAttendance} = require("./attendanceHistoryController");
-const {createAttendance} = require("./attendanceController")
+const {createAttendance} = require("./attendanceController");
 
-const addSemesterData = asynchandler(async(req,res)=>{
-    const newData =await Semester.create(req.body);
-    console.log(newData);
-    if(newData){
-        const result = await AttendanceHistory.deleteMany({Regulation:req.body.Regulation});
-        assignAttendance(req,res,newData.StartDates[0],newData.EndDates[newData.EndDates.length-1],newData);
-        createAttendance(req,res,newData);
+// const addSemesterData = asynchandler(async(req,res)=>{
+//     const data = await Semester.find({Regulation:req.body.Regulation,Semester:req.body.Semester});
+//         // console.log(data);
+
+
+//     if(data.length === 0){
+//         const newData =await Semester.create(req.body);
+//         // console.log(newData);
+//         // const result = await AttendanceHistory.deleteMany({Regulation:req.body.Regulation});
+//         assignAttendance(req,res,newData.StartDates[0],newData.EndDates[newData.EndDates.length-1],newData);
+//         createAttendance(req,res,newData);
+
+//         res.status(200).json({message:"uploaded sucessfully"});
+//     }
+//     else{
+//         res.status(202).json({message:"already exists"});
+//     }
+// });
+
+
+const addSemesterData = asynchandler(async(req, res) => {
+    const data = await Semester.find({ Regulation: req.body.Regulation, Semester: req.body.Semester });
+
+    if (data.length === 0) {
+        const newData = await Semester.create(req.body);
+
+        // Wrapping assignAttendance and createAttendance in promises
+        const assignAttendancePromise = new Promise((resolve, reject) => {
+            assignAttendance(req, res, newData.StartDates[0], newData.EndDates[newData.EndDates.length - 1], newData, (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+
+        const createAttendancePromise = new Promise((resolve, reject) => {
+            createAttendance(req, res, newData, (err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
+
+        // Using Promise.all to wait for both promises to complete
+        try {
+            await Promise.all([assignAttendancePromise, createAttendancePromise]);
+            console.log("done");
+            res.status(200).json({ message: "uploaded successfully" });
+        } catch (error) {
+            res.status(500).json({ message: "Error executing functions", error: error.message });
+        }
+    } else {
+        res.status(202).json({ message: "already exists" });
     }
 });
+
 
 const updateSemesterData = asynchandler(async(req,res)=>{
     let filter = {};
@@ -71,4 +116,15 @@ const fetchAcademicmonths = asynchandler(async(req,res)=>{
     res.json(Data.TotalNumberOfMonths);
 })
 
-module.exports = {addSemesterData,updateSemesterData,fetchAcademicmonths};
+
+const getSubjectsForClass = asynchandler(async(req,res)=>{
+    let filter = {};
+    if(req.query){
+        filter = {Regulation: req.query.regulation,Department:req.query.department,Section:req.query.section}
+    }
+
+    const subjects = await SubjectsModel.findOne(filter);
+    res.status(200).json(subjects.Subjects);
+})
+
+module.exports = {addSemesterData,updateSemesterData,fetchAcademicmonths,getSubjectsForClass};

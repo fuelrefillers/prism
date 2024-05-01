@@ -60,17 +60,43 @@ class _PrevQPDownloadedScreenState extends State<PrevQPDownloadedScreen> {
                 : ListView.builder(
                     itemCount: downloadedBooks.length,
                     itemBuilder: (context, index) => ListTile(
-                      title: Text(downloadedBooks[index].SubjectName),
                       onTap: () {
                         openPdf(downloadedBooks[index].PrevQuestionPaperUrl);
                       },
-                      onLongPress: () {
-                        PrevQp.deleteItemFromLocalStorage(
-                            "downloadedPapers", downloadedBooks[index].Id);
-                        setState(() {
-                          downloadedBooks.removeAt(index);
-                        });
-                      },
+                      title: Text(downloadedBooks[index].SubjectName),
+                      subtitle: Text(downloadedBooks[index].Regulation),
+                      leading: Icon(Icons.download_done),
+                      trailing: IconButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text("Warning"),
+                                content: const Text(
+                                    "This operation will delete the update permanently"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("cancel"),
+                                  ),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        PrevQp.deleteItemFromLocalStorage(
+                                            "downloadedPapers",
+                                            downloadedBooks[index].Id);
+                                        setState(() {
+                                          downloadedBooks.removeAt(index);
+                                        });
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text("Ok"))
+                                ],
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.delete_forever)),
                     ),
                   ));
   }

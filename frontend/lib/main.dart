@@ -8,20 +8,21 @@ import 'package:frontend/hostels/providers/DetailsProvider.dart';
 import 'package:frontend/hostels/providers/GirlsFloorsProvider.dart';
 import 'package:frontend/hostels/providers/GirlsRoomsProvider.dart';
 import 'package:frontend/hostels/providers/verifyProvider.dart';
-import 'package:frontend/providers.dart/atten_confirm_provider.dart';
-import 'package:frontend/providers.dart/attendance_provider.dart';
-import 'package:frontend/providers.dart/download_provider.dart';
-import 'package:frontend/providers.dart/faculty_login_provider.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
-import 'package:frontend/providers.dart/is_error_provider.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
-import 'package:frontend/providers.dart/upload_percentage_provider.dart';
-import 'package:frontend/providers.dart/who_is_signed_in.dart';
-import 'package:frontend/providers.dart/library_provider.dart';
-import 'package:frontend/providers.dart/performance_provider.dart';
-import 'package:frontend/providers.dart/token_provider.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/atten_confirm_provider.dart';
+import 'package:frontend/providers/attendance_provider.dart';
+import 'package:frontend/providers/download_provider.dart';
+import 'package:frontend/providers/faculty_login_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
+import 'package:frontend/providers/hostel_provider.dart';
+import 'package:frontend/providers/is_error_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
+import 'package:frontend/providers/upload_percentage_provider.dart';
+import 'package:frontend/providers/who_is_signed_in.dart';
+import 'package:frontend/providers/library_provider.dart';
+import 'package:frontend/providers/performance_provider.dart';
+import 'package:frontend/providers/token_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/services/auth.dart';
@@ -37,10 +38,9 @@ import 'package:firebase_core/firebase_core.dart';
 // also change some UI to the newly added things in student
 // take your own time
 // do what you like and if you feel it looks good or any idea about improving it further do it ,its your take do as you want
-
 // import 'SocketService.dart';
-
 // function to lisen to background changes
+
 Future _firebaseBackgroundMessage(RemoteMessage message) async {
   if (message.notification != null) {
     print("Some notification Received");
@@ -50,10 +50,9 @@ Future _firebaseBackgroundMessage(RemoteMessage message) async {
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  SocketService().connectToServer();
+  // SocketService().connectToServer();
   // io.Socket socket = SocketService().socket;
-
-  // socket.onConnect((data) {+++++++++++
+  // socket.onConnect((daa) {+++++++++++
   //   print("Connected");
   // });
 
@@ -109,6 +108,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => isErrorProvider()),
           ChangeNotifierProvider(create: (_) => UploadPercentageProvider()),
           ChangeNotifierProvider(create: (_) => DownloadProvider()),
+          ChangeNotifierProvider(create: (_) => HostelProvider()),
         ],
         child: MyApp(
           token: prefs.getString('x-auth-token'),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/time_table_view_model.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
 import 'package:provider/provider.dart';
 
 class TimeTableViewScreen extends StatelessWidget {

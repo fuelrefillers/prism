@@ -1,6 +1,6 @@
 import 'package:draw_graph/models/feature.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/performance_provider.dart';
+import 'package:frontend/providers/performance_provider.dart';
 import 'package:frontend/screens/performanceScreens/backlogs_screen.dart';
 import 'package:frontend/screens/performanceScreens/performance_graph.dart';
 import 'package:frontend/screens/performanceScreens/previous_results.dart';
@@ -154,6 +154,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
               subcategory1: '',
             ),
             MultiPurposeLinkCard(
+              url: "https://mrecacademics.com/",
               category: "Exams Fee",
               height1: MediaQuery.of(context).size.height / 8,
               subcategory: 'Paid',

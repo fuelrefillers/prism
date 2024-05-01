@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/attendance_provider.dart';
+import 'package:frontend/providers/attendance_provider.dart';
+import 'package:frontend/screens/AttendanceScreens/view_total_attendance_screen.dart';
 import 'package:frontend/widgets/attendance_guage.dart';
+import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';
 
 class SummaryContainer extends StatelessWidget {
@@ -135,7 +137,7 @@ class MonthlyAttendance extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Total percentage ",
+                      "Monthly percentage ",
                       style: TextStyle(
                           fontSize: 25, color: Color.fromARGB(255, 0, 0, 0)),
                     ),
@@ -144,9 +146,9 @@ class MonthlyAttendance extends StatelessWidget {
                         SizedBox(
                           child: Center(
                             child: AttendanceGuage(
-                              totalAttendance:
-                                  double.parse(userAttendance.SemPercentage) /
-                                      100,
+                              totalAttendance: double.parse(
+                                      userAttendance.MonthlyPercentage) /
+                                  100,
                             ),
                           ),
                         ),
@@ -229,6 +231,16 @@ class MonthlyAttendance extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            MultiPurposeCard(
+              category: "All Day's Attendance",
+              subcategory: "",
+              subcategory1: "",
+              height1: 80,
+              screen: TotalAttendanceScreen(),
             )
           ],
         ),

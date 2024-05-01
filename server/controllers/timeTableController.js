@@ -6,6 +6,7 @@ const TimeTable = require("../models/timeTableModel");
 const asynchandler = require("express-async-handler");
 const { log } = require("console");
 const { convertTimeTable } = require("./TimeTableController1");
+const domain = process.env.DOMAIN;
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
@@ -30,7 +31,7 @@ router.post("/upload", upload.single('timetablePdf'), asynchandler(async(req, re
     }
     else{
         const file1 = req.file;
-        const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,Section:section,TimeTableAddress:`upload/timetable/${file1.filename}`,TimeTableUrl:`http://15.20.17.222:3000/upload/timetable/${file1.filename}`});
+        const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,Section:section,TimeTableAddress:`upload/timetable/${file1.filename}`,TimeTableUrl:`${domain}/upload/timetable/${file1.filename}`});
         const hello = `upload/timetable/${file1.filename}`;
         await convertTimeTable(req,res,hello);
         // res.status(200).json(TimeTableRes);

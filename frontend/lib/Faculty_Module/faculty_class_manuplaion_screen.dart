@@ -41,9 +41,11 @@ class _FacultyClassManuplationScreenState
 
   void addAclass() {
     ClassesModel newt = ClassesModel(
+        // Subject: "dd",
+        // SubjectCode: "66",
         Department: _DepartmentController.text.toUpperCase(),
         Section: _SectionController.text.toUpperCase(),
-        Regulation: _SectionController.text.toUpperCase(),
+        Regulation: _RegulationController.text.toUpperCase(),
         Year: _YearController.text.toUpperCase());
     setState(() {
       faculty.Classes.add(newt);

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/mid_details_model.dart';
 import 'package:frontend/Faculty_Module/mid_marks_assigning.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';

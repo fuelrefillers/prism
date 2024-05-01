@@ -5,6 +5,8 @@ const router = express.Router();
 const Book = require("../models/booksModel");
 const asynchandler = require("express-async-handler");
 
+const domain = process.env.DOMAIN;
+
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
         if (file.fieldname === "booksCover") {
@@ -33,7 +35,7 @@ router.post("/upload", upload.fields([{name:'booksCover',maxC5ount:1},{name:'boo
 
     const file1 = req.files['booksCover'][0].filename;
     const file2 = req.files['booksPdf'][0].filename;
-    const book = await Book.create({BookName:booksname,Department:department,Regulation:regulation,BookImageUrl:`http://15.20.17.222:3000/upload/booksCover/${file1}`,BookLinkUrl:`http://15.20.17.222:3000/upload/booksPdf/${file2}`,BookAuthor:"sai"});
+    const book = await Book.create({BookName:booksname,Department:department,Regulation:regulation,BookImageUrl:`${domain}/upload/booksCover/${file1}`,BookLinkUrl:`${domain}/upload/booksPdf/${file2}`,BookAuthor:"sai"});
     res.status(200).json(req.files);
 
     

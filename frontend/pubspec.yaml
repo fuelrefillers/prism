@@ -81,6 +81,8 @@ dependencies:
   flutter_map: ^6.1.0
   easy_date_timeline: ^1.0.3
   eva_icons_flutter: ^3.1.0
+  dotted_border: ^2.1.0
+  timelines: ^0.1.0
   # leaflet: ^1.0.5
   # video_player: ^1.0.1
   # socket_io_client: ^2.12.0

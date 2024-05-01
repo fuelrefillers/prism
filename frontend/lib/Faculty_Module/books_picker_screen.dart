@@ -3,8 +3,8 @@ import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.d
 import 'package:frontend/Faculty_Module/selection_pannel/photo_selection_pannel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/download_provider.dart';
-import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/providers/download_provider.dart';
+import 'package:frontend/providers/upload_percentage_provider.dart';
 import 'package:frontend/services/faculty_services.dart';
 import 'package:provider/provider.dart';
 

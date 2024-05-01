@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/screens/login_screen.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:frontend/util/util.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Authservice {
@@ -28,9 +30,13 @@ class Authservice {
       );
       if (context.mounted) {
         httpErrorHandle(
+          type: "Student",
           response: res,
           context: context,
           onSuccess: () async {
+            final isLoadingProvider =
+                Provider.of<isLoadinProvider>(context, listen: false);
+            isLoadingProvider.toggleStudentLoading();
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['token']);
@@ -69,9 +75,13 @@ class Authservice {
       );
       if (context.mounted) {
         httpErrorHandle(
+          type: "faculty",
           response: res,
           context: context,
           onSuccess: () async {
+            final isLoadingProvider =
+                Provider.of<isLoadinProvider>(context, listen: false);
+            isLoadingProvider.toggleFacultyLoading();
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['token']);
@@ -109,9 +119,13 @@ class Authservice {
       );
       if (context.mounted) {
         httpErrorHandle(
+          type: "parent",
           response: res,
           context: context,
           onSuccess: () async {
+            final isLoadingProvider =
+                Provider.of<isLoadinProvider>(context, listen: false);
+            isLoadingProvider.toggleStudentLoading();
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString(
                 'x-auth-token', jsonDecode(res.body)['token']);

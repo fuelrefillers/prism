@@ -676,7 +676,7 @@ import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.d
 import 'package:frontend/Faculty_Module/selection_pannel/photo_selection_pannel.dart';
 import 'package:frontend/chatting/messagesStore.dart';
 import 'package:frontend/chatting/socketio.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/chatting/UI/widgets/own_message_card.dart';
 import 'package:frontend/chatting/UI/widgets/reply_card.dart';

@@ -29,7 +29,7 @@ class _TransportscreenState extends State<Transportscreen> {
 
   void set() async {
     List<Bus> b = await service.getBusses();
-    await Future.delayed(Duration(seconds: 1));
+    // await Future.delayed(Duration(seconds: 1));
     setState(() {
       busses = b;
       filteredList = b;
@@ -52,7 +52,9 @@ class _TransportscreenState extends State<Transportscreen> {
     } else {
       result = busses
           .where((bus) =>
-              bus.Routename.toLowerCase().contains(searchkey.toLowerCase()))
+              bus.Routename.toLowerCase().contains(searchkey.toLowerCase()) ||
+              bus.Busno.toLowerCase().contains(searchkey.toLowerCase()) ||
+              bus.Routeno.toLowerCase().contains(searchkey.toLowerCase()))
           .toList();
     }
     setState(() {

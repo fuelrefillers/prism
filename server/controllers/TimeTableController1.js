@@ -61,6 +61,7 @@ const convertTimeTable = asynchandler(async(req,res,f)=>{
             const cell = worksheet[XLSX.utils.encode_col(col) + i];
                 if (cell && (cell.v !== "BREAK") && (cell.v !== "LUNCH" )) {
                     let period = cell.v;
+                    console.log(cell.v);
                     let intermediate = cell.v.split(" ");
 
                     if(intermediate.includes("LAB")){
@@ -310,4 +311,6 @@ const test = asynchandler(async(req,res)=>{
 // test();
 
 // convertTimeTable();
+
+
 module.exports = {setTimeTable,convertTimeTable,getTimeTable};

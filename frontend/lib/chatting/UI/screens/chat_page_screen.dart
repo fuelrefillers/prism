@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/chatting/UI/screens/individual_chat_screen.dart';
 import 'package:frontend/chatting/UI/screens/new_chat_screen.dart';
 import 'package:frontend/chatting/models/ChatModel.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 

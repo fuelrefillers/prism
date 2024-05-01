@@ -17,3 +17,5 @@ const bookedUsersModel = mongoose.Schema({
     }
 });
 
+
+module.exports = mongoose.model("bookedUserModel",bookedUsersModel);

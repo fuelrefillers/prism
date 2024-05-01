@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
+import 'package:frontend/screens/Hostel_Screens/hostel_home_screen.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -183,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                             // If the form is valid, display a snackbar. In the real world,
                             // you'd often call a server or save the information in a database.
                             login();
-                            isLoadingProvider.changeStatus();
+                            isLoadingProvider.toggleStudentLoading();
                           }
                         },
                         color: const Color.fromRGBO(49, 39, 79, 1),
@@ -193,12 +194,13 @@ class _LoginPageState extends State<LoginPage> {
                         height: 50,
                         child: Center(
                           child: Consumer<isLoadinProvider>(
-                            builder: (context, value, child) => value.isloading
-                                ? CircularProgressIndicator.adaptive()
-                                : Text(
-                                    "Student Login",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                            builder: (context, value, child) =>
+                                value.isloadingstudent
+                                    ? CircularProgressIndicator.adaptive()
+                                    : Text(
+                                        "Student Login",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
                           ),
                         ),
                       ),
@@ -211,8 +213,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: Center(
                         child: MaterialButton(
                           onPressed: () {
-                            //isLoadingProvider.changeStatus();
-                            loginParent();
+                            if (_formKey.currentState!.validate()) {
+                              // If the form is valid, display a snackbar. In the real world,
+                              // you'd often call a server or save the information in a database.
+                              loginParent();
+                              isLoadingProvider.toggleParentLoading();
+                            }
                           },
                           color: const Color.fromRGBO(49, 39, 79, 1),
                           shape: RoundedRectangleBorder(
@@ -220,9 +226,14 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           height: 50,
                           child: Center(
-                            child: Text(
-                              "Parent Login",
-                              style: TextStyle(color: Colors.white),
+                            child: Consumer<isLoadinProvider>(
+                              builder: (context, value, child) =>
+                                  value.isloadingparent
+                                      ? CircularProgressIndicator.adaptive()
+                                      : Text(
+                                          "Parent Login",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                             ),
                           ),
                         ),
@@ -235,8 +246,12 @@ class _LoginPageState extends State<LoginPage> {
                       duration: const Duration(milliseconds: 1900),
                       child: MaterialButton(
                         onPressed: () {
-                          //isLoadingProvider.changeStatus();
-                          loginfaculty();
+                          if (_formKey.currentState!.validate()) {
+                            // If the form is valid, display a snackbar. In the real world,
+                            // you'd often call a server or save the information in a database.
+                            loginfaculty();
+                            isLoadingProvider.toggleFacultyLoading();
+                          }
                         },
                         color: const Color.fromRGBO(49, 39, 79, 1),
                         shape: RoundedRectangleBorder(
@@ -244,9 +259,41 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         height: 50,
                         child: Center(
-                          child: Text(
-                            "Faculty",
-                            style: TextStyle(color: Colors.white),
+                          child: Consumer<isLoadinProvider>(
+                            builder: (context, value, child) =>
+                                value.isloadingsfaculty
+                                    ? CircularProgressIndicator.adaptive()
+                                    : Text(
+                                        "Faculty Login",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    FadeInUp(
+                      duration: const Duration(milliseconds: 1500),
+                      child: Center(
+                        child: MaterialButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HostelsHomeScreen()));
+                          },
+                          color: const Color.fromRGBO(49, 39, 79, 1),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          height: 50,
+                          child: Center(
+                            child: Text(
+                              "Hostels Booking",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                       ),

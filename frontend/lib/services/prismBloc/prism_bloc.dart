@@ -21,7 +21,7 @@ class PrismBloc extends Bloc<PrismEvent, PrismState> {
   FutureOr<void> userInitialFetchEvent(
       UserInitialFetchEvent event, Emitter<PrismState> emit) async {
     emit(UserFetchingLoadingState());
-    await Future.delayed(Duration(seconds: 1));
+    // await Future.delayed(Duration(seconds: 1));
     User user = await PrismRepo.getUser();
     emit(UserFetchingSuccessfullState(user: user));
   }
@@ -29,7 +29,7 @@ class PrismBloc extends Bloc<PrismEvent, PrismState> {
   FutureOr<void> facultyInitialFetchEvent(
       FacultyInitialFetchEvent event, Emitter<PrismState> emit) async {
     emit(FacultyFetchingLoadingState());
-    await Future.delayed(Duration(seconds: 2));
+    // await Future.delayed(Duration(seconds: 2));
     Faculty faculty = await PrismRepo.getFaculty();
     emit(FacultyFetchingSuccessfullState(faculty: faculty));
   }

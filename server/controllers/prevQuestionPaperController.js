@@ -4,6 +4,7 @@ const path = require("path");
 const router = express.Router();
 const asynchandler = require("express-async-handler");
 const prevQpapreModel = require("../models/prevQpapreModel");
+const domain = process.env.DOMAIN;
 
 const storage = multer.diskStorage({
      destination: (req, file, cb) => {
@@ -28,7 +29,7 @@ router.post("/upload", upload.single('prevQPPdf'), asynchandler(async(req, res) 
     }
     else{
         const file1 = req.file;
-        const prevQPRes = await prevQpapreModel.create({SubjectName:prevQPname,Department:department,Regulation:regulation,PrevQuestionPaperAddress:`upload/prevQp/${file1.filename}`,PrevQuestionPaperUrl:`http://192.168.29.194:3000/upload/prevQp/${file1.filename}`});
+        const prevQPRes = await prevQpapreModel.create({SubjectName:prevQPname,Department:department,Regulation:regulation,PrevQuestionPaperAddress:`upload/prevQp/${file1.filename}`,PrevQuestionPaperUrl:`${domain}/upload/prevQp/${file1.filename}`});
         const hello = `upload/timetable/${file1.filename}`;
         res.status(200).json(prevQPRes);
     }

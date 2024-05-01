@@ -4,6 +4,9 @@ const path = require("path");
 const router = express.Router();
 const Updates = require("../models/updatesModel");
 const asyncHandler = require("express-async-handler");
+// const { route } = require("./updatesController");
+
+const domain = process.env.DOMAIN;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -28,11 +31,11 @@ router.post("/upload", upload.fields([{ name: 'images' }, { name: 'pdfs' }]), as
     let pdfUrls = [];
 
     if (req.files['images']) {
-        imagesUrls = req.files['images'].map(file => 'http://192.168.29.194:3000/upload/UpadteImages/' + file.filename);
+        imagesUrls = req.files['images'].map(file => `${domain}/upload/UpadteImages/` + file.filename);
     }
 
     if (req.files['pdfs']) {
-        pdfUrls = req.files['pdfs'].map(file => 'http://192.168.29.194:3000/upload/UpdatePdfs/' + file.filename);
+        pdfUrls = req.files['pdfs'].map(file => `${domain}/upload/UpdatePdfs/` + file.filename);
     }
 
     const update = await Updates.create({
@@ -59,7 +62,29 @@ router.get("/getUpdates",asyncHandler(async(req,res)=>{
     const response = await Updates.find(filter);
 
     res.status(200).json(response);
-}))
+}));
+
+router.post("/getUpdatesForSpecificFaculty",asyncHandler(async(req,res)=>{
+    filter = {}
+
+    const {name,id} = req.body;
+
+
+    const updates = await Updates.find({SentBy:`${name} - ${id}`});
+
+    res.status(200).json(updates);
+
+}));
+
+router.delete("/deleteUpdate/:id",asyncHandler(async(req,res)=>{
+
+    const deleted = await Updates.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+        return res.status(404).json({ message: 'Update not found' });
+    }
+    res.status(200).json({ message: 'Update deleted successfully' });
+}));
+
 
 
 module.exports = router;

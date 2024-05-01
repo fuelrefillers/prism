@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/attendance_provider.dart';
+import 'package:frontend/providers/attendance_provider.dart';
 import 'package:frontend/screens/AttendanceScreens/monthly_attendance_screen.dart';
 
 import 'package:frontend/services/auth.dart';

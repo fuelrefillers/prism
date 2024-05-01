@@ -32,8 +32,8 @@ class BusDriverDetailsCard extends StatelessWidget {
               ),
               height: 130,
               width: 100,
-              child: Image.network(
-                "https://www.shutterstock.com/image-vector/physics-chalkboard-background-hand-drawn-600w-1988419205.jpg",
+              child: Image.asset(
+                "assets/placeHolder.png",
                 fit: BoxFit.fill,
               ),
             ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/faculty-home-screen.dart';
-import 'package:frontend/providers.dart/atten_confirm_provider.dart';
-import 'package:frontend/providers.dart/is_error_provider.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
+import 'package:frontend/providers/atten_confirm_provider.dart';
+import 'package:frontend/providers/is_error_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
 import 'package:frontend/widgets/multipurpose_link_card.dart';
 import 'package:provider/provider.dart';
 
@@ -44,7 +44,14 @@ class AttendanceLoadingScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Center(
-                                child: Text("success"),
+                                child: Text(
+                                  "Attendance marked successfully",
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                              ),
+                              Text(
+                                "Abscentees :",
+                                style: TextStyle(fontSize: 20),
                               ),
                               SizedBox(
                                 height: 300,
@@ -53,6 +60,7 @@ class AttendanceLoadingScreen extends StatelessWidget {
                                       atten.attenConfirm.absentees.length,
                                   itemBuilder: (context, index) =>
                                       MultiPurposeLinkCard(
+                                    url: "",
                                     category:
                                         atten.attenConfirm.absentees[index],
                                     subcategory1: '',
@@ -63,7 +71,9 @@ class AttendanceLoadingScreen extends StatelessWidget {
                               ),
                               Center(
                                 child: Text(
-                                    atten.attenConfirm.attendees.toString()),
+                                  "Total no of presentees : ${atten.attenConfirm.attendees}",
+                                  style: TextStyle(fontSize: 20),
+                                ),
                               ),
                               ElevatedButton(
                                   onPressed: () {

@@ -156,7 +156,7 @@ const cron = require('node-cron');
 
   const updateCurrentDayAttendanceAtMidnight = async () => {
     try {
-      const attendanceRecords = await Attendance.find({ 'CurrentDay.MorningAttended': 0, 'CurrentDay.AfternoonAttended': 0 });
+      const attendanceRecords = await attenn.find({ 'CurrentDay.MorningAttended': 0, 'CurrentDay.AfternoonAttended': 0 });
 
       for (const record of attendanceRecords) {
           record.SemesterData.TotalDaysAbsentForSem += 1;
@@ -184,16 +184,16 @@ const cron = require('node-cron');
   
   
   // Schedule the task to run at midnight every day
-  cron.schedule('34 9 * * *', () => {
+  cron.schedule('35 14 * * *', () => {
     updatePercentageAtMidnight();
     console.log("8:20");
   });
 
-  cron.schedule('35 10 * * *',()=>{
+  cron.schedule('35 14 * * *',()=>{
     updateCurrentDayAttendanceAtMidnight();
     console.log("9.30");
   });
-
+  
   module.exports = {updatePercentageAtMidnight};
 
   

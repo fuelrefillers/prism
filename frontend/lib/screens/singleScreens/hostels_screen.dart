@@ -13,11 +13,17 @@ class HostelScreen extends StatelessWidget {
         padding: const EdgeInsets.all(13.0),
         child: Column(
           children: [
-            HostelsCard(),
+            HostelsCard(
+              title: "Boy's Hostel",
+              type: "boys",
+            ),
             SizedBox(
               height: 20,
             ),
-            HostelsCard(),
+            HostelsCard(
+              title: "Girl's Hostel",
+              type: "girls",
+            ),
           ],
         ),
       ),

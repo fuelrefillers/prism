@@ -30,6 +30,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<FacultyFetchRollNo> data = [];
   List<String> selected = [];
+  String selectedValue = 'Absentees';
 
   @override
   void initState() {
@@ -78,73 +79,104 @@ class _MainScreenState extends State<MainScreen> {
       appBar: AppBar(
         title: Text("${widget.department}-${widget.section}"),
       ),
-      body: Column(
-        children: [
-          Container(
-            child: Expanded(
-              child: ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) => CheckboxListTile(
-                  value: selected.contains(data[index].RollNo),
-                  onChanged: (bool? value) {
-                    onRollnoSelected(value, data[index].RollNo);
-                  },
-                  title: Text(data[index].RollNo.toUpperCase()),
-                  subtitle: Text(data[index].StudentName),
+      body: data.isEmpty
+          ? Center(child: CircularProgressIndicator.adaptive())
+          : Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio(
+                      value: 'Absentees',
+                      groupValue: selectedValue,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value!;
+                        });
+                      },
+                    ),
+                    Text('Absentees'),
+                    SizedBox(width: 20), // Space between radio buttons
+                    Radio(
+                      value: 'Presentees',
+                      groupValue: selectedValue,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValue = value!;
+                        });
+                      },
+                    ),
+                    Text('Presentees'),
+                  ],
                 ),
-              ),
-            ),
-          ),
-          // Container(
-          //   child: Expanded(
-          //     child: ListView.builder(
-          //         itemCount: selected.length,
-          //         itemBuilder: (context, index) => ElevatedButton(
-          //             onPressed: () {}, child: Text(selected[index]))),
-          //   ),
-          // ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          if (DateFormat('yyyy-MM-dd').format(DateTime.now()) ==
-              DateFormat('yyyy-MM-dd').format(widget.selectedDate)) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ReviewAndSubmitScreen(
-                    selected: selected,
-                    section: widget.section,
-                    department: widget.department,
-                    regulation: widget.regulation,
-                    startTime: widget.startTime,
-                    endTime: widget.endTime),
-              ),
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (ctx) => AlertDialog(
-                title: const Text("Warning"),
-                content: const Text(
-                    "Date does not match you cannot mark attendance !"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("cancel"),
+                Container(
+                  child: Expanded(
+                    child: ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) => CheckboxListTile(
+                        value: selected.contains(data[index].RollNo),
+                        onChanged: (bool? value) {
+                          onRollnoSelected(value, data[index].RollNo);
+                        },
+                        title: Text(data[index].RollNo.toUpperCase()),
+                        subtitle: Text(data[index].StudentName),
+                      ),
+                    ),
                   ),
-                ],
+                ),
+                // Container(
+                //   child: Expanded(
+                //     child: ListView.builder(
+                //         itemCount: selected.length,
+                //         itemBuilder: (context, index) => ElevatedButton(
+                //             onPressed: () {}, child: Text(selected[index]))),
+                //   ),
+                // ),
+              ],
+            ),
+      floatingActionButton: data.isNotEmpty
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                if (DateFormat('yyyy-MM-dd').format(DateTime.now()) ==
+                    DateFormat('yyyy-MM-dd').format(widget.selectedDate)) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ReviewAndSubmitScreen(
+                          selected: selected,
+                          section: widget.section,
+                          department: widget.department,
+                          regulation: widget.regulation,
+                          startTime: widget.startTime,
+                          endTime: widget.endTime,
+                          type: selectedValue),
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text("Warning"),
+                      content: const Text(
+                          "Date does not match you cannot mark attendance !"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text("cancel"),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              label: const Padding(
+                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: Text("Next"),
               ),
-            );
-          }
-        },
-        label: const Padding(
-          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-          child: Text("Next"),
-        ),
-        enableFeedback: true,
-      ),
+              enableFeedback: true,
+            )
+          : Text(""),
     );
   }
 }

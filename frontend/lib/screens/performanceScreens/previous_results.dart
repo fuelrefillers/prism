@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/performance_provider.dart';
+import 'package:frontend/providers/performance_provider.dart';
 import 'package:frontend/screens/performanceScreens/sem_marks_screen.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/hostels/screens/InstructionsScreen.dart';
-import 'package:frontend/providers.dart/who_is_signed_in.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/who_is_signed_in.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/AttendanceScreens/attendance_screen.dart';
+import 'package:frontend/screens/Hostel_Screens/hostel_terms_and_conditions_screen.dart';
 import 'package:frontend/screens/booksScreens/books_home_screen.dart';
 import 'package:frontend/screens/prevQPScreens/prevQPScreen.dart';
 import 'package:frontend/screens/singleScreens/circular_screen.dart';
@@ -12,6 +12,7 @@ import 'package:frontend/screens/performanceScreens/performance_screen.dart';
 import 'package:frontend/screens/busScreens/transport_screen.dart';
 import 'package:frontend/screens/singleScreens/updates_screen.dart';
 import 'package:frontend/screens/CertificateScreens/uploaded_certificates_screen.dart';
+import 'package:frontend/screens/subjects_screens/subjects_home_screen.dart';
 import 'package:frontend/services/Students_Parents_services.dart';
 import 'package:frontend/services/prismBloc/prism_bloc.dart';
 import 'package:frontend/widgets/custom_button.dart';
@@ -243,14 +244,25 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                             CustomButton(
-                              buttonText: 'Transpoart',
+                              buttonText: 'Transport',
                               icon: Icons.bus_alert_rounded,
                               onPressed: Transportscreen(),
                             ),
                             CustomButton(
                               buttonText: 'Hostel',
                               icon: Icons.apartment,
-                              onPressed: InstructionScreen(),
+                              onPressed: HostelTnC_Screen(),
+                              // onPressed: InstructionScreen(),
+                            ),
+                            CustomButton(
+                              buttonText: 'Subjects',
+                              icon: Icons.subject,
+                              onPressed: SubjectsHomeScreen(
+                                department: successState.user.Department,
+                                regulation: successState.user.Regulation,
+                                section: successState.user.Section,
+                                rollno: successState.user.RollNo,
+                              ),
                             ),
                             Visibility(
                               visible: whois.isSignedIn == 'student',

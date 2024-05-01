@@ -122,72 +122,103 @@ class _PrevQpItemState extends State<PrevQpItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      width: MediaQuery.of(context).size.width,
-      height: 130,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 10,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Row(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width - 50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.prevQp.SubjectName,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Text(
-                    "${widget.prevQp.Department} - ${widget.prevQp.Regulation}",
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      isAlreadyDownloaded || downloadCompleted
-                          ? ElevatedButton.icon(
-                              onPressed: () {
-                                openPdf();
-                              },
-                              icon: Icon(Icons.check),
-                              label: Text("Tap to open"))
-                          : downloadStarted
-                              ? Center(
-                                  child: CircularProgressIndicator.adaptive(
-                                  value: progress,
-                                ))
-                              : ElevatedButton.icon(
-                                  onPressed: () {
-                                    // openPdf();
-                                    downloadPdf();
-                                  },
-                                  icon: Icon(Icons.download),
-                                  label: Text("Downlad"))
-                    ],
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+    return ListTile(
+      title: Text(widget.prevQp.SubjectName),
+      subtitle: Text(widget.prevQp.Department),
+      leading: Text(widget.prevQp.Regulation),
+      trailing: isAlreadyDownloaded || downloadCompleted
+          ? ElevatedButton.icon(
+              onPressed: () {
+                openPdf();
+              },
+              icon: Icon(Icons.check),
+              label: Text("Tap to open"))
+          : downloadStarted
+              ? Center(
+                  child: CircularProgressIndicator.adaptive(
+                  value: progress,
+                ))
+              : ElevatedButton.icon(
+                  onPressed: () {
+                    // openPdf();
+                    downloadPdf();
+                  },
+                  icon: Icon(Icons.download),
+                  label: Text("Downlad")),
     );
   }
 }
+
+
+
+
+
+
+
+// Container(
+//       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+//       width: MediaQuery.of(context).size.width,
+//       height: 130,
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(15),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.grey.withOpacity(0.5),
+//             spreadRadius: 3,
+//             blurRadius: 10,
+//             offset: Offset(0, 3),
+//           ),
+//         ],
+//       ),
+//       child: Padding(
+//         padding: const EdgeInsets.all(15),
+//         child: Row(
+//           children: [
+//             SizedBox(
+//               width: MediaQuery.of(context).size.width - 50,
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.center,
+//                 children: [
+//                   Text(
+//                     widget.prevQp.SubjectName,
+//                     maxLines: 2,
+//                     overflow: TextOverflow.ellipsis,
+//                     style: TextStyle(fontSize: 18),
+//                   ),
+//                   Text(
+//                     "${widget.prevQp.Department} - ${widget.prevQp.Regulation}",
+//                     style: TextStyle(fontSize: 18),
+//                   ),
+//                   Row(
+//                     crossAxisAlignment: CrossAxisAlignment.center,
+//                     mainAxisAlignment: MainAxisAlignment.center,
+//                     children: [
+//                       isAlreadyDownloaded || downloadCompleted
+//                           ? ElevatedButton.icon(
+//                               onPressed: () {
+//                                 openPdf();
+//                               },
+//                               icon: Icon(Icons.check),
+//                               label: Text("Tap to open"))
+//                           : downloadStarted
+//                               ? Center(
+//                                   child: CircularProgressIndicator.adaptive(
+//                                   value: progress,
+//                                 ))
+//                               : ElevatedButton.icon(
+//                                   onPressed: () {
+//                                     // openPdf();
+//                                     downloadPdf();
+//                                   },
+//                                   icon: Icon(Icons.download),
+//                                   label: Text("Downlad"))
+//                     ],
+//                   ),
+//                 ],
+//               ),
+//             )
+//           ],
+//         ),
+//       ),
+//     )

@@ -1,6 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/updates_model.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class UpdatesViewerScreen extends StatefulWidget {
   const UpdatesViewerScreen({Key? key, required this.update}) : super(key: key);
@@ -12,11 +15,52 @@ class UpdatesViewerScreen extends StatefulWidget {
 }
 
 class _UpdatesViewerScreenState extends State<UpdatesViewerScreen> {
-  void _launchPDFURL(String pdfUrl) async {
-    if (await canLaunchUrl(Uri.parse(pdfUrl))) {
-      await launchUrl(Uri.parse(pdfUrl));
-    } else {
-      throw 'Could not launch $pdfUrl';
+  String? pdfPath11;
+
+  void openPdf() {
+    try {
+      OpenFile.open(pdfPath11);
+    } catch (error) {
+      print('Error opening PDF: $error');
+    }
+  }
+
+  void openpdf(String url, String name) {
+    downloadPdf(name, url);
+  }
+
+  void downloadPdf(String name, String url) async {
+    PermissionStatus status = await Permission.storage.request();
+    if (status.isGranted) {
+      //private storage -------> var dir = await getApplicationDocumentsDirectory(); <-------
+
+      var dir = await getExternalStorageDirectory();
+      if (dir != null) {
+        String savename = name;
+        String savePath = dir.path + "/$savename";
+        setState(() {
+          pdfPath11 = savePath;
+        });
+        print(savePath);
+
+        //output:  /storage/emulated/0/Android/data/com.example.frontend/files/next.pdf
+
+        try {
+          await Dio().download(url, savePath,
+              onReceiveProgress: (received, total) {
+            if (total != -1) {}
+          });
+
+          openPdf();
+
+          print("File is saved to download folder.");
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("File Downloaded"),
+          ));
+        } on DioException catch (e) {
+          print(e.message);
+        }
+      }
     }
   }
 
@@ -63,10 +107,11 @@ class _UpdatesViewerScreenState extends State<UpdatesViewerScreen> {
                 itemCount: widget.update.PdfUrl.length,
                 itemBuilder: (context, index) => ListTile(
                   onTap: () {
-                    _launchPDFURL(widget.update.PdfUrl[index]);
+                    openpdf(widget.update.PdfUrl[index],
+                        widget.update.PdfUrl[index].split("-").last);
                   },
                   leading: Icon(Icons.picture_as_pdf),
-                  title: Text("Tap to open PDF"),
+                  title: Text(widget.update.PdfUrl[index].split("-").last),
                 ),
               ),
             ),

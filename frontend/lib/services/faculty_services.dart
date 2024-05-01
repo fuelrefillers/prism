@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/faculty_time_table_model.dart';
 import 'package:frontend/models/time_table_view_model.dart';
 import 'package:frontend/models/time_table_view_screen.dart';
-import 'package:frontend/providers.dart/atten_confirm_provider.dart';
-import 'package:frontend/providers.dart/download_provider.dart';
-import 'package:frontend/providers.dart/is_error_provider.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
-import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/providers/atten_confirm_provider.dart';
+import 'package:frontend/providers/download_provider.dart';
+import 'package:frontend/providers/is_error_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
+import 'package:frontend/providers/upload_percentage_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/services/ip.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,7 +28,8 @@ class FacultyServices {
       required String regulation,
       required String startTime,
       required String endTime,
-      required BuildContext context}) async {
+      required BuildContext context,
+      required String type}) async {
     try {
       final attenProvider =
           Provider.of<AttendanceConfirm>(context, listen: false);
@@ -38,6 +39,7 @@ class FacultyServices {
         Uri.parse(
             '${ip}/api/attendance/setAttendance?section=${section}&department=${department}&regulation=${regulation}'),
         body: jsonEncode({
+          'type': type,
           'rollNumbers': rollnumbers,
           "startTime": startTime,
           "endTime": endTime,
@@ -217,7 +219,8 @@ class FacultyServices {
       required String Message,
       required String Regulation,
       required String Department,
-      required String Title}) async {
+      required String Title,
+      required Function(bool) onUploadComplete}) async {
     final uploadPercentageProvider =
         Provider.of<UploadPercentageProvider>(context, listen: false);
     final download = Provider.of<DownloadProvider>(context, listen: false);
@@ -293,13 +296,17 @@ class FacultyServices {
 
       if (response.statusCode == 200) {
         print('Files uploaded successfully');
+        onUploadComplete(true);
         if (download.isDownloaded == false) {
           download.changeStatus();
         }
       } else {
+        onUploadComplete(false);
         print('Failed to upload files. Status code: ${response.statusCode}');
       }
     } catch (e) {
+      onUploadComplete(false);
+
       print('Error uploading files: $e');
     }
   }

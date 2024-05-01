@@ -5,8 +5,8 @@ import 'package:frontend/Faculty_Module/main_screen.dart';
 import 'package:frontend/Faculty_Module/substitute_data_model.dart';
 import 'package:frontend/models/faculty_time_table_model.dart';
 import 'package:frontend/models/substitute_model.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
 import 'package:frontend/services/ip.dart';
 import 'package:frontend/util/util.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
@@ -382,108 +382,111 @@ class _SubstitutePageState extends State<SubstitutePage>
 
     Widget SendRequests = Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 16),
-          TextFormField(
-            keyboardType: TextInputType.text,
-            controller: departmentController,
-            decoration: InputDecoration(
-              labelText: "Enter the Department Name",
-              fillColor: Color.fromARGB(255, 215, 224, 243),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16),
+            TextFormField(
+              keyboardType: TextInputType.text,
+              controller: departmentController,
+              decoration: InputDecoration(
+                labelText: "Enter the Department Name",
+                fillColor: Color.fromARGB(255, 215, 224, 243),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 16),
-          Text('Select Date :'),
-          SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: () async {
-                  selectDate(context);
-                },
-                child: Text('Pick a date'),
-              ),
-              Text("$selectedDateSS - $selectedWeekdaySS"),
-            ],
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          DropdownButtonFormField<String>(
-            value: _selectedPeriod,
-            onChanged: (newValue) {
-              setState(() {
-                _selectedPeriod = newValue!;
-              });
-            },
-            items: _periods.map((department) {
-              return DropdownMenuItem<String>(
-                value: department,
-                child: Text(department),
-              );
-            }).toList(),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Center(
-              child: ElevatedButton(
-                  onPressed: () {
-                    if (checked(timeTable: FTP)) {
-                      getKali();
-                    } else {
-                      showSnackBar(context,
-                          "you dont have period for the selected time");
-                    }
+            SizedBox(height: 16),
+            Text('Select Date :'),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    selectDate(context);
                   },
-                  child: Text("search"))),
-          fetchInit
-              ? Center(
-                  child: CircularProgressIndicator.adaptive(),
-                )
-              : fetched
-                  ? dumm.isEmpty
-                      ? Center(
-                          child: Text("No faculty are free"),
-                        )
-                      : Column(
-                          children: [
-                            DropdownButtonFormField<SubstituteModelFORDROP>(
-                              value: _selectedFaculty,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  _selectedFaculty = newValue!;
-                                });
-                              },
-                              items:
-                                  dumm.map((SubstituteModelFORDROP department) {
-                                return DropdownMenuItem<SubstituteModelFORDROP>(
-                                  value: department,
-                                  child: Text(
-                                      "${department.FacultyName}-${department.FacultyId}"),
-                                );
-                              }).toList(),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                sendRequiest();
-                              },
-                              child: Text("Send Request"),
-                            ),
-                          ],
-                        )
-                  : Text("Select date and search to get results"),
-        ],
+                  child: Text('Pick a date'),
+                ),
+                Text("$selectedDateSS - $selectedWeekdaySS"),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            DropdownButtonFormField<String>(
+              value: _selectedPeriod,
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedPeriod = newValue!;
+                });
+              },
+              items: _periods.map((department) {
+                return DropdownMenuItem<String>(
+                  value: department,
+                  child: Text(department),
+                );
+              }).toList(),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      if (checked(timeTable: FTP)) {
+                        getKali();
+                      } else {
+                        showSnackBar(context,
+                            "you dont have period for the selected time");
+                      }
+                    },
+                    child: Text("search"))),
+            fetchInit
+                ? Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  )
+                : fetched
+                    ? dumm.isEmpty
+                        ? Center(
+                            child: Text("No faculty are free"),
+                          )
+                        : Column(
+                            children: [
+                              DropdownButtonFormField<SubstituteModelFORDROP>(
+                                value: _selectedFaculty,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _selectedFaculty = newValue!;
+                                  });
+                                },
+                                items: dumm
+                                    .map((SubstituteModelFORDROP department) {
+                                  return DropdownMenuItem<
+                                      SubstituteModelFORDROP>(
+                                    value: department,
+                                    child: Text(
+                                        "${department.FacultyName}-${department.FacultyId}"),
+                                  );
+                                }).toList(),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  sendRequiest();
+                                },
+                                child: Text("Send Request"),
+                              ),
+                            ],
+                          )
+                    : Text("Select date and search to get results"),
+          ],
+        ),
       ),
     );
 

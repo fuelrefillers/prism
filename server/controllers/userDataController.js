@@ -161,10 +161,12 @@ const validateUser = asyncHandler(async(req,res)=>{
 
 const loginUser = asyncHandler(async (req,res) =>{
     const {UserName,Password} = req.body;
+    console.log(req.body);
     if(!UserName || !Password){
         res.status(400).json({error:"all fields are manditory"});
     }
-    const user = await UserData.findOne({UserName});    
+    const user = await UserData.findOne({UserName});   
+    console.log(user) 
     if(user && (user.Password===Password)){
             const accessToken = jwt.sign(
                 {

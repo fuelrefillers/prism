@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MultiPurposeLinkCard extends StatelessWidget {
   const MultiPurposeLinkCard({
     super.key,
+    required this.url,
     required this.category,
     required this.height1,
     required this.subcategory,
     required this.subcategory1,
   });
+  final String url;
   final String category;
   final String subcategory;
   final String subcategory1;
@@ -18,6 +21,14 @@ class MultiPurposeLinkCard extends StatelessWidget {
       OpenFile.open(path);
     } catch (error) {
       print('Error opening PDF: $error');
+    }
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -33,11 +44,7 @@ class MultiPurposeLinkCard extends StatelessWidget {
         child: InkWell(
           splashColor: Colors.white,
           onTap: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => screen,
-            //   ),
-            // );
+            _launchURL('https://mrecacademics.com/');
           },
           child: Card(
             shadowColor: Colors.grey,

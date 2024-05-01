@@ -7,6 +7,8 @@ const downloadAttendanceModel = require("../models/downloadAttendanceModel");
 const path = require('path');
 const individualClassSubjectsModel = require("../models/individualClassSubjectsModel");
 const individualClassAttendance = require("../models/individualClassAttendance");
+const cron = require('node-cron');
+const domain = process.env.DOMAIN;
 
 
 
@@ -96,35 +98,178 @@ const assignAttendance = asyncHandler(async (req,res,startdate,enddate,newData) 
 
 
 const caluclateDayAttendance = asyncHandler(async(req,res)=>{
-  const targetDate = '2024-02-05';
+  const targetDate = '2024-04-30';
   const AllRollNo = await UserDetails.find({},{RollNo:1,_id:0});
+  // console.log(AllRollNo);
   for(rno of AllRollNo){
     AttendanceHistory.findOne({ RollNumber: rno.RollNo })
   .then(doc => {
     if (doc) {
       const timetableToUpdate = doc.TimeTable.find(timetable => timetable.date === targetDate);
-      console.log(timetableToUpdate);
+      // console.log(timetableToUpdate);
       if (timetableToUpdate) {
         const noOfPeriods = timetableToUpdate.Periods.length;
         timetableToUpdate.PresentStatus = timetableToUpdate.Periods.reduce((sum, period) => sum + (period.present ? period.ClassDuration : 0), 0);
         doc.save()
-          .then(() => console.log('PresentStatus updated successfully!'))
           .catch(error => console.error('Error saving document:', error));
-        console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
+        // console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
       } else {
-        console.log('TimeTable not found for the specified date.');
+        // console.log('TimeTable not found for the specified date.');
       }
     } else {
-      console.log('Document not found for the specified roll number.');
+      // console.log('Document not found for the specified roll number.');
     }
   })
   .catch(error => console.error('Error retrieving document:', error));
 
   }
-
 });
 
-// caluclateDayAttendance();
+cron.schedule('40 17 * * *', () => {
+  caluclateDayAttendance();
+  console.log("8:20");
+});
+
+
+
+
+const getAttendanceByHistories = asyncHandler(async (req, res) => {
+  // req.user.roolno
+  const userAtten = await AttendanceHistory.findOne({ RollNumber: req.user.roolno });
+
+  if (userAtten) {
+    const timeTableData = userAtten.TimeTable;
+
+    // Get today's date
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
+
+    // Filter entries in TimeTable array until today's date
+    const attendanceData = timeTableData.filter(entry => new Date(entry.date) <= currentDate)
+                                         .map(entry => ({
+                                           date: entry.date,
+                                           PresentStatus: entry.PresentStatus
+                                         }));
+
+    res.status(200).json(attendanceData );
+  } else {
+    res.status(404).json({ success: false, message: 'Attendance data not found for the specified roll number' });
+  }
+});
+
+
+
+
+
+// const getAttendanceByHistoriesForSpecificSubject = asyncHandler(async (req, res) => {
+//   // req.user.roolno
+//   const userAtten = await AttendanceHistory.findOne({ RollNumber: "21J41A05R5" });
+
+//   if (userAtten) {
+//     const timeTableData = userAtten.TimeTable;
+
+//     // Get today's date
+//     const currentDate = new Date();
+//     currentDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
+
+//     // Filter entries in TimeTable array until today's date
+//     const attendanceData = timeTableData.filter(entry => new Date(entry.date) <= currentDate)
+//                                          .map(entry => ({
+//                                            Present:entry.Periods.filter(period => period.Subjectcode == "B0544").map(period => ({
+//                                             Date: entry.date,
+//                                             Present: period.present
+//                                           }))
+//                                          }));
+
+//     res.status(200).json({ success: true, data: attendanceData });
+//   } else {
+//     res.status(404).json({ success: false, message: 'Attendance data not found for the specified roll number' });
+//   }
+// });
+
+
+
+
+
+
+const getAttendanceByHistoriesForSpecificSubject = asyncHandler(async (req, res) => {
+
+
+  // req.user.roolno
+  const userAtten = await AttendanceHistory.findOne({ RollNumber: req.query.rollno });
+
+  if (userAtten) {
+    const timeTableData = userAtten.TimeTable;
+
+    // Get today's date
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set to the beginning of the day
+
+    // Filter entries in TimeTable array until today's date
+    const attendanceData = timeTableData
+      .filter(entry => new Date(entry.date) <= currentDate)
+      .flatMap(entry => entry.Periods.filter(period => period.Subjectcode === req.query.subjectcode )
+                                      .map(period => ({ date: entry.date,startTime:period.StartTime, endTime:period.EndTime,present: period.present })));
+
+    res.status(200).json(attendanceData );
+  } else {
+    res.status(404).json({ success: false, message: 'Attendance data not found for the specified roll number' });
+  }
+});
+
+
+
+
+
+
+
+
+const caluclateDayAttendanceUpgraded = asyncHandler(async (req, res) => {
+  const startDate = '2024-04-01';
+  const endDate = '2024-04-30';
+
+  // Get all distinct RollNo from UserDetails
+  const allRollNo = await UserDetails.distinct('RollNo');
+
+  for (const rollNo of allRollNo) {
+    // Find AttendanceHistory for each RollNo
+    const attendanceHistory = await AttendanceHistory.findOne({ RollNumber: rollNo });
+
+    if (attendanceHistory) {
+      // Loop through dates in the range
+      for (const date of getDateRange(startDate, endDate)) {
+        const timetableToUpdate = attendanceHistory.TimeTable.find(timetable => timetable.date === date);
+
+        if (timetableToUpdate) {
+          const noOfPeriods = timetableToUpdate.Periods.length;
+          timetableToUpdate.PresentStatus = timetableToUpdate.Periods.reduce((sum, period) => sum + (period.present ? period.ClassDuration : 0), 0);
+          await attendanceHistory.save().catch(error => console.error('Error saving document:', error));
+          console.log('Updated PresentStatus for date', date, ':', timetableToUpdate.PresentStatus);
+        } else {
+          console.log('TimeTable not found for the specified date:', date);
+        }
+      }
+    } else {
+      console.log('Attendance history not found for the specified roll number:', rollNo);
+    }
+  }
+});
+
+// caluclateDayAttendanceUpgraded();
+
+function getDateRange(startDate, endDate) {
+  const dates = [];
+  let currentDate = new Date(startDate);
+  endDate = new Date(endDate);
+
+  while (currentDate <= endDate) {
+    dates.push(currentDate.toISOString().split('T')[0]);
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return dates;
+}
+
 
 
 
@@ -199,7 +344,7 @@ const DataToExcel = asyncHandler(async(req,res)=>{
     xlsx.writeFile(workbook, filePath);
   
     // Generate a URL for the saved Excel file
-    const fileURL = `http://192.168.4.142:3000/downloadAttendance/${fileName}`;
+    const fileURL = `${domain}/downloadAttendance/${fileName}`;
   
   
   const AttendaceDownload = await downloadAttendanceModel.create({AttendanceExcelName:fileName,Department:filter.Department,Regulation:filter.Regulation,Section:filter.Section,AttendanceExcelAddress:filePath,AttendanceExcelUrl:fileURL});
@@ -259,7 +404,7 @@ const dataToExcelForIndividualClassSubjects = asyncHandler(async(req,res)=>{
   const folderPath = path.join(__dirname, '../created');
   const filePath = path.join(folderPath, fileName);
   xlsx.writeFile(workbook, filePath);
-  const fileURL = `http://192.168.4.142:3000/downloadAttendance/${fileName}`;
+  const fileURL = `${domain}/downloadAttendance/${fileName}`;
   const AttendaceDownload = await downloadAttendanceModel.create({AttendanceExcelName:fileName,Department:filter.Department,Regulation:filter.Regulation,Section:filter.Section,AttendanceExcelAddress:filePath,AttendanceExcelUrl:fileURL});
   res.status(200).json(AttendaceDownload);
   console.log('Excel sheet generated successfully!');
@@ -281,4 +426,4 @@ const dataToExcelForIndividualClassSubjects = asyncHandler(async(req,res)=>{
 
 
 
-module.exports = {assignAttendance,getCurrentTimestamp,DataToExcel,dataToExcelForIndividualClassSubjects};
+module.exports = {assignAttendance,getCurrentTimestamp,DataToExcel,dataToExcelForIndividualClassSubjects,getAttendanceByHistories,getAttendanceByHistoriesForSpecificSubject};

@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/singleScreens/individeual_hostel_screens.dart';
+import 'package:frontend/screens/Hostel_Screens/hostel_floors_screen.dart';
 
 class HostelsCard extends StatelessWidget {
-  const HostelsCard({super.key});
+  final String title;
+  final String type;
+  const HostelsCard({super.key, required this.title, required this.type});
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => HostelsInfo(),
+            builder: (context) => HostelsFLoorScreen(
+              type: type,
+            ),
           ),
         );
       },
@@ -25,7 +29,7 @@ class HostelsCard extends StatelessWidget {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 5,
+                height: MediaQuery.of(context).size.height / 4.3,
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
@@ -41,14 +45,16 @@ class HostelsCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                          "hbjfhvsbewnjqrhizvbjnhriavbgjnq3hirehavbytfcvbjhuiytrdtfcgvhuiytrdt"),
+                        title,
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
                     ),
                     Icon(Icons.arrow_forward_ios),
                   ],
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 5,
               )
             ],
           )),

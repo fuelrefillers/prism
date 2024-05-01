@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/user_provider.dart';
+import 'package:frontend/providers/user_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FeeStatusScreen extends StatelessWidget {
   const FeeStatusScreen({super.key});
+
+  _launchURL(String url) async {
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +219,9 @@ class FeeStatusScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _launchURL('https://mrecacademics.com/');
+                        },
                         child: Text(
                           'View more details',
                           style: TextStyle(
@@ -235,7 +246,9 @@ class FeeStatusScreen extends StatelessWidget {
                           backgroundColor: Color.fromARGB(255, 17, 79, 90),
                           shadowColor: Colors.grey,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _launchURL('https://mrecacademics.com/');
+                        },
                         child: const Text(
                           "Pay Fee",
                           style: TextStyle(color: Colors.white),

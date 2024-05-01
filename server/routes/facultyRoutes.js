@@ -1,5 +1,5 @@
 const express = require("express");
-const { createFaculty, loginFaculty, getFacultyData, getFacultyByDepartment, getFacultyTimeTable, getFacultyByDepartmentShort, getFacultyById, updateFaculty } = require("../controllers/facultyConttroller");
+const { createFaculty, loginFaculty, getFacultyData, getFacultyByDepartment, getFacultyTimeTable, getFacultyByDepartmentShort, getFacultyById, updateFaculty, assignDataToFaculty } = require("../controllers/facultyConttroller");
 const validateToken = require("../middleware/tokenValidator");
 const { AssignSubstitute, settingSubstitute, acceptRequest } = require("../controllers/assignSubstituteController");
 const router = express.Router();
@@ -17,4 +17,7 @@ router.route("/acceptRequest").post(acceptRequest);
 router.route('/getfacultybydeptshort').get(getFacultyByDepartmentShort);
 router.route('/getfacultybyId').post(getFacultyById);
 router.route('/updateFaculty').post(updateFaculty);
+
+
+router.route('/asssignTimeTableTofaculty').get(assignDataToFaculty);
 module.exports = router;

@@ -11,6 +11,7 @@ class CertificatesModel {
   final String Course;
   final String CertificateUrl;
   final String CertificateAddress;
+  final String id;
   CertificatesModel({
     required this.RollNo,
     required this.Department,
@@ -21,6 +22,7 @@ class CertificatesModel {
     required this.Course,
     required this.CertificateUrl,
     required this.CertificateAddress,
+    required this.id,
   });
 
   Map<String, dynamic> toMap() {
@@ -34,6 +36,7 @@ class CertificatesModel {
       'Course': Course,
       'CertificateUrl': CertificateUrl,
       'CertificateAddress': CertificateAddress,
+      'id': id,
     };
   }
 
@@ -48,6 +51,7 @@ class CertificatesModel {
       Course: map['Course'] as String,
       CertificateUrl: map['CertificateUrl'] as String,
       CertificateAddress: map['CertificateAddress'] as String,
+      id: map['id'] as String,
     );
   }
 

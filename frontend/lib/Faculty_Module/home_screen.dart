@@ -1,7 +1,7 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/main_screen.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
 import 'package:frontend/widgets/multi_purpose_card.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/is_loading_provider.dart';
+import 'package:frontend/providers/is_loading_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
@@ -13,6 +13,7 @@ void showSnackBar(BuildContext context, String text) {
 }
 
 void httpErrorHandle({
+  required String type,
   required http.Response response,
   required BuildContext context,
   required VoidCallback onSuccess,

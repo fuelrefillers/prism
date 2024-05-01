@@ -1,7 +1,7 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/models/faculty_time_table_model.dart';
-import 'package:frontend/providers.dart/time_table_view_provider.dart';
+import 'package:frontend/providers/time_table_view_provider.dart';
 import 'package:provider/provider.dart';
 
 class FacultyTimeTableScreen extends StatefulWidget {

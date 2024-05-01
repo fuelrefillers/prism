@@ -8,15 +8,15 @@ const hostelFloorsSchema = mongoose.Schema({
     floorNumber: {
         type: Number,
         required: true,
-      },
-      totalBeds: {
-        type: Number,
-        required: true,
-      },
-      availableBeds: {
-        type: Number,
-        required: true,
-      }
+    },
+    totalBeds: {
+      type: Number,
+      required: true,
+    },
+    availableBeds: {
+      type: Number,
+      required: true,
+    }
 });
 
 module.exports = mongoose.model("hostelFloorModel",hostelFloorsSchema);

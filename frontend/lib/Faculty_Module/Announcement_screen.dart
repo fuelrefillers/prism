@@ -3,8 +3,8 @@ import 'package:frontend/Faculty_Module/selection_pannel/file_selection_pannel.d
 import 'package:frontend/Faculty_Module/selection_pannel/photo_selection_pannel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/providers.dart/faculty_provider.dart';
-import 'package:frontend/providers.dart/upload_percentage_provider.dart';
+import 'package:frontend/providers/faculty_provider.dart';
+import 'package:frontend/providers/upload_percentage_provider.dart';
 import 'package:frontend/services/faculty_services.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +48,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 10.0),
 
@@ -57,23 +57,19 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                 controller: regulationController,
                 decoration: InputDecoration(
                   labelText: "Enter the Regulation",
-                  fillColor: const Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
               SizedBox(height: 10.0),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: DepartmentController,
+                controller: sectionController,
                 decoration: InputDecoration(
                   labelText: "Enter the Department Name",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -83,38 +79,37 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                 controller: sectionController,
                 decoration: InputDecoration(
                   labelText: "Enter section",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               TextFormField(
                 keyboardType: TextInputType.text,
                 controller: TitleController,
                 decoration: InputDecoration(
                   labelText: "Enter Title(max 5 words)",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                controller: messageController,
+                decoration: InputDecoration(
+                  labelText: "Enter message",
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25.0),
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                controller: messageController,
-                decoration: InputDecoration(
-                  labelText: "Enter message",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                ),
+              SizedBox(
+                height: 15,
               ),
               ElevatedButton(
                 onPressed: () async {
@@ -135,15 +130,17 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 10.0),
               ElevatedButton(
                 onPressed: () async {
                   List<String>? filePaths = await showPdfPickerOption(context);
                   print(filePaths);
                   if (filePaths != null) {
-                    _pdfNames.add(filePaths[0]);
-                    print(filePaths[0]);
-                    _pdfFiles.add(File(filePaths[1]));
+                    setState(() {
+                      _pdfNames.add(filePaths[0]);
+                      print(filePaths[0]);
+                      _pdfFiles.add(File(filePaths[1]));
+                    });
                   }
                 },
                 child: Text("Add PDF Files"),
@@ -156,24 +153,29 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.0),
-              // ElevatedButton(
-              //   onPressed: () {
-              //     _uploadFiles();
-              //   },
-              //   child: Text("Submit"),
-              // ),
-              SizedBox(height: 20.0),
-              SizedBox(height: 20.0),
+              // SizedBox(height: 20.0),
+              // // ElevatedButton(
+              // //   onPressed: () {
+              // //     _uploadFiles();
+              // //   },
+              // //   child: Text("Submit"),
+              // // ),
+              // SizedBox(height: 20.0),
+              SizedBox(height: 25.0),
+              ElevatedButton(
+                onPressed: () {
+                  _uploadFiles("${faculty.FacultyName} - ${faculty.FacultyId}");
+                },
+                child: Text(
+                  "Submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 17, 79, 90)),
+              ),
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _uploadFiles("${faculty.FacultyName} - ${faculty.FacultyId}");
-        },
-        child: Text("Submit"),
       ),
     );
   }
@@ -231,9 +233,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
   }
 
   void _uploadFiles(String sentBy) {
-    if (_images.isNotEmpty &&
-        _pdfFiles.isNotEmpty &&
-        sectionController.text.isNotEmpty &&
+    if (sectionController.text.isNotEmpty &&
         messageController.text.isNotEmpty &&
         DepartmentController.text.isNotEmpty &&
         regulationController.text.isNotEmpty) {
@@ -247,6 +247,41 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
         Regulation: regulationController.text,
         Department: DepartmentController.text,
         Title: TitleController.text,
+        onUploadComplete: (bool success) {
+          if (success) {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text("Success"),
+                content: const Text("Update posted"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("ok"),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                title: const Text("Failed"),
+                content: const Text("Something went wrong ! please try again"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("ok"),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       );
     } else {
       showTypeError(context, "Please fill all fields and add files.");

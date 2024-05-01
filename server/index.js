@@ -41,6 +41,8 @@ io.on("connection", (socket) => {
 const port = process.env.PORT || 3000
 connectDB();
 app.use(cors());
+
+
 app.use(express.json());
 
 app.use("/api/user",require("./routes/userRoutes"));
@@ -69,6 +71,10 @@ app.use("/api/midmarks",require("./routes/mid_marks_routes"));
 // app.use('/profile', express.static('./upload/images'));
 app.use('/upload',express.static('./upload'));
 app.use('/downloadAttendance',express.static('./created'));
+
+
+app.use("/api/hostels",require("./hostels/routes/hostelsRoutes"));
+
 
 // app.use('/booksPdf',express.static('./upload/booksPdf'));
 
