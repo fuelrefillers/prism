@@ -47,6 +47,7 @@ const userDataSchema = mongoose.Schema({
     ImageUrl:{
         type:String,
         required:true,
+        default:"https://imageUrl"
     },
     Semester:{
         type:Number,

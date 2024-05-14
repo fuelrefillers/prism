@@ -65,7 +65,7 @@ class _UpdatesScreenState extends State<UpdatesScreen> {
               SizedBox(height: 10.0),
               TextFormField(
                 keyboardType: TextInputType.text,
-                controller: sectionController,
+                controller: DepartmentController,
                 decoration: InputDecoration(
                   labelText: "Enter the Department Name",
                   labelStyle: TextStyle(

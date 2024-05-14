@@ -1,4 +1,4 @@
-const ip = "http://192.168.29.194:3000";
+const ip = "https://tharak.me";
 
 // https://prism-server-batch-testing.vercel.app
 // https://vercel-prism-server-1.vercel.app

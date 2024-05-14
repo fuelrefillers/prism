@@ -70,7 +70,7 @@ void main() async {
 
   final RemoteMessage? message =
       await FirebaseMessaging.instance.getInitialMessage();
-
+    
   if (message != null) {
     print("Launched from terminated state");
     Future.delayed(Duration(seconds: 1), () {

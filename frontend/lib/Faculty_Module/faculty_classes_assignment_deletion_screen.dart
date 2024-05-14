@@ -85,15 +85,16 @@ class _FacultyClassAssignmentOrdeletionScreenState
           SizedBox(
             height: 15,
           ),
-          TextFormField(
-            keyboardType: TextInputType.text,
-            controller: departmentController,
-            decoration: InputDecoration(
-              labelText: "Enter the Department Name",
-              fillColor: Color.fromARGB(255, 215, 224, 243),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25.0),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: TextFormField(
+              keyboardType: TextInputType.text,
+              controller: departmentController,
+              decoration: InputDecoration(
+                labelText: "Enter the Department Name",
+                labelStyle: TextStyle(
+                  color: Color.fromARGB(255, 17, 79, 90),
+                ),
               ),
             ),
           ),
@@ -101,13 +102,18 @@ class _FacultyClassAssignmentOrdeletionScreenState
             onPressed: () {
               searchbydept();
             },
-            child: Text("search"),
+            child: Text(
+              "search",
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 17, 79, 90)),
           ),
           SizedBox(
             height: 20,
           ),
           faculties.isEmpty
-              ? Text("search to get list")
+              ? Text("Search to get list")
               : Expanded(
                   child: ListView.builder(
                     itemCount: faculties.length,

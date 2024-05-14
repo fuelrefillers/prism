@@ -257,11 +257,11 @@ class _HostelBookingConfirmationScreenState
               child: widget.inside == "Bed booked Successfully"
                   ? HomeButton(
                       title: 'Home',
-                      onTap: HomeScreen(whoissignedin: 'student'),
+                      // onTap: HomeScreen(whoissignedin: 'student'),
                     )
                   : HomeButton(
-                      title: 'Change',
-                      onTap: HomeScreen(whoissignedin: 'student'),
+                      title: 'Home',
+                      // onTap: HomeScreen(whoissignedin: 'student'),
                     ),
             ),
           ],

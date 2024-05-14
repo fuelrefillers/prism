@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Faculty_Module/hostel_admin/to_be_changed/floors.dart';
 import 'package:frontend/screens/Hostel_Screens/widgets/hostel_main_screen_button.dart';
 
-class Hostels extends StatefulWidget {
-  const Hostels({super.key});
+class Hostels extends StatelessWidget {
+  const Hostels({Key? key}) : super(key: key);
 
-  @override
-  State<Hostels> createState() => _HostelsState();
-}
-
-class _HostelsState extends State<Hostels> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,33 +13,31 @@ class _HostelsState extends State<Hostels> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
-        child: Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                HostelHomeScreenButton(
-                  bottomtext: "Take a look",
-                  image: "assets/hostel_image_1.png",
-                  toptext: "Boy's Hostel",
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              HostelHomeScreenButton(
+                bottomtext: "Take a look",
+                image: "assets/hostel_image_1.png",
+                toptext: "Boy's Hostel",
+                type: "boys",
+                screen: Floors(
                   type: "boys",
-                  screen: Floors(
-                    type: "boys",
-                  ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                HostelHomeScreenButton(
-                  bottomtext: "Take a look",
-                  image: "assets/hostel_image_2.png",
-                  toptext: "Girl's Hostel",
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              HostelHomeScreenButton(
+                bottomtext: "Take a look",
+                image: "assets/hostel_image_2.png",
+                toptext: "Girl's Hostel",
+                type: "girls",
+                screen: Floors(
                   type: "girls",
-                  screen: Floors(
-                    type: "girls",
-                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

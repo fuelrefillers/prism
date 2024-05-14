@@ -251,6 +251,11 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                       controller: _regulationController,
                       decoration: InputDecoration(
                         labelText: 'Regulation',
+                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -259,10 +264,16 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                         return null;
                       },
                     ),
+                    SizedBox(height: 10.0),
                     TextFormField(
                       controller: _departmentController,
                       decoration: InputDecoration(
                         labelText: 'Department',
+                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -271,10 +282,16 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                         return null;
                       },
                     ),
+                    SizedBox(height: 10.0),
                     TextFormField(
                       controller: _sectionController,
                       decoration: InputDecoration(
                         labelText: 'Section',
+                        fillColor: Color.fromARGB(255, 255, 255, 255),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
                       ),
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -283,6 +300,7 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                         return null;
                       },
                     ),
+                    SizedBox(height: 10.0),
                     Row(
                       children: [
                         Expanded(
@@ -360,9 +378,22 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                                 ? isdownloading
                                     ? CircularProgressIndicator.adaptive()
                                     : isdownloaded
-                                        ? Text("Open")
-                                        : Text("Download")
-                                : Text('Submit'),
+                                        ? Text(
+                                            "Open",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        : Text(
+                                            "Download",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                : Text(
+                                    'Submit',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 17, 79, 90)),
                       ),
                     ),
                   ],
@@ -382,6 +413,11 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                     controller: _regulationController1,
                     decoration: InputDecoration(
                       labelText: 'Regulation',
+                      fillColor: Color.fromARGB(255, 255, 255, 255),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -390,10 +426,16 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 10.0),
                   TextFormField(
                     controller: _departmentController1,
                     decoration: InputDecoration(
                       labelText: 'Department',
+                      fillColor: Color.fromARGB(255, 255, 255, 255),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -402,10 +444,16 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                       return null;
                     },
                   ),
+                  SizedBox(height: 10.0),
                   TextFormField(
                     controller: _sectionController1,
                     decoration: InputDecoration(
                       labelText: 'Section',
+                      fillColor: Color.fromARGB(255, 255, 255, 255),
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25.0),
+                      ),
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -444,9 +492,20 @@ class _DownloadAttendanceScreenState extends State<DownloadAttendanceScreen>
                               ? isdownloading
                                   ? CircularProgressIndicator.adaptive()
                                   : isdownloaded
-                                      ? Text("Open")
-                                      : Text("Download")
-                              : Text('Submit'),
+                                      ? Text(
+                                          "Open",
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                                      : Text(
+                                          "Download",
+                                          style: TextStyle(color: Colors.white),
+                                        )
+                              : Text(
+                                  'Submit',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 17, 79, 90)),
                     ),
                   ),
                 ],

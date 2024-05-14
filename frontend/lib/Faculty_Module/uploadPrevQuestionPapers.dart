@@ -58,11 +58,11 @@ class _UploadPrevQPScreenState extends State<UploadPrevQPScreen> {
                   controller: subjectNameController,
                   decoration: InputDecoration(
                     labelText: "Subject Name",
-                    fillColor: const Color.fromARGB(255, 215, 224, 243),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 17, 79, 90),
                     ),
+                    fillColor: Color.fromARGB(255, 255, 255, 255),
+                    filled: true,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -77,11 +77,11 @@ class _UploadPrevQPScreenState extends State<UploadPrevQPScreen> {
                   controller: departmentController,
                   decoration: InputDecoration(
                     labelText: "Enter the Department Name",
-                    fillColor: Color.fromARGB(255, 215, 224, 243),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 17, 79, 90),
                     ),
+                    fillColor: Color.fromARGB(255, 255, 255, 255),
+                    filled: true,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -96,11 +96,11 @@ class _UploadPrevQPScreenState extends State<UploadPrevQPScreen> {
                   controller: regulationController,
                   decoration: InputDecoration(
                     labelText: "Enter the Regulation",
-                    fillColor: const Color.fromARGB(255, 215, 224, 243),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
+                    labelStyle: TextStyle(
+                      color: Color.fromARGB(255, 17, 79, 90),
                     ),
+                    fillColor: Color.fromARGB(255, 255, 255, 255),
+                    filled: true,
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -109,64 +109,71 @@ class _UploadPrevQPScreenState extends State<UploadPrevQPScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
+                SizedBox(height: 25.0),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () async {
-                          List<String>? ans =
-                              await showPdfPickerOption(context);
+                    GestureDetector(
+                      onTap: () async {
+                        List<String>? ans = await showPdfPickerOption(context);
 
-                          if (ans != null &&
-                              ans.isNotEmpty &&
-                              ans.length == 2) {
-                            setState(() {
-                              fileName = ans[0];
-                              path = ans[1];
-                            });
-                          } else {
-                            showTypeError(context,
-                                "Error: Invalid response from showPdfPickerOption");
-                          }
-                        },
-                        child: Container(
-                          clipBehavior: Clip.hardEdge,
-                          height: 200,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                          ),
-                          child: fileName != null
-                              ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/pdfexist.jpg',
-                                      scale: 1.8,
-                                    ),
-                                    Text(
-                                      fileName!.toString(),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/addpdf.jpg',
-                                      scale: 1.8,
-                                    ),
-                                    Text("no pdf selected"),
-                                  ],
-                                ),
+                        if (ans != null && ans.isNotEmpty && ans.length == 2) {
+                          setState(() {
+                            fileName = ans[0];
+                            path = ans[1];
+                          });
+                        } else {
+                          showTypeError(context,
+                              "Error: Invalid response from showPdfPickerOption");
+                        }
+                      },
+                      child: Container(
+                        clipBehavior: Clip.hardEdge,
+                        height: 125,
+                        width: 125,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.28),
+                              spreadRadius: 1,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
                         ),
+                        child: fileName != null
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/pdfexist.jpg',
+                                    scale: 1.8,
+                                  ),
+                                  Text(
+                                    fileName!.toString(),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Image.asset(
+                                    'assets/addpdf.jpg',
+                                    scale: 2.2,
+                                  ),
+                                  Text("Add pdf "),
+                                ],
+                              ),
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 25,
                 ),
                 Consumer<UploadPercentageProvider>(
                   builder: (context, progressfinal, child) =>
@@ -193,19 +200,36 @@ class _UploadPrevQPScreenState extends State<UploadPrevQPScreen> {
                                     ),
                             ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _submitForm();
+                    }
+                  },
+                  child: Text(
+                    "submit",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 17, 79, 90),
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            _submitForm();
-          }
-        },
-        child: Text("submit"),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     if (_formKey.currentState!.validate()) {
+      //       _submitForm();
+      //     }
+      //   },
+      //   child: Text("submit"),
+      // ),
     );
   }
 

@@ -721,8 +721,8 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
-    socket = SocketService().socket;
-    socket.on("message", _handleIncomingMessage);
+    // socket = SocketService().socket;
+    // socket.on("message", _handleIncomingMessage);
     _initMessages().then((_) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
@@ -756,8 +756,8 @@ class _IndividualPageState extends State<IndividualPage> {
 
   void sendImage(Uint8List image, String sourceId, String targetId) {
     print(image);
-    socket.emit("image",
-        {"image": image, "sourceId": widget.current, "targetId": targetId});
+    // socket.emit("image",
+    //     {"image": image, "sourceId": widget.current, "targetId": targetId});
   }
 
   void setMessage(String type, String message) async {

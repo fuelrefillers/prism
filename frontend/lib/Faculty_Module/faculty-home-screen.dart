@@ -10,6 +10,7 @@ import 'package:frontend/Faculty_Module/download_attendance.dart';
 import 'package:frontend/Faculty_Module/faculty_classes_assignment_deletion_screen.dart';
 import 'package:frontend/Faculty_Module/home_screen.dart';
 import 'package:frontend/Faculty_Module/hostel_admin/hostel_admin_home_screen.dart';
+import 'package:frontend/Faculty_Module/mid_marks_screen.dart';
 import 'package:frontend/Faculty_Module/new_faculty_or_class_assignment_screen.dart';
 import 'package:frontend/Faculty_Module/substitue_page.dart';
 import 'package:frontend/Faculty_Module/time_table_picker_screen.dart';
@@ -107,11 +108,11 @@ class _FacultyHomeScreenState extends State<FacultyHomeScreen> {
                 icon: Icons.person,
                 onPressed: SubstitutePage(),
               ),
-              // CustomButton(
-              //   buttonText: "mid",
-              //   icon: Icons.person,
-              //   onPressed: MidMarksScreen(),
-              // ),
+              CustomButton(
+                buttonText: "mid",
+                icon: Icons.person,
+                onPressed: MidMarksScreen(),
+              ),
             ];
 
             if (successState.faculty.IsAdmin) {

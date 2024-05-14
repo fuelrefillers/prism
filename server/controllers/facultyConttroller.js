@@ -84,9 +84,8 @@ const updateFaculty = asyncHandler(async (req, res) => {
 
 const getFacultyTimeTable = asyncHandler(async(req,res)=>{
     const currentUser = await facultyTimeTableModel.findOne({ FacultyId: req.user.id} );
-    // console.log("hii from get faculty timetable");
     res.json(currentUser);
-})
+});
 
 
 

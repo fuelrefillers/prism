@@ -20,6 +20,8 @@ import 'package:frontend/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/chatting/UI/screens/chat_screen_for_student.dart';
+import 'package:frontend/screens/singleScreens/events_screen.dart';
+import 'package:frontend/screens/singleScreens/community.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.whoissignedin});
@@ -264,6 +266,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rollno: successState.user.RollNo,
                               ),
                             ),
+                            CustomButton(
+                              buttonText: 'Events',
+                              icon: Icons.person,
+                              onPressed: EventsScreen(),
+                            ),
                             Visibility(
                               visible: whois.isSignedIn == 'student',
                               child: CustomButton(
@@ -314,6 +321,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     department: successState.user.Department,
                                     regulation: successState.user.Regulation,
                                     section: successState.user.Section),
+                              ),
+                            ),
+                            Visibility(
+                              visible: whois.isSignedIn == 'student',
+                              child: CustomButton(
+                                buttonText: 'MREC Community',
+                                icon: Icons.verified,
+                                onPressed: Community(),
                               ),
                             ),
                           ],

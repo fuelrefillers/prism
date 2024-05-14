@@ -98,7 +98,7 @@ const assignAttendance = asyncHandler(async (req,res,startdate,enddate,newData) 
 
 
 const caluclateDayAttendance = asyncHandler(async(req,res)=>{
-  const targetDate = '2024-04-30';
+  const targetDate = getCurrentTimestamp(new Date());
   const AllRollNo = await UserDetails.find({},{RollNo:1,_id:0});
   // console.log(AllRollNo);
   for(rno of AllRollNo){
@@ -112,12 +112,12 @@ const caluclateDayAttendance = asyncHandler(async(req,res)=>{
         timetableToUpdate.PresentStatus = timetableToUpdate.Periods.reduce((sum, period) => sum + (period.present ? period.ClassDuration : 0), 0);
         doc.save()
           .catch(error => console.error('Error saving document:', error));
-        // console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
+        console.log('Updated PresentStatus:', timetableToUpdate.PresentStatus);
       } else {
-        // console.log('TimeTable not found for the specified date.');
+        console.log('TimeTable not found for the specified date.');
       }
     } else {
-      // console.log('Document not found for the specified roll number.');
+      console.log('Document not found for the specified roll number.');
     }
   })
   .catch(error => console.error('Error retrieving document:', error));
@@ -125,10 +125,16 @@ const caluclateDayAttendance = asyncHandler(async(req,res)=>{
   }
 });
 
+// caluclateDayAttendance();
+
+
 cron.schedule('40 17 * * *', () => {
   caluclateDayAttendance();
   console.log("8:20");
 });
+
+
+// caluclateDayAttendance();
 
 
 
@@ -225,8 +231,8 @@ const getAttendanceByHistoriesForSpecificSubject = asyncHandler(async (req, res)
 
 
 const caluclateDayAttendanceUpgraded = asyncHandler(async (req, res) => {
-  const startDate = '2024-04-01';
-  const endDate = '2024-04-30';
+  const startDate = '2024-05-01';
+  const endDate = '2024-05-03';
 
   // Get all distinct RollNo from UserDetails
   const allRollNo = await UserDetails.distinct('RollNo');
@@ -255,7 +261,7 @@ const caluclateDayAttendanceUpgraded = asyncHandler(async (req, res) => {
   }
 });
 
-// caluclateDayAttendanceUpgraded();
+// caluclateDayAttendanceUpgraded(); 
 
 function getDateRange(startDate, endDate) {
   const dates = [];

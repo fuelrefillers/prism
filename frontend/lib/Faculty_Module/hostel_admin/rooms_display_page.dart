@@ -29,7 +29,7 @@ class _RoomsDisplayPageState extends State<RoomsDisplayPage> {
     super.initState();
     setState(() {
       rooms = List.generate(
-          widget.noofrooms, (index) => widget.floorno * 100 + index);
+          widget.noofrooms, (index) => widget.floorno * 100 + (index + 1));
     });
   }
 
@@ -38,14 +38,14 @@ class _RoomsDisplayPageState extends State<RoomsDisplayPage> {
       "type": widget.type,
       "floorno": widget.floorno,
       "roomsarr": rooms,
-      "noofbedsperroom": widget.noofrooms
+      "noofbedsperroom": widget.bedsPerRoom
     }));
     var response = await http.post(Uri.parse("${ip}/api/hostels/createRooms"),
         body: jsonEncode({
           "type": widget.type,
           "floorno": widget.floorno,
           "roomsarr": rooms,
-          "noofbedsperroom": widget.noofrooms
+          "noofbedsperroom": widget.bedsPerRoom
         }),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

@@ -33,6 +33,7 @@ router.post("/upload", upload.single('timetablePdf'), asynchandler(async(req, re
         const file1 = req.file;
         const TimeTableRes = await TimeTable.create({TimeTableTitle:timetablename,Department:department,Regulation:regulation,Section:section,TimeTableAddress:`upload/timetable/${file1.filename}`,TimeTableUrl:`${domain}/upload/timetable/${file1.filename}`});
         const hello = `upload/timetable/${file1.filename}`;
+        console.log(hello);
         await convertTimeTable(req,res,hello);
         // res.status(200).json(TimeTableRes);
     }

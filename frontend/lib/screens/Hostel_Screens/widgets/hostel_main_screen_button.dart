@@ -7,13 +7,15 @@ class HostelHomeScreenButton extends StatelessWidget {
   final String bottomtext;
   final String type;
   final Widget screen;
-  const HostelHomeScreenButton(
-      {super.key,
-      required this.bottomtext,
-      required this.image,
-      required this.toptext,
-      required this.type,
-      required this.screen});
+
+  const HostelHomeScreenButton({
+    Key? key, // Corrected the key parameter
+    required this.bottomtext,
+    required this.image,
+    required this.toptext,
+    required this.type,
+    required this.screen,
+  }) : super(key: key); // Added super constructor
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,10 @@ class HostelHomeScreenButton extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height / 3,
               decoration: BoxDecoration(
-                image: DecorationImage(image: AssetImage(image)),
+                image: DecorationImage(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover, // Added fit property
+                ),
               ),
             ),
           ),

@@ -102,7 +102,7 @@ const convertTimeTable = asynchandler(async(req,res,f)=>{
 
 
     const workbook1 = new ExcelJS.Workbook();
-    await workbook1.xlsx.readFile("upload/timetable/TIMETABLE-TEST.xlsx");
+    await workbook1.xlsx.readFile(f);
     const worksheet1 = workbook1.getWorksheet(1); // Assuming the first worksheet
 
     let foundCell;
@@ -192,13 +192,14 @@ const convertTimeTable = asynchandler(async(req,res,f)=>{
             Periods : []
         }
         for(let j=0;j<startandendarr[i].length;j++){
+            console.log(periodswhole[i][j]);
             intermediate = periodswhole[i][j].split(" ");
 
             if(intermediate.includes("LAB")){
-                let searchKey = intermediate[0].split("/")[0]+" LAB";
-                // console.log(searchKey);
+                let searchKey = periodswhole[i][j].split("/")[0]+" LAB";
+                console.log(searchKey);
                 let ansobj = facultyDetails.find(entry => entry.ClassName === searchKey);
-                // console.log(ansobj);
+                console.log(ansobj);
                 sai.Periods.push({
                 StartTime : startandendarr[i][j].split("-")[0],
                 EndTime : startandendarr[i][j].split("-")[1],

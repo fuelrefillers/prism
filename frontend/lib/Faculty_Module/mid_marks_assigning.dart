@@ -113,81 +113,84 @@ class _MidMarksAssigningScreenState extends State<MidMarksAssigningScreen> {
         title: Text("Assigning"),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: DataTable2(
-                dataRowHeight: 60,
-                columnSpacing: 10,
-                horizontalMargin: 12,
-                minWidth: 600,
-                lmRatio: 2,
-                columns: [
-                  DataColumn2(
-                    label: Text('RollNo'),
-                    size: ColumnSize.L,
-                  ),
-                  DataColumn2(
-                    fixedWidth: 150,
-                    label: Text('Subjective'),
-                    size: ColumnSize.L,
-                  ),
-                  DataColumn2(
-                    label: Text('Assignment'),
-                    size: ColumnSize.L,
-                  ),
-                  DataColumn2(
-                    label: Text('Total'),
-                    size: ColumnSize.L,
-                  ),
-                  DataColumn2(
-                    label: Text('Final'),
-                    size: ColumnSize.L,
-                  ),
-                ],
-                rows: midMarks
-                    .map((mm) => DataRow(
-                          cells: [
-                            DataCell(Text(mm.RollNo)),
-                            DataCell(TextFormField(
-                              initialValue: subMarks[mm.RollNo]!.toString(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  subMarks[mm.RollNo] = int.parse(newValue);
-                                  updateTotalAndFinalMarks(mm);
-                                });
-                              },
-                            )),
-                            DataCell(TextFormField(
-                              initialValue:
-                                  assignmentMarks[mm.RollNo]!.toString(),
-                              onChanged: (newValue) {
-                                setState(() {
-                                  assignmentMarks[mm.RollNo] =
-                                      int.parse(newValue);
-                                  updateTotalAndFinalMarks(mm);
-                                });
-                              },
-                            )),
-                            DataCell(Text(calculateTotalMarks(
-                                    subMarks[mm.RollNo]!,
-                                    assignmentMarks[mm.RollNo]!)
-                                .toString())),
-                            DataCell(Text(mm.Marks.toString())),
-                          ],
-                        ))
-                    .toList(),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 50),
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height - 200,
+                child: DataTable2(
+                  dataRowHeight: 60,
+                  columnSpacing: 10,
+                  horizontalMargin: 12,
+                  minWidth: 600,
+                  lmRatio: 2,
+                  columns: [
+                    DataColumn2(
+                      label: Text('RollNo'),
+                      size: ColumnSize.L,
+                    ),
+                    DataColumn2(
+                      fixedWidth: 150,
+                      label: Text('Subjective'),
+                      size: ColumnSize.L,
+                    ),
+                    DataColumn2(
+                      label: Text('Assignment'),
+                      size: ColumnSize.L,
+                    ),
+                    DataColumn2(
+                      label: Text('Total'),
+                      size: ColumnSize.L,
+                    ),
+                    DataColumn2(
+                      label: Text('Final'),
+                      size: ColumnSize.L,
+                    ),
+                  ],
+                  rows: midMarks
+                      .map((mm) => DataRow(
+                            cells: [
+                              DataCell(Text(mm.RollNo)),
+                              DataCell(TextFormField(
+                                initialValue: subMarks[mm.RollNo]!.toString(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    subMarks[mm.RollNo] = int.parse(newValue);
+                                    updateTotalAndFinalMarks(mm);
+                                  });
+                                },
+                              )),
+                              DataCell(TextFormField(
+                                initialValue:
+                                    assignmentMarks[mm.RollNo]!.toString(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    assignmentMarks[mm.RollNo] =
+                                        int.parse(newValue);
+                                    updateTotalAndFinalMarks(mm);
+                                  });
+                                },
+                              )),
+                              DataCell(Text(calculateTotalMarks(
+                                      subMarks[mm.RollNo]!,
+                                      assignmentMarks[mm.RollNo]!)
+                                  .toString())),
+                              DataCell(Text(mm.Marks.toString())),
+                            ],
+                          ))
+                      .toList(),
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                print(jsonEncode(midMarks));
-                updateMarks();
-              },
-              child: Text("submit"),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: () {
+                  print(jsonEncode(midMarks));
+                  updateMarks();
+                },
+                child: Text("submit"),
+              ),
+            ],
+          ),
         ),
       ),
     );

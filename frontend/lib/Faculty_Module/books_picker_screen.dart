@@ -67,10 +67,8 @@ class _PickImageState extends State<PickImage> {
                 controller: BookNameController,
                 decoration: InputDecoration(
                   labelText: "Enter the Book Name",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -80,10 +78,8 @@ class _PickImageState extends State<PickImage> {
                 controller: DepartmentController,
                 decoration: InputDecoration(
                   labelText: "Enter the Department Name",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -93,95 +89,125 @@ class _PickImageState extends State<PickImage> {
                 controller: regulationController,
                 decoration: InputDecoration(
                   labelText: "Enter the regulation",
-                  fillColor: const Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
               SizedBox(height: 50.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        Uint8List? dummy = await showImagePickerOption(context);
-                        setState(() {
-                          _image = dummy;
-                        });
-                      },
-                      child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        height: MediaQuery.of(context).size.height / 4,
-                        width: MediaQuery.of(context).size.width / 2,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: _image != null
-                            ? Image(
-                                image: MemoryImage(_image!),
-                                fit: BoxFit.cover,
-                              )
-                            : Image.asset(
-                                'assets/fileadd.jpg',
-                                scale: 1.8,
-                              ),
+                  InkWell(
+                    onTap: () async {
+                      Uint8List? dummy = await showImagePickerOption(context);
+                      setState(() {
+                        _image = dummy;
+                      });
+                    },
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width / 3,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.28),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        //  border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
                       ),
+                      child: _image != null
+                          ? Image(
+                              image: MemoryImage(_image!),
+                              fit: BoxFit.cover,
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/fileadd.jpg',
+                                  scale: 2.5,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  "Add image",
+                                  style: TextStyle(
+                                      color: Color.fromARGB(255, 252, 164, 41)),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                   SizedBox(width: 16.0),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () async {
-                        List<String>? ans = await showPdfPickerOption(context);
+                  InkWell(
+                    onTap: () async {
+                      List<String>? ans = await showPdfPickerOption(context);
 
-                        if (ans.isNotEmpty && ans.length == 2) {
-                          setState(() {
-                            fileName = ans[0];
-                            path = ans[1];
-                          });
-                        } else {
-                          showTypeError(context,
-                              "Error: Invalid response from showPdfPickerOption");
-                        }
-                      },
-                      child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        height: MediaQuery.of(context).size.height / 4,
-                        width: MediaQuery.of(context).size.width / 2,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: fileName != null
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/pdfexist.jpg',
-                                    scale: 1.8,
-                                  ),
-                                  Text(
-                                    fileName!.toString(),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/addpdf.jpg',
-                                    scale: 1.8,
-                                  ),
-                                  Text("no pdf selected"),
-                                ],
-                              ),
+                      if (ans.isNotEmpty && ans.length == 2) {
+                        setState(() {
+                          fileName = ans[0];
+                          path = ans[1];
+                        });
+                      } else {
+                        showTypeError(context,
+                            "Error: Invalid response from showPdfPickerOption");
+                      }
+                    },
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      height: MediaQuery.of(context).size.height / 6,
+                      width: MediaQuery.of(context).size.width / 3,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 152, 152, 152)
+                                .withOpacity(0.28),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
                       ),
+                      child: fileName != null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/pdfexist.jpg',
+                                  scale: 1.8,
+                                ),
+                                Text(
+                                  fileName!.toString(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/addpdf.jpg',
+                                  scale: 2.2,
+                                ),
+                                SizedBox(height: 10),
+                                Text("Add pdf",
+                                    style: TextStyle(
+                                        color: Color.fromARGB(
+                                      255,
+                                      251,
+                                      171,
+                                      58,
+                                    ))),
+                              ],
+                            ),
                     ),
                   ),
                 ],
@@ -234,42 +260,83 @@ class _PickImageState extends State<PickImage> {
                                   ),
                           ),
               ),
+              SizedBox(
+                height: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_image != null &&
+                      path != null &&
+                      BookNameController.text.isNotEmpty &&
+                      DepartmentController.text.isNotEmpty &&
+                      regulationController.text.isNotEmpty) {
+                    facultyServices.uploadImage(
+                        context: context,
+                        filePath: path!,
+                        image: _image!,
+                        type: 'books',
+                        api: 'booksImage',
+                        typename: BookNameController.text,
+                        regulation: regulationController.text,
+                        department: DepartmentController.text);
+                  } else if (_image == null && path == null) {
+                    showTypeError(context, "image and file not selected");
+                  } else if (_image == null && path != null) {
+                    showTypeError(context, "image  not selected");
+                  } else if (_image != null && path == null) {
+                    showTypeError(context, "file  not selected");
+                  } else if (BookNameController.text.isEmpty ||
+                      DepartmentController.text.isEmpty ||
+                      regulationController.text.isEmpty) {
+                    showTypeError(context, "text field is empty");
+                  } else {
+                    showTypeError(context, "something went wrong");
+                  }
+                },
+                child: Text(
+                  'submit',
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 17, 79, 90),
+                ),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_image != null &&
-              path != null &&
-              BookNameController.text.isNotEmpty &&
-              DepartmentController.text.isNotEmpty &&
-              regulationController.text.isNotEmpty) {
-            facultyServices.uploadImage(
-                context: context,
-                filePath: path!,
-                image: _image!,
-                type: 'books',
-                api: 'booksImage',
-                typename: BookNameController.text,
-                regulation: regulationController.text,
-                department: DepartmentController.text);
-          } else if (_image == null && path == null) {
-            showTypeError(context, "image and file not selected");
-          } else if (_image == null && path != null) {
-            showTypeError(context, "image  not selected");
-          } else if (_image != null && path == null) {
-            showTypeError(context, "file  not selected");
-          } else if (BookNameController.text.isEmpty ||
-              DepartmentController.text.isEmpty ||
-              regulationController.text.isEmpty) {
-            showTypeError(context, "text field is empty");
-          } else {
-            showTypeError(context, "something went wrong");
-          }
-        },
-        child: Text("Submit"),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     if (_image != null &&
+      //         path != null &&
+      //         BookNameController.text.isNotEmpty &&
+      //         DepartmentController.text.isNotEmpty &&
+      //         regulationController.text.isNotEmpty) {
+      //       facultyServices.uploadImage(
+      //           context: context,
+      //           filePath: path!,
+      //           image: _image!,
+      //           type: 'books',
+      //           api: 'booksImage',
+      //           typename: BookNameController.text,
+      //           regulation: regulationController.text,
+      //           department: DepartmentController.text);
+      //     } else if (_image == null && path == null) {
+      //       showTypeError(context, "image and file not selected");
+      //     } else if (_image == null && path != null) {
+      //       showTypeError(context, "image  not selected");
+      //     } else if (_image != null && path == null) {
+      //       showTypeError(context, "file  not selected");
+      //     } else if (BookNameController.text.isEmpty ||
+      //         DepartmentController.text.isEmpty ||
+      //         regulationController.text.isEmpty) {
+      //       showTypeError(context, "text field is empty");
+      //     } else {
+      //       showTypeError(context, "something went wrong");
+      //     }
+      //   },
+      //   child: Text("Submit"),
+      // ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:frontend/providers/is_loading_provider.dart';
 import 'package:frontend/screens/Hostel_Screens/hostel_home_screen.dart';
+import 'package:frontend/screens/Hostel_Screens/hostel_terms_and_conditions_screen.dart';
 import 'package:frontend/services/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -282,7 +283,7 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HostelsHomeScreen()));
+                                    builder: (context) => HostelTnC_Screen()));
                           },
                           color: const Color.fromRGBO(49, 39, 79, 1),
                           shape: RoundedRectangleBorder(

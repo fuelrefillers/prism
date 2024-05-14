@@ -108,10 +108,10 @@ class _TransportscreenState extends State<Transportscreen> {
                         },
                         decoration: InputDecoration(
                           filled: true,
-                          fillColor: const Color(0xfff1f1f1),
+                          fillColor: Color.fromARGB(255, 245, 245, 241),
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(color: Colors.black45),
                           ),
                           hintText: "Search for Items",
                           prefixIcon: const Icon(Icons.search),

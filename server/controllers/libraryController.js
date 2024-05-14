@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Library = require("../models/libraryModel");
 const Book = require("../models/booksModel");
 const librarybooksModel = require("../models/librarybooksModel");
+const UserData = require("../models/userDetailsModel");
 
 
 
@@ -49,6 +50,38 @@ const booksget = asyncHandler(async(req,res)=>{
     const finalBooksObj = await librarybooksModel.find({ BookId: { $in: bookIds } });
     res.status(200).json(finalBooksObj);
 });
+
+
+
+const getLibAndStudentDetailsOnScan  = asyncHandler(async(req,res)=>{
+
+  const user = await UserData.findOne({RollNo:req.query.rollno});
+  let userLibrary = await Library.findOne({RollNo:req.query.rollno});
+
+if(!userLibrary){
+  userLibrary = await Library.create({RollNo:req.query.rollno,booksTaken:[],dateTaken:[]});
+}
+  const bookIds = userLibrary.booksTaken;
+  const finalBooksObj = await librarybooksModel.find({ BookId: { $in: bookIds } });
+
+  const data = {
+    name : user.StudentName,
+    rollNo : user.RollNo,
+    regulation : user.Regulation,
+    department : user.Department,
+    section : user.Section,
+    imageUrl:user.ImageUrl,
+    booksTaken : userLibrary.booksTaken,
+    dateTaken : userLibrary.dateTaken,
+    booksTakenData : finalBooksObj
+  }
+
+  res.status(200).json(data);
+
+
+});
+
+
 
 const getLib = asyncHandler(async(req,res)=>{
     const currentUser = await Library.findOne({RollNo:req.user.roolno});
@@ -138,7 +171,7 @@ const updateDate = asyncHandler(async(req,res)=>{
     const current = await Library.findOne(filter);
     console.log(current);
     let timearr = current.dateTaken; 
-    const currentDate = new Date();
+    const currentDate = getCurrentTimestamp();
     if(current.booksTaken.length>0){
         if(current.booksTaken.includes(bookId)){
 
@@ -169,4 +202,4 @@ const getBooks = asyncHandler(async(req,res)=>{
 
 });
 
-module.exports = {createLibrary,booksget,getLib,addToLibrary,removeFromLibrary,updateDate,addLibBooks};
+module.exports = {createLibrary,booksget,getLib,addToLibrary,removeFromLibrary,updateDate,addLibBooks,getLibAndStudentDetailsOnScan};

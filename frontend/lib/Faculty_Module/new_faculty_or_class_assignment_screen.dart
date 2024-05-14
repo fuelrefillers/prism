@@ -35,9 +35,17 @@ class _NewFacultyOrChangeClassesScreenState
           key: _formKey,
           child: ListView(
             children: [
+              SizedBox(height: 5.0),
               TextFormField(
                 controller: _facultyIdController,
-                decoration: InputDecoration(labelText: 'Faculty ID'),
+                decoration: InputDecoration(
+                  labelText: 'Faculty ID',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Faculty ID';
@@ -45,9 +53,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _facultyNameController,
-                decoration: InputDecoration(labelText: 'Faculty Name'),
+                decoration: InputDecoration(
+                  labelText: 'Faculty Name',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Faculty Name';
@@ -55,9 +71,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _facultyDesignationController,
-                decoration: InputDecoration(labelText: 'Faculty Designation'),
+                decoration: InputDecoration(
+                  labelText: 'Faculty Designation',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Faculty Designation';
@@ -65,9 +89,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _facultyDepartmentController,
-                decoration: InputDecoration(labelText: 'Faculty Department'),
+                decoration: InputDecoration(
+                  labelText: 'Faculty Department',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Faculty Department';
@@ -75,9 +107,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _facultyPhnNoController,
-                decoration: InputDecoration(labelText: 'Faculty PhnNo'),
+                decoration: InputDecoration(
+                  labelText: 'Faculty PhnNo',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Faculty PhnNo';
@@ -85,9 +125,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Username'),
+                decoration: InputDecoration(
+                  labelText: 'Username',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter User name';
@@ -95,9 +143,17 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter Password';
@@ -105,6 +161,7 @@ class _NewFacultyOrChangeClassesScreenState
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               Row(
                 children: [
                   Text('Is Admin?'),

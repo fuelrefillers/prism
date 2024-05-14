@@ -62,10 +62,8 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 controller: TimeTableController,
                 decoration: InputDecoration(
                   labelText: "Time Table Title",
-                  fillColor: const Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -75,10 +73,8 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 controller: departmentController,
                 decoration: InputDecoration(
                   labelText: "Enter the Department Name",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -88,10 +84,8 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 controller: regulationController,
                 decoration: InputDecoration(
                   labelText: "Enter the Regulation",
-                  fillColor: const Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
@@ -101,146 +95,202 @@ class _TimeTablePickerScreenState extends State<TimeTablePickerScreen> {
                 controller: sectionController,
                 decoration: InputDecoration(
                   labelText: "Enter section",
-                  fillColor: Color.fromARGB(255, 215, 224, 243),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
+                  labelStyle: TextStyle(
+                    color: Color.fromARGB(255, 17, 79, 90),
                   ),
                 ),
               ),
-              SizedBox(height: 16.0),
+              SizedBox(height: 20.0),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        List<String>? ans = await showPdfPickerOption(context);
+                  GestureDetector(
+                    onTap: () async {
+                      List<String>? ans = await showPdfPickerOption(context);
 
-                        if (ans.isNotEmpty && ans.length == 2) {
-                          setState(() {
-                            fileName = ans[0];
-                            path = ans[1];
-                          });
-                          print(ans);
-                        } else {
-                          showTypeError(context,
-                              "Error: Invalid response from showPdfPickerOption");
-                        }
-                      },
-                      child: Container(
-                        clipBehavior: Clip.hardEdge,
-                        height: 200,
-                        width: 100,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                        ),
-                        child: fileName != null
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/pdfexist.jpg',
-                                    scale: 1.8,
-                                  ),
-                                  Text(
-                                    fileName!.toString(),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/addpdf.jpg',
-                                    scale: 1.8,
-                                  ),
-                                  Text("no pdf selected"),
-                                ],
-                              ),
+                      if (ans.isNotEmpty && ans.length == 2) {
+                        setState(() {
+                          fileName = ans[0];
+                          path = ans[1];
+                        });
+                        print(ans);
+                      } else {
+                        showTypeError(context,
+                            "Error: Invalid response from showPdfPickerOption");
+                      }
+                    },
+                    child: Container(
+                      clipBehavior: Clip.hardEdge,
+                      height: 125,
+                      width: 125,
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(255, 152, 152, 152)
+                                .withOpacity(0.28),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
                       ),
+                      child: fileName != null
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/pdfexist.jpg',
+                                  scale: 1.8,
+                                ),
+                                Text(
+                                  fileName!.toString(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  'assets/addpdf.jpg',
+                                  scale: 2.2,
+                                ),
+                                Text(
+                                  "Add pdf ",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(
+                                      255,
+                                      251,
+                                      171,
+                                      58,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 20,
+              ),
               Consumer<UploadPercentageProvider>(
-                builder: (context, Progressfinal, child) =>
-                    Progressfinal.progress == 0.00
-                        ? Text("not uploaded")
-                        : Consumer<DownloadProvider>(
-                            builder: (context, value, child) => double.parse(
-                                            Progressfinal.progress
-                                                .toStringAsFixed(2)) ==
-                                        1.00 &&
-                                    value.isDownloaded == true
-                                ? Column(
-                                    children: [
-                                      Text("Download complete"),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            TimeTableController.clear();
-                                            departmentController.clear();
-                                            regulationController.clear();
-                                            final download =
-                                                Provider.of<DownloadProvider>(
-                                                    context,
-                                                    listen: false);
-                                            progressProvider = Provider.of<
-                                                    UploadPercentageProvider>(
-                                                context,
-                                                listen: false);
-                                            progressProvider.setprogress(0.00);
+                builder: (context, Progressfinal, child) => Progressfinal
+                            .progress ==
+                        0.00
+                    ? Text("not uploaded")
+                    : Consumer<DownloadProvider>(
+                        builder: (context, value, child) => double.parse(
+                                        Progressfinal.progress
+                                            .toStringAsFixed(2)) ==
+                                    1.00 &&
+                                value.isDownloaded == true
+                            ? Column(
+                                children: [
+                                  Text("Download complete"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      TimeTableController.clear();
+                                      departmentController.clear();
+                                      regulationController.clear();
+                                      final download =
+                                          Provider.of<DownloadProvider>(context,
+                                              listen: false);
+                                      progressProvider =
+                                          Provider.of<UploadPercentageProvider>(
+                                              context,
+                                              listen: false);
+                                      progressProvider.setprogress(0.00);
 
-                                            if (download.isDownloaded == true) {
-                                              download.changeStatus();
-                                            }
-                                            setState(() {
-                                              path = null;
-                                              fileName = null;
-                                            });
-                                          },
-                                          child: Text("upload another book"))
-                                    ],
-                                  )
-                                : LinearProgressIndicator(
-                                    value: Progressfinal.progress,
+                                      if (download.isDownloaded == true) {
+                                        download.changeStatus();
+                                      }
+                                      setState(() {
+                                        path = null;
+                                        fileName = null;
+                                      });
+                                    },
+                                    child: Text("upload another book"),
                                   ),
-                          ),
+                                ],
+                              )
+                            : LinearProgressIndicator(
+                                value: Progressfinal.progress,
+                              ),
+                      ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (path != null &&
+                      TimeTableController.text.isNotEmpty &&
+                      departmentController.text.isNotEmpty &&
+                      regulationController.text.isNotEmpty) {
+                    facultyServices.timeTableUpload(
+                        context: context,
+                        filePath: path!,
+                        image: null,
+                        type: 'timetable',
+                        api: 'timetable',
+                        typename: TimeTableController.text,
+                        regulation: regulationController.text,
+                        department: departmentController.text,
+                        section: sectionController.text);
+                  } else if (path == null) {
+                    showTypeError(context, "image and file not selected");
+                  } else if (TimeTableController.text.isEmpty ||
+                      departmentController.text.isEmpty ||
+                      regulationController.text.isEmpty) {
+                    showTypeError(context, "text field is empty");
+                  } else {
+                    showTypeError(context, "something went wrong");
+                  }
+                },
+                child: Text(
+                  "submit",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 17, 79, 90),
+                ),
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (path != null &&
-              TimeTableController.text.isNotEmpty &&
-              departmentController.text.isNotEmpty &&
-              regulationController.text.isNotEmpty) {
-            facultyServices.timeTableUpload(
-                context: context,
-                filePath: path!,
-                image: null,
-                type: 'timetable',
-                api: 'timetable',
-                typename: TimeTableController.text,
-                regulation: regulationController.text,
-                department: departmentController.text,
-                section: sectionController.text);
-          } else if (path == null) {
-            showTypeError(context, "image and file not selected");
-          } else if (TimeTableController.text.isEmpty ||
-              departmentController.text.isEmpty ||
-              regulationController.text.isEmpty) {
-            showTypeError(context, "text field is empty");
-          } else {
-            showTypeError(context, "something went wrong");
-          }
-        },
-        child: Text("submit"),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     if (path != null &&
+      //         TimeTableController.text.isNotEmpty &&
+      //         departmentController.text.isNotEmpty &&
+      //         regulationController.text.isNotEmpty) {
+      //       facultyServices.timeTableUpload(
+      //           context: context,
+      //           filePath: path!,
+      //           image: null,
+      //           type: 'timetable',
+      //           api: 'timetable',
+      //           typename: TimeTableController.text,
+      //           regulation: regulationController.text,
+      //           department: departmentController.text,
+      //           section: sectionController.text);
+      //     } else if (path == null) {
+      //       showTypeError(context, "image and file not selected");
+      //     } else if (TimeTableController.text.isEmpty ||
+      //         departmentController.text.isEmpty ||
+      //         regulationController.text.isEmpty) {
+      //       showTypeError(context, "text field is empty");
+      //     } else {
+      //       showTypeError(context, "something went wrong");
+      //     }
+      //   },
+      //   child: Text("submit"),
+      // ),
     );
   }
 

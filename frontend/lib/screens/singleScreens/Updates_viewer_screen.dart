@@ -79,9 +79,7 @@ class _UpdatesViewerScreenState extends State<UpdatesViewerScreen> {
             Text("Sent on: ${widget.update.created_at}"),
             SizedBox(height: 20),
             Text(
-              'Wikipedia is a free online encyclopedia that anyone can edit, and millions already have. Wikipedia differs from printed references in important ways. It is continually created and updated, and encyclopedic articles on new events appear within minutes rather than months or years. Because anyone can improve Wikipedia, it has become more comprehensive than any other encyclopedia. Its contributors enhance its articles\' quality and quantity, and remove misinformation, errors and vandalism. Any reader can fix a mistake or add more information (see Researching with Wikipedia).',
-              textAlign: TextAlign.justify,
-            ),
+                textAlign: TextAlign.justify, widget.update.Message.toString()),
             SizedBox(height: 20),
             Container(
               height: MediaQuery.of(context).size.height /

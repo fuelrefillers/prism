@@ -88,6 +88,8 @@ class _MidMarksScreenState extends State<MidMarksScreen> {
                 controller: _regulationController1,
                 decoration: InputDecoration(
                   labelText: 'Regulation',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -96,10 +98,13 @@ class _MidMarksScreenState extends State<MidMarksScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _departmentController1,
                 decoration: InputDecoration(
                   labelText: 'Department',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -108,10 +113,13 @@ class _MidMarksScreenState extends State<MidMarksScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 10.0),
               TextFormField(
                 controller: _sectionController1,
                 decoration: InputDecoration(
                   labelText: 'Section',
+                  fillColor: Color.fromARGB(255, 255, 255, 255),
+                  filled: true,
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -130,7 +138,12 @@ class _MidMarksScreenState extends State<MidMarksScreen> {
                   },
                   child: isfetching
                       ? CircularProgressIndicator.adaptive()
-                      : Text('Submit'),
+                      : Text(
+                          'Submit',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 17, 79, 90)),
                 ),
               ),
               Expanded(

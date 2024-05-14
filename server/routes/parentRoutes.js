@@ -4,6 +4,6 @@ const validateToken = require("../middleware/tokenValidator");
 
 const router = express.Router();
 
-router.route("/parentlogin").post(parentLogin);
+router.route("/login").post(parentLogin);
 
 module.exports = router;

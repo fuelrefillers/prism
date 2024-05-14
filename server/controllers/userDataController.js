@@ -184,4 +184,39 @@ const loginUser = asyncHandler(async (req,res) =>{
     
 });
 
+// Currently the below function manages image address.
+
+const manageNewData = asyncHandler(async(req,res)=>{
+    let count = 0;
+    const newUsers = await UserData.find();
+    // console.log(newUsers);
+    // console.log(newUsers);
+    
+    newUsers.forEach(async(obj)=>{
+        // console.log(obj.FatherName);
+
+
+        obj.ImageUrl = `https://mrecadmissions.com/Images/Students/${obj.RollNo}.jpg?v=20231207193652`;
+
+        await obj.save();
+
+        // if(obj.Section === "A"){
+
+        //     await UserData.deleteOne({ RollNo:obj.RollNo });
+        // }
+            // await UserData.deleteOne({ RollNo:obj.RollNo });
+
+
+        count = count+1;
+    });
+
+    console.log(count);
+});
+
+// manageNewData();
+
+
+
+
+
 module.exports = {getUserData,createUserData,deleteAllUsersData,deleteUserData,getallUserData,validateUser,getAllUsersDataAsSection,loginUser,getStudentsDataFORchat,getParentsForChat,getFacultyForChat,getFacultyStudentForChat};
