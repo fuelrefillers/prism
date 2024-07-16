@@ -16,48 +16,19 @@ const setAttendance = asyncHandler(async (req, res) => {
 
   let presentRollNumbers, absentRollNumbers;
 
-<<<<<<< HEAD
-    console.log(type);
-
-  if(type === 'Absentees'){
-    abscentRollNumbers = rollNumbers
-
-    filteredList = rollNumberslist.filter(item => !abscentRollNumbers.some(rollNo => rollNo === item.RollNo));
-
-    presentRollNumbers = filteredList.map(item => item.RollNo);
-  }
-  else{
-    presentRollNumbers = rollNumbers
-
-    filteredList = rollNumberslist.filter(item => !presentRollNumbers.some(rollNo => rollNo === item.RollNo));
-
-    abscentRollNumbers = filteredList.map(item => item.RollNo);
-  }
-
-
-
-    const currentTime = new Date();
-  const hours = currentTime.getHours();
-  const minutes = currentTime.getMinutes();
-    
-  let updateObject = {};
-
-  if (hours < 13 || (hours === 13 && minutes < 20)) {
-    // If the current time is before 1:20 PM, set MorningAttended to 1
-    updateObject = [{ $set: { 'CurrentDay.MorningAttended': 1 } }];
-=======
   if (type === 'Absentees') {
     absentRollNumbers = rollNumbers;
     presentRollNumbers = rollNumbersList
       .filter(item => !absentRollNumbers.includes(item.RollNo))
       .map(item => item.RollNo);
->>>>>>> origin/main
   } else {
     presentRollNumbers = rollNumbers;
     absentRollNumbers = rollNumbersList
       .filter(item => !presentRollNumbers.includes(item.RollNo))
       .map(item => item.RollNo);
   }
+
+
 
   const currentTime = new Date();
     const hours = currentTime.getHours();
@@ -186,7 +157,6 @@ const updateIndividualClassSubjectAttendance = asyncHandler(async (req, res, pre
   }
 });
 
-<<<<<<< HEAD
 
 
 
@@ -275,6 +245,3 @@ module.exports = {setAttendance,adjustAttendance,adgustAttendanceUpdate};
 
 
 
-=======
-module.exports = { setAttendance, adjustAttendance, adgustAttendanceUpdate };
->>>>>>> origin/main

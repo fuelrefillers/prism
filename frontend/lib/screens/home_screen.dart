@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/hostels/models/new.dart';
 import 'package:frontend/providers/who_is_signed_in.dart';
 import 'package:frontend/providers/user_provider.dart';
 import 'package:frontend/screens/AttendanceScreens/attendance_screen.dart';
@@ -254,6 +255,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               buttonText: 'Hostel',
                               icon: Icons.apartment,
                               onPressed: HostelTnC_Screen(),
+                              // onPressed: InstructionScreen(),
+                            ),
+                            CustomButton(
+                              buttonText: 'nithin',
+                              icon: Icons.apartment,
+                              onPressed: AddCategory(),
                               // onPressed: InstructionScreen(),
                             ),
                             CustomButton(
